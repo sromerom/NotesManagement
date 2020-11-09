@@ -1,0 +1,4 @@
+com\liceu\notemanagment\controllers\LoginServlet.class
+com\liceu\notemanagment\filters\AuthFilter.class
+com\liceu\notemanagment\filters\CorsFilter.class
+com\liceu\notemanagment\controllers\MainServlet.class
