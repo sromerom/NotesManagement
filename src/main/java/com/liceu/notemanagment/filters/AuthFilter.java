@@ -20,11 +20,11 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
+
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
 
         String urlLogin = req.getContextPath() + "/login";
-
         /*
         //Si ja ha fet login anterioment, i torna a fer login, redirigim l'usuari cap a la pagina principal.
         if (session != null && username != null && req.getRequestURI().equals(urlLogin) || req.getRequestURI().endsWith("login.jsp")) {
@@ -36,26 +36,6 @@ public class AuthFilter implements Filter {
         String username = (String) session.getAttribute("username");
         System.out.println("url login: " + urlLogin);
 
-        //L'usuari ya ha fet login y vol tornar a fer login, per tant, ho duim a la pagina principal
-        if (username != null && req.getRequestURI().equals(urlLogin)) {
-            RequestDispatcher dispatcher = req.getRequestDispatcher(urlLogin);
-            dispatcher.forward(servletRequest, servletResponse);
-        }
-        //L'usuari a fet login, per tant el deixam entrar
-        if (username != null) {
-            System.out.println("S'ha fet logim! Tens la sessio iniciada!!");
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-
-
-        //No ha fet login pero l'usuari es troba en la pagina login
-        if (username == null && urlLogin.contains("/login")) {
-            System.out.println("No tens la sessio iniciada pero et deixo que puguis fer login...");
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-
         //No ha fet login y a damunt vol entrar en la part privada
         if (username == null && needLogin(req)) {
             System.out.println("No s'ha fet login...");
@@ -63,6 +43,18 @@ public class AuthFilter implements Filter {
             dispatcher.forward(servletRequest, servletResponse);
             return;
         }
+
+        //L'usuari ya ha fet login i esta en la pagina login, per tant, ho duim a la pagina principal per que ja esta autenticat i no pinta res en el login
+        if (username != null && req.getRequestURI().equals(urlLogin)) {
+            System.out.println("No fa falta que tornis al login, estas autenticat!!!");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+            dispatcher.forward(servletRequest, servletResponse);
+        }
+
+        //Si s'arriba fins aqui, voldra dir dues coses:
+        // 1.- Que l'usuari ha fet login y es troba en una pagina que no es el login.
+        // 2.- L'usuari es la primera vegada que entra y no te cap sessio iniciada, per tant en la part del login ho deixarem passar
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
