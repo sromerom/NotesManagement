@@ -1,4 +1,15 @@
-com\liceu\notemanagment\controllers\LoginServlet.class
+com\liceu\notemanagment\model\User.class
+com\liceu\notemanagment\daos\UserDaoImpl.class
+com\liceu\notemanagment\daos\NoteDao.class
+com\liceu\notemanagment\services\UserService.class
+com\liceu\notemanagment\controllers\HomeServlet.class
+com\liceu\notemanagment\services\NoteServiceImpl.class
 com\liceu\notemanagment\filters\AuthFilter.class
+com\liceu\notemanagment\model\Note.class
+com\liceu\notemanagment\services\UserServiceImpl.class
+com\liceu\notemanagment\services\NoteService.class
+com\liceu\notemanagment\daos\NoteDaoImpl.class
+com\liceu\notemanagment\daos\UserDao.class
+com\liceu\notemanagment\controllers\LoginServlet.class
+com\liceu\notemanagment\daos\Database.class
 com\liceu\notemanagment\filters\CorsFilter.class
-com\liceu\notemanagment\controllers\MainServlet.class

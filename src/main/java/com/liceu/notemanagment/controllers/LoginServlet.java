@@ -1,5 +1,8 @@
 package com.liceu.notemanagment.controllers;
 
+import com.liceu.notemanagment.services.UserService;
+import com.liceu.notemanagment.services.UserServiceImpl;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,16 +24,34 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String user = req.getParameter("username");
         String pass = req.getParameter("password");
-        //En un cas normal, s'hauria de comprovar en la ddbb si esta el usuario en concret
+        //En un cas normal, s'hauria de comprovar en la ddbb si esta el usuari en concret
 
+        UserService us = new UserServiceImpl();
+        boolean exists = us.existsUserLogin(user, pass);
+
+        if (exists) {
+            System.out.println("Estas dentro!!");
+            req.setAttribute("username", user);
+            HttpSession session = req.getSession();
+            session.setAttribute("username", user);
+
+            //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+            //dispatcher.forward(req, resp);
+            System.out.println("CONTEXT PATH...: " + req.getContextPath());
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+        /*
         if (user.equals("admin") && pass.equals("1234")) {
             System.out.println("Estas dentro!!");
             req.setAttribute("username", user);
             HttpSession session = req.getSession();
             session.setAttribute("username", user);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
             dispatcher.forward(req, resp);
         }
+        */
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
         dispatcher.forward(req, resp);
     }

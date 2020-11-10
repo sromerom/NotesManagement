@@ -3,14 +3,12 @@ package com.liceu.notemanagment.filters;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebFilter(filterName = "AuthFilter")
 public class AuthFilter implements Filter {
-    private static final String[] loginRequiredURLs = new String[]{"/main"};
+    private static final String[] loginRequiredURLs = new String[]{"/home"};
 
 
     @Override
@@ -47,7 +45,7 @@ public class AuthFilter implements Filter {
         //L'usuari ya ha fet login i esta en la pagina login, per tant, ho duim a la pagina principal per que ja esta autenticat i no pinta res en el login
         if (username != null && req.getRequestURI().equals(urlLogin)) {
             System.out.println("No fa falta que tornis al login, estas autenticat!!!");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/main.jsp");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
             dispatcher.forward(servletRequest, servletResponse);
         }
 
