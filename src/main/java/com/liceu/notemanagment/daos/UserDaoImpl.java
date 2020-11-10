@@ -1,4 +1,5 @@
 package com.liceu.notemanagment.daos;
+
 import com.liceu.notemanagment.model.User;
 
 import java.sql.Connection;
@@ -51,17 +52,27 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean create(User user) {
-        return false;
+    public void create(User user) {
+        try {
+            Connection conn = Database.getConnection();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO user (email, username, password) values (?, ?, ?)");
+            ps.setString(1, user.getEmail());
+            ps.setString(2, user.getUsername());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            ps.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public boolean update(User user) {
-        return false;
+    public void update(User user) {
+
     }
 
     @Override
-    public boolean deleteUser(User user) {
-        return false;
+    public void deleteUser(User user) {
     }
 }

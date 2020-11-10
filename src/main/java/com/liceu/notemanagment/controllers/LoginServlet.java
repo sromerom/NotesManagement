@@ -41,18 +41,8 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
-        /*
-        if (user.equals("admin") && pass.equals("1234")) {
-            System.out.println("Estas dentro!!");
-            req.setAttribute("username", user);
-            HttpSession session = req.getSession();
-            session.setAttribute("username", user);
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-            dispatcher.forward(req, resp);
-        }
-        */
-
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
         dispatcher.forward(req, resp);
     }
+
 }

@@ -4,12 +4,14 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\HomeServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\UserService.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\filters\AuthFilter.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\UnloginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\UserDao.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\filters\CorsFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\model\Note.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\Database.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\LoginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\UserServiceImpl.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\RegisterUserServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\NoteDao.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\NoteDaoImpl.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\NoteServiceImpl.java

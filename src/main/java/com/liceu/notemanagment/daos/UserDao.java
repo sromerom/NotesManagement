@@ -10,9 +10,9 @@ public interface UserDao {
 
     public User getUserById(long id);
 
-    public boolean create(User user);
+    public void create(User user);
 
-    public boolean update(User user);
+    public void update(User user);
 
-    public boolean deleteUser(User user);
+    public void deleteUser(User user);
 }

@@ -3,6 +3,7 @@ package com.liceu.notemanagment.filters;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ public class AuthFilter implements Filter {
 
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
+        HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
 
         String urlLogin = req.getContextPath() + "/login";
@@ -37,16 +39,18 @@ public class AuthFilter implements Filter {
         //No ha fet login y a damunt vol entrar en la part privada
         if (username == null && needLogin(req)) {
             System.out.println("No s'ha fet login...");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-            dispatcher.forward(servletRequest, servletResponse);
+            //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
+            //dispatcher.forward(servletRequest, servletResponse);
+            resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
         //L'usuari ya ha fet login i esta en la pagina login, per tant, ho duim a la pagina principal per que ja esta autenticat i no pinta res en el login
         if (username != null && req.getRequestURI().equals(urlLogin)) {
             System.out.println("No fa falta que tornis al login, estas autenticat!!!");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-            dispatcher.forward(servletRequest, servletResponse);
+            //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+            //dispatcher.forward(servletRequest, servletResponse);
+            resp.sendRedirect(req.getContextPath() + "/home");
         }
 
         //Si s'arriba fins aqui, voldra dir dues coses:

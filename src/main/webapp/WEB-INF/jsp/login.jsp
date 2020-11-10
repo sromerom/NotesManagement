@@ -10,5 +10,6 @@
     Password: <input type="password" name="password"><br>
     <button type="submit">Login</button>
 </form>
+<a href="/register">No tens usuari? Crea'n un!</a>
 </body>
 </html>

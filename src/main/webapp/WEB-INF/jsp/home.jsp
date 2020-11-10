@@ -5,5 +5,6 @@
 </head>
 <body>
 <h1>Si estas aqui, estas autenticado...</h1>
+<a href="/unlogin">Cerrar session</a>
 </body>
 </html>
