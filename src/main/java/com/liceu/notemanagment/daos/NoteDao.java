@@ -10,5 +10,5 @@ public interface NoteDao {
     public Note getNoteById(long id);
     public boolean create(Note note);
     public boolean update(Note note);
-    public boolean delete(Note note);
+    public boolean delete(long idnote);
 }

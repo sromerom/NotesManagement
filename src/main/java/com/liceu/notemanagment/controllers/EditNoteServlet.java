@@ -15,13 +15,18 @@ import java.io.IOException;
 @WebServlet(value = "/edit")
 public class EditNoteServlet extends HttpServlet {
 
-    private Long idnote = null;
+    private Long noteid = null;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("id") != null) {
-            idnote = Long.parseLong(req.getParameter("id"));
+            noteid = Long.parseLong(req.getParameter("id"));
+            NoteService ns = new NoteServiceImpl();
+            req.setAttribute("action", "/edit");
+            req.setAttribute("noteid", noteid);
+            req.setAttribute("title", ns.getTitleById(noteid));
+            req.setAttribute("body", ns.getBodyById(noteid));
         }
-        req.setAttribute("action", "/edit");
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);
     }
@@ -30,10 +35,17 @@ public class EditNoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         NoteService ns = new NoteServiceImpl();
-        long iduser = (long) session.getAttribute("userid");
         String title = req.getParameter("title");
         String body = req.getParameter("bodyContent");
 
+        //Actualitzam la nota...
+        boolean noError = ns.editNote(noteid, title, body);
+
+        if (noError) {
+            System.out.println("S'ha actualitzat la nota correctament...");
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);

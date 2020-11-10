@@ -6,11 +6,8 @@ import com.liceu.notemanagment.daos.UserDao;
 import com.liceu.notemanagment.daos.UserDaoImpl;
 import com.liceu.notemanagment.model.Note;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 public class NoteServiceImpl implements NoteService {
@@ -24,6 +21,24 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> getNotesFromUser(long id) {
         NoteDao nd = new NoteDaoImpl();
         return nd.getAllNotesFromUser(id);
+    }
+
+    @Override
+    public Note getNoteById(long id) {
+        NoteDao nd = new NoteDaoImpl();
+        return nd.getNoteById(id);
+    }
+
+    @Override
+    public String getTitleById(long noteid) {
+        NoteDao nd = new NoteDaoImpl();
+        return nd.getNoteById(noteid).getTitle();
+    }
+
+    @Override
+    public String getBodyById(long noteid) {
+        NoteDao nd = new NoteDaoImpl();
+        return nd.getNoteById(noteid).getBody();
     }
 
     @Override
@@ -55,11 +70,37 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public boolean editNote(long idnote, String title, String body) {
-        return false;
+        NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
+        //2020-11-10 12:46:03
+        //With SimpleDateFormat
+        //String pattern = "yyyy-MM-dd HH:mm:ss";
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("es", "ES"));
+        //String lastModificationDate = simpleDateFormat.format(new Date());
+
+        //With LocalDateTime
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String lastModificationDate = myDateObj.format(myFormatObj);
+        Note noteToUpdate = nd.getNoteById(idnote);
+
+        try {
+            nd.update(new Note(idnote, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
-    public boolean deleteNote(String title, String body) {
-        return false;
+    public boolean deleteNote(long idnote) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            nd.delete(idnote);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

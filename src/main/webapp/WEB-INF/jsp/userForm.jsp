@@ -6,11 +6,18 @@
     <title>Title</title>
 </head>
 <body>
-
 <form method="POST" action="${action}">
-    Title: <input type="text" name="title"><br>
-    body: <textarea id="bodyContent" name="bodyContent"></textarea>
-    <button type="submit">Create</button>
+    <c:if test="${action == '/create'}">
+        Title: <input type="text" name="title"><br>
+        body: <textarea id="bodyContent" name="bodyContent"></textarea>
+    </c:if>
+
+    <c:if test="${action == '/edit'}">
+        Title: <input type="text" name="title" value="${title}"><br>
+        body: <textarea id="bodyContent" name="bodyContent">${body}</textarea>
+    </c:if>
+    <button type="submit">Envia</button>
 </form>
+
 </body>
 </html>

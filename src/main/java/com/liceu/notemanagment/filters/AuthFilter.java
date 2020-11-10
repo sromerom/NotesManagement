@@ -9,7 +9,7 @@ import java.io.IOException;
 
 @WebFilter(filterName = "AuthFilter")
 public class AuthFilter implements Filter {
-    private static final String[] loginRequiredURLs = new String[]{"/home"};
+    private static final String[] loginRequiredURLs = new String[]{"/home", "/unlogin", "/create", "/edit", "/delete"};
 
 
     @Override
