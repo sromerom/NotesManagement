@@ -15,9 +15,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existsUserLogin(String username, String password) {
+    public User existsUserLogin(String username, String password) {
         UserDao ud = new UserDaoImpl();
         return ud.existsUserLogin(username, password);
+    }
+
+    @Override
+    public long getIdByUser(User user) {
+        return user.getIduser();
     }
 
     @Override

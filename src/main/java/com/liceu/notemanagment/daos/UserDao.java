@@ -6,7 +6,8 @@ import java.util.List;
 public interface UserDao {
     public List<User> getAllUsers();
 
-    public boolean existsUserLogin(String username, String password);
+    //public boolean existsUserLogin(String username, String password);
+    public User existsUserLogin(String username, String password);
 
     public User getUserById(long id);
 

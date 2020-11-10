@@ -1,8 +1,10 @@
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\UserDaoImpl.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\model\User.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\NoteService.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\CreateNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\HomeServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\UserService.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\EditNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\filters\AuthFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\UnloginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\UserDao.java
@@ -11,6 +13,7 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\Database.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\LoginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\services\UserServiceImpl.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\DeleteNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\controllers\RegisterUserServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\NoteDao.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\notemanagment\daos\NoteDaoImpl.java

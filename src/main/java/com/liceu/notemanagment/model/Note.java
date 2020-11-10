@@ -1,22 +1,36 @@
 package com.liceu.notemanagment.model;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 public class Note {
     private long idnote;
     private User user;
     private String title;
     private String body;
-    private Date creationDate;
-    private Date lastModification;
+    private String creationDate;
+    private String lastModification;
 
-    public Note(long idnote, User user, String title, String body, Date creationDate, Date lastModification) {
+    public Note(long idnote, User user, String title, String body, String creationDate, String lastModification) {
         this.setIdnote(idnote);
         this.setUser(user);
         this.setTitle(title);
         this.setBody(body);
         this.setCreationDate(creationDate);
         this.setLastModification(lastModification);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "idnote=" + getIdnote() +
+                ", user=" + getUser() +
+                ", title='" + getTitle() + '\'' +
+                ", body='" + getBody() + '\'' +
+                ", creationDate=" + getCreationDate() +
+                ", lastModification=" + getLastModification() +
+                '}';
     }
 
     public long getIdnote() {
@@ -51,31 +65,19 @@ public class Note {
         this.body = body;
     }
 
-    public Date getCreationDate() {
+    public String getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getLastModification() {
+    public String getLastModification() {
         return lastModification;
     }
 
-    public void setLastModification(Date lastModification) {
+    public void setLastModification(String lastModification) {
         this.lastModification = lastModification;
-    }
-
-    @Override
-    public String toString() {
-        return "Note{" +
-                "idnote=" + idnote +
-                ", user=" + user +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                ", creationDate=" + creationDate +
-                ", lastModification=" + lastModification +
-                '}';
     }
 }

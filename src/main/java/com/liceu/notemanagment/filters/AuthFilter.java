@@ -33,11 +33,17 @@ public class AuthFilter implements Filter {
         }
         */
 
+        Long userid = null;
+        if (session.getAttribute("userid") != null) {
+            userid = (Long) session.getAttribute("userid");
+        }
+
         String username = (String) session.getAttribute("username");
-        System.out.println("url login: " + urlLogin);
+        System.out.println("userid: " + userid);
+        System.out.println("username: " + username);
 
         //No ha fet login y a damunt vol entrar en la part privada
-        if (username == null && needLogin(req)) {
+        if (username == null && userid == null && needLogin(req)) {
             System.out.println("No s'ha fet login...");
             //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
             //dispatcher.forward(servletRequest, servletResponse);

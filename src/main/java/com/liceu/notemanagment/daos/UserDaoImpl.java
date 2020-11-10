@@ -6,16 +6,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
-    @Override
-    public List<User> getAllUsers() {
-        List<User> result = new ArrayList<>();
-        try {
-            //UserDao userDao = new UserDaoImpl();
+    private List<User> users = new ArrayList<>();
 
+    public UserDaoImpl() {
+        try {
             Connection c = Database.getConnection();
             PreparedStatement ps = c.prepareStatement("SELECT * FROM user");
             ResultSet rs = ps.executeQuery();
@@ -26,28 +25,40 @@ public class UserDaoImpl implements UserDao {
                 String username = rs.getString(3);
                 String password = rs.getString(4);
                 User user = new User(userid, email, username, password);
-                result.add(user);
+                this.users.add(user);
             }
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
     }
 
     @Override
-    public boolean existsUserLogin(String username, String password) {
-        List<User> users = getAllUsers();
-        for (User user : users) {
+    public List<User> getAllUsers() {
+        List<User> resultat = new ArrayList<>();
+        for (User u : this.users) {
+            resultat.add(new User(u.getIduser(), u.getEmail(), u.getEmail(), u.getPassword()));
+        }
+        return resultat;
+    }
+
+    @Override
+    public User existsUserLogin(String username, String password) {
+        for (User user : this.users) {
             if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return true;
+                return user;
             }
         }
-        return false;
+        return null;
     }
 
     @Override
     public User getUserById(long id) {
+        for (User user : this.users) {
+            if (user.getIduser() == id) {
+                return user;
+            }
+        }
         return null;
     }
 
@@ -69,7 +80,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void update(User user) {
-
+        Iterator<User> it = this.users.iterator();
+        while (it.hasNext()) {
+            User u = it.next();
+            if (u.getIduser() == user.getIduser()) {
+                u.setEmail(user.getEmail());
+                u.setUsername(user.getUsername());
+                u.setPassword(user.getPassword());
+            }
+        }
     }
 
     @Override

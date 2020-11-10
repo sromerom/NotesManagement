@@ -27,12 +27,14 @@ public class LoginServlet extends HttpServlet {
         //En un cas normal, s'hauria de comprovar en la ddbb si esta el usuari en concret
 
         UserService us = new UserServiceImpl();
-        boolean exists = us.existsUserLogin(user, pass);
 
-        if (exists) {
+        if (us.existsUserLogin(user, pass) != null) {
             System.out.println("Estas dentro!!");
+
             req.setAttribute("username", user);
             HttpSession session = req.getSession();
+            //GUARDAR EN SESSIO L'OBJECTE USER COMPLET? ES CORRECTE?
+            session.setAttribute("userid", us.getIdByUser(us.existsUserLogin(user, pass)));
             session.setAttribute("username", user);
 
             //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
