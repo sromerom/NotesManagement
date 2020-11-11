@@ -1,18 +1,11 @@
 package com.liceu.notemanagment.daos;
-
 import com.liceu.notemanagment.model.Note;
 import com.liceu.notemanagment.model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class NoteDaoImpl implements NoteDao {
 

@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> resultat = new ArrayList<>();
         for (User u : this.users) {
-            resultat.add(new User(u.getIduser(), u.getEmail(), u.getEmail(), u.getPassword()));
+            resultat.add(new User(u.getIduser(), u.getEmail(), u.getUsername(), u.getPassword()));
         }
         return resultat;
     }

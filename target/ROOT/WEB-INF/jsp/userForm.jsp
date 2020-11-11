@@ -6,6 +6,12 @@
     <title>Title</title>
 </head>
 <body>
+<c:if test="${noerror == false && action == '/create'}">
+    <div><p>No s'ha pogut crear la nota correctament...</p></div>
+</c:if>
+<c:if test="${noerror == false && action == '/edit'}">
+    <div><p>No s'ha pogut editar la nota correctament...</p></div>
+</c:if>
 <form method="POST" action="${action}">
     <c:if test="${action == '/create'}">
         Title: <input type="text" name="title"><br>

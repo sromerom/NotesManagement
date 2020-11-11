@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS note;
 
 CREATE TABLE IF NOT EXISTS user(
-user_id INTEGER UNSIGNED PRIMARY KEY AUTOINCREMENT,
+user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 email VARCHAR(255) UNIQUE NOT NULL,
 username VARCHAR(30) UNIQUE NOT NULL,
 password VARCHAR(40) NOT NULL);
@@ -16,13 +16,13 @@ creationDate DATETIME,
 lastModificationDate DATETIME,
 FOREIGN KEY(user_iduser) REFERENCES user(iduser));
 
+
 CREATE TABLE IF NOT EXISTS sharedNote(
 shared_note INTEGER PRIMARY KEY AUTOINCREMENT,
 note_id INTEGER NOT NULL,
 user_id INTEGER NOT NULL,
 FOREIGN KEY(note_id) REFERENCES note(note_id),
 FOREIGN KEY(user_id) REFERENCES user(iduser));
-)
 
 //INSERTS
 INSERT INTO user (email, username, password) values ("sromerom@esliceu.net", "sromerom", "ABCD1234");

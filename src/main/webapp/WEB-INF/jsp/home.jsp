@@ -17,6 +17,7 @@
             <p>${note.body}</p>
             <a href="/edit?id=${note.idnote}">Update</a>
             <a href="/delete?id=${note.idnote}">Delete</a>
+            <a href="/users?id=${note.idnote}">Share With Users!</a>
         </div>
     </c:forEach>
 </section>
