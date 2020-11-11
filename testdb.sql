@@ -2,20 +2,29 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS note;
 
 CREATE TABLE IF NOT EXISTS user(
-user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-email varchar(255) unique,
-username varchar(30) unique,
-password varchar(40));
+user_id INTEGER UNSIGNED PRIMARY KEY AUTOINCREMENT,
+email VARCHAR(255) UNIQUE NOT NULL,
+username VARCHAR(30) UNIQUE NOT NULL,
+password VARCHAR(40) NOT NULL);
 
-create table note(
-note_id integer primary key autoincrement,
-user_iduser integer,
-title varchar(150),
-body text,
-creationDate datetime,
-lastModificationDate datetime,
+CREATE TABLE IF NOT EXISTS note(
+note_id INTEGER PRIMARY KEY AUTOINCREMENT,
+user_iduser INTEGER NOT NULL,
+title VARCHAR(150),
+body TEXT,
+creationDate DATETIME,
+lastModificationDate DATETIME,
 FOREIGN KEY(user_iduser) REFERENCES user(iduser));
 
+CREATE TABLE IF NOT EXISTS sharedNote(
+shared_note INTEGER PRIMARY KEY AUTOINCREMENT,
+note_id INTEGER NOT NULL,
+user_id INTEGER NOT NULL,
+FOREIGN KEY(note_id) REFERENCES note(note_id),
+FOREIGN KEY(user_id) REFERENCES user(iduser));
+)
+
+//INSERTS
 INSERT INTO user (email, username, password) values ("sromerom@esliceu.net", "sromerom", "ABCD1234");
 
 //Notas del usuario sromerom
@@ -26,4 +35,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 
 //TABLA N-M
 //TABLA RELACIONAL ENTRE NOTAS
+//Limitacion de intentos de login
+//Contraseñas fuertes
 

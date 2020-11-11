@@ -27,7 +27,9 @@ public class RegisterUserServlet extends HttpServlet {
 
         UserService us = new UserServiceImpl();
         boolean noError = us.createUser(newEmail, newUser, newPass);
+
         if (noError) {
+            System.out.println("S'ha creat correctament");
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }

@@ -7,9 +7,10 @@
 </head>
 <body>
 <h1>Registra el teu usuari per poder accedir a la aplicació desde aquest formulari!</h1>
-<c:if test="not empty ${noError}">
+<c:if test = "${noerror == false}">
     <div><p>No s'ha pogut crear l'usuari correctament...</p></div>
 </c:if>
+
 <form method="POST" action="/register">
     Email <input type="text" name="newEmail"><br>
     Nom usuari: <input type="text" name="newUser"><br>

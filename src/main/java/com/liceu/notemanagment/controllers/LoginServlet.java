@@ -28,13 +28,13 @@ public class LoginServlet extends HttpServlet {
 
         UserService us = new UserServiceImpl();
 
-        if (us.existsUserLogin(user, pass) != null) {
+        if (us.validateUser(user, pass)) {
             System.out.println("Estas dentro!!");
 
             req.setAttribute("username", user);
             HttpSession session = req.getSession();
             //GUARDAR EN SESSIO L'OBJECTE USER COMPLET? ES CORRECTE?
-            session.setAttribute("userid", us.getIdByUser(us.existsUserLogin(user, pass)));
+            session.setAttribute("userid", us.getUserId(user));
             session.setAttribute("username", user);
 
             //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");

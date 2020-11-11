@@ -78,57 +78,42 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public boolean create(Note note) {
-        try {
-            Connection conn = Database.getConnection();
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) VALUES (?,?,?,?,?)");
-            ps.setLong(1, note.getUser().getIduser());
-            ps.setString(2, note.getTitle());
-            ps.setString(3, note.getBody());
+    public void create(Note note) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) VALUES (?,?,?,?,?)");
+        ps.setLong(1, note.getUser().getIduser());
+        ps.setString(2, note.getTitle());
+        ps.setString(3, note.getBody());
 
-            //2020-11-10 12:46:03
+        //2020-11-10 12:46:03
 
-            ps.setString(4, note.getCreationDate());
-            ps.setString(5, note.getLastModification());
-            ps.execute();
-            ps.close();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        ps.setString(4, note.getCreationDate());
+        ps.setString(5, note.getLastModification());
+        ps.execute();
+        ps.close();
+
     }
 
     @Override
-    public boolean update(Note note) {
-        try {
-            Connection conn = Database.getConnection();
-            PreparedStatement ps = conn.prepareStatement("UPDATE note SET title = ?, body = ?, lastModificationDate = ? WHERE note_id = ?");
-            ps.setString(1, note.getTitle());
-            ps.setString(2, note.getBody());
+    public void update(Note note) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE note SET title = ?, body = ?, lastModificationDate = ? WHERE note_id = ?");
+        ps.setString(1, note.getTitle());
+        ps.setString(2, note.getBody());
 
 
-            ps.setString(3, note.getLastModification());
-            ps.setLong(4, note.getIdnote());
-            ps.execute();
-            ps.close();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        ps.setString(3, note.getLastModification());
+        ps.setLong(4, note.getIdnote());
+        ps.execute();
+        ps.close();
     }
 
     @Override
-    public boolean delete(long idnote) {
-
-        try {
-            Connection conn = Database.getConnection();
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM note WHERE note_id = ?");
-            ps.setLong(1, idnote);
-            ps.execute();
-            ps.close();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+    public void delete(long idnote) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM note WHERE note_id = ?");
+        ps.setLong(1, idnote);
+        ps.execute();
+        ps.close();
     }
 }

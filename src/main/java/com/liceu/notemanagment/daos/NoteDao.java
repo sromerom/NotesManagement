@@ -8,7 +8,7 @@ public interface NoteDao {
     public List<Note> getAllNotes();
     public List<Note> getAllNotesFromUser(long iduser);
     public Note getNoteById(long id);
-    public boolean create(Note note);
-    public boolean update(Note note);
-    public boolean delete(long idnote);
+    public void create(Note note) throws Exception;
+    public void update(Note note) throws Exception;
+    public void delete(long idnote) throws Exception;
 }

@@ -43,16 +43,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User existsUserLogin(String username, String password) {
-        for (User user : this.users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public User getUserById(long id) {
         for (User user : this.users) {
             if (user.getIduser() == id) {
@@ -63,23 +53,39 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void create(User user) {
-        try {
-            Connection conn = Database.getConnection();
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO user (email, username, password) values (?, ?, ?)");
-            ps.setString(1, user.getEmail());
-            ps.setString(2, user.getUsername());
-            ps.setString(3, user.getPassword());
-            ps.execute();
-            ps.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean existsUserWithUsername(String username) {
+        for (User user : this.users) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
-    public void update(User user) {
+    public long getUserIdByUsername(String username) {
+        for (User user : this.users) {
+            if (user.getUsername().equals(username)) {
+                return user.getIduser();
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public void create(User user) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO user (email, username, password) values (?, ?, ?)");
+        ps.setString(1, user.getEmail());
+        ps.setString(2, user.getUsername());
+        ps.setString(3, user.getPassword());
+        ps.execute();
+        ps.close();
+
+    }
+
+    @Override
+    public void update(User user) throws Exception{
         Iterator<User> it = this.users.iterator();
         while (it.hasNext()) {
             User u = it.next();
@@ -92,6 +98,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(User user) throws Exception{
     }
 }
