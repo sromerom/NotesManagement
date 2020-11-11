@@ -43,7 +43,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public boolean addNote(long iduser, String title, String body) {
-        //ES CORRECTE EMPRAR ELS DOS DAOS EN UN SERVICE QUE ES DE NOTE?
+        //ES CORRECTE EMPRAR ALTRES DAOS EN UN SERVICE QUE ES DE NOTE?
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
 

@@ -12,7 +12,10 @@ public class Database {
             //jdbc:sqlite:C:/sqlite/db/chinook.db
             //"jdbc:sqlite:D:\\testdb.db"
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:E:\\Fp informatica\\CFGS 2n any REP\\PracticasEntornServidor\\NotesManagment\\databaseManagement.db";
+            //Windows
+            //String url = "jdbc:sqlite:E:\\Fp informatica\\CFGS 2n any REP\\PracticasEntornServidor\\NotesManagment\\databaseManagement.db";
+            //Linux
+            String url = "jdbc:sqlite:/home/superior/sromerom/Practiques Entorn Servidor/NotesManagment/databaseManagement.db";
             if (connection == null) {
                 connection = DriverManager.getConnection(url);
             }

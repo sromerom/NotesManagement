@@ -69,7 +69,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
             }
 
             //if (n.getUser().getIduser() == iduser) {
-              //  result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
+            //  result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
             //}
         }
         return result;
@@ -78,6 +78,21 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
 
     @Override
     public void create(List<SharedNote> sharedNotes) throws Exception {
+        try {
+            Connection c = Database.getConnection();
+            PreparedStatement ps = c.prepareStatement("INSERT INTO sharedNote (note_id, user_id) VALUES (?,?)");
 
+            System.out.println(sharedNotes);
+
+            for (SharedNote sn : sharedNotes) {
+                ps.setLong(1, sn.getNote().getIdnote());
+                ps.setLong(2, sn.getUser().getIduser());
+                ps.execute();
+            }
+            ps.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,6 +9,7 @@
 <form method="POST" action="/share">
     <c:forEach var="user" items="${users}">
         <div>
+            <input type="hidden" id="noteid" name="noteid" value="${noteid}">
             <input type="checkbox" id="${user.username}" name="share" value="${user.username}">
             <label for="${user.username}">${user.username}</label>
         </div>

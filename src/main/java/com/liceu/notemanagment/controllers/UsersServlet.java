@@ -14,11 +14,16 @@ import java.io.IOException;
 
 @WebServlet(value = "/users")
 public class UsersServlet extends HttpServlet {
+    private Long noteid = null;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter("id") != null) {
+            noteid = Long.parseLong(req.getParameter("id"));
+        }
         UserService us = new UserServiceImpl();
         HttpSession session = req.getSession();
         req.setAttribute("users", us.getAll());
+        req.setAttribute("noteid", noteid);
         //req.setAttribute("notes", ns.getNotesFromUser((long) session.getAttribute("userid")));
         System.out.println(us.getAll());
 

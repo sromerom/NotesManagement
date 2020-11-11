@@ -9,4 +9,5 @@ import java.util.List;
 public interface SharedNoteService {
     public List<SharedNote> getAll();
     public List<Note> getSharedNotes(long userid);
+    public boolean shareNote(long noteid, String [] usernames);
 }

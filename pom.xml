@@ -79,7 +79,6 @@
                 <!-- #### TOMCAT #### -->
                 <!-- Linux -->
                 <!-- /home/Documents/apache-tomcat-9.0.39/-->
-                <!--
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
@@ -96,7 +95,8 @@
                         </configuration>
                     </configuration>
                 </plugin>
-                -->
+                <!-- Windows -->
+                <!--
                 <plugin>
                     <groupId>org.codehaus.cargo</groupId>
                     <artifactId>cargo-maven2-plugin</artifactId>
@@ -112,6 +112,7 @@
                         </configuration>
                     </configuration>
                 </plugin>
+                -->
             </plugins>
         </pluginManagement>
         <plugins>
