@@ -3,7 +3,6 @@ package com.liceu.notemanagment.services;
 import com.liceu.notemanagment.daos.*;
 import com.liceu.notemanagment.model.Note;
 import com.liceu.notemanagment.model.SharedNote;
-import com.liceu.notemanagment.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +15,15 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public List<Note> getSharedNotes(long userid) {
+    public List<SharedNote> getSharedNoteWithMe(long userid) {
         SharedNoteDao snd = new SharedNoteDaoImpl();
-        return snd.getSharedNotesById(userid);
+        return snd.getSharedNotesWithMe(userid);
+    }
+
+    @Override
+    public List<SharedNote> getSharedNotes(long userid) {
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        return snd.getSharedNotes(userid);
     }
 
     @Override
@@ -33,9 +38,21 @@ public class SharedNoteServiceImpl implements SharedNoteService {
 
             for (String username: usernames) {
                 long userid = ud.getUserIdByUsername(username);
-                sharedNotes.add(new SharedNote(noteForShare, ud.getUserById(userid)));
+                sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
             }
             snd.create(sharedNotes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteShareNote(long sharedNoteId) {
+        try {
+            SharedNoteDao snd = new SharedNoteDaoImpl();
+            snd.delete(sharedNoteId);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

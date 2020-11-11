@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS sharedNote(
 shared_note INTEGER PRIMARY KEY AUTOINCREMENT,
 note_id INTEGER NOT NULL,
 user_id INTEGER NOT NULL,
-FOREIGN KEY(note_id) REFERENCES note(note_id),
-FOREIGN KEY(user_id) REFERENCES user(iduser));
+FOREIGN KEY(note_id) REFERENCES note(note_id) ON DELETE CASCADE,
+FOREIGN KEY(user_id) REFERENCES user(iduser) ON DELETE CASCADE);
 
 //INSERTS
 INSERT INTO user (email, username, password) values ("sromerom@esliceu.net", "sromerom", "ABCD1234");

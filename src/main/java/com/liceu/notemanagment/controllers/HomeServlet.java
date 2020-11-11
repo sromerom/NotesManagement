@@ -25,7 +25,9 @@ public class HomeServlet extends HttpServlet {
         Long userid = (Long) session.getAttribute("userid");
 
         req.setAttribute("notes", ns.getNotesFromUser((long) session.getAttribute("userid")));
+        req.setAttribute("sharedNotesWithMe", sns.getSharedNoteWithMe(userid));
         req.setAttribute("sharedNotes", sns.getSharedNotes(userid));
+        System.out.println(sns.getSharedNoteWithMe(userid));
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
         dispatcher.forward(req, resp);
     }

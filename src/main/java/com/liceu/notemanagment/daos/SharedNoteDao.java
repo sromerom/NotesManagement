@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface SharedNoteDao {
     public List<SharedNote> getAllSharedNotes();
-    public List<Note> getSharedNotesById(long userid);
+    public List<SharedNote> getSharedNotesWithMe(long userid);
+    public List<SharedNote> getSharedNotes(long userid);
     public void create(List<SharedNote> sharedNotes) throws Exception;
+    public void delete(long sharedNoteId) throws Exception;
 }

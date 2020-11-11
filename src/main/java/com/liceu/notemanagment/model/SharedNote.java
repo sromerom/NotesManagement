@@ -1,12 +1,15 @@
 package com.liceu.notemanagment.model;
 
 public class SharedNote {
+    private long idShareNote;
     private User user;
     private Note note;
 
-    public SharedNote( Note note, User user) {
+    public SharedNote(long idShareNote, Note note, User user) {
+        this.idShareNote = idShareNote;
         this.note = note;
         this.user = user;
+
     }
 
     public Note getNote() {
@@ -25,11 +28,21 @@ public class SharedNote {
         this.user = user;
     }
 
+
     @Override
     public String toString() {
         return "SharedNote{" +
-                "user=" + user +
+                "idShareNote=" + idShareNote +
+                ", user=" + user +
                 ", note=" + note +
                 '}';
+    }
+
+    public long getIdShareNote() {
+        return idShareNote;
+    }
+
+    public void setIdShareNote(long idShareNote) {
+        this.idShareNote = idShareNote;
     }
 }

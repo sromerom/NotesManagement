@@ -16,21 +16,22 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public SharedNoteDaoImpl() {
         try {
             Connection c = Database.getConnection();
-            PreparedStatement all = c.prepareStatement("SELECT s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id");
+            PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id");
             PreparedStatement ownerNote = c.prepareStatement("SELECT * FROM user WHERE user_id = ?");
             ResultSet rs = all.executeQuery();
             User ownerSharedNote = null;
             while (rs.next()) {
-                long userid = rs.getLong(1);
-                String email = rs.getString(2);
-                String username = rs.getString(3);
-                String password = rs.getString(4);
-                long noteid = rs.getLong(5);
-                long user_iduser = rs.getLong(6);
-                String title = rs.getString(7);
-                String body = rs.getString(8);
-                String creationDate = rs.getString(9);
-                String lastModificationDate = rs.getString(10);
+                long sharedNote = rs.getLong(1);
+                long userid = rs.getLong(2);
+                String email = rs.getString(3);
+                String username = rs.getString(4);
+                String password = rs.getString(5);
+                long noteid = rs.getLong(6);
+                long user_iduser = rs.getLong(7);
+                String title = rs.getString(8);
+                String body = rs.getString(9);
+                String creationDate = rs.getString(10);
+                String lastModificationDate = rs.getString(11);
 
                 ownerNote.setLong(1, user_iduser);
                 ResultSet rs2 = ownerNote.executeQuery();
@@ -41,10 +42,12 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
                     String ownerPassword = rs2.getString(4);
                     ownerSharedNote = new User(ownerUserid, ownerEmail, ownerUsername, ownerPassword);
                 }
-                SharedNote sn = new SharedNote(new Note(noteid, ownerSharedNote, title, body, creationDate, lastModificationDate), new User(userid, email, username, password));
+                System.out.println("id shader note: " + sharedNote);
+                SharedNote sn = new SharedNote(sharedNote, new Note(noteid, ownerSharedNote, title, body, creationDate, lastModificationDate), new User(userid, email, username, password));
                 sharedNotes.add(sn);
             }
-
+            all.close();
+            ownerNote.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,26 +57,33 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public List<SharedNote> getAllSharedNotes() {
         List<SharedNote> result = new ArrayList<>();
         for (SharedNote s : this.sharedNotes) {
-            result.add(new SharedNote(new Note(s.getNote().getIdnote(), s.getNote().getUser(), s.getNote().getTitle(), s.getNote().getBody(), s.getNote().getCreationDate(), s.getNote().getLastModification()), new User(s.getUser().getIduser(), s.getUser().getEmail(), s.getUser().getUsername(), s.getUser().getPassword())));
+            result.add(new SharedNote(s.getIdShareNote(), new Note(s.getNote().getIdnote(), s.getNote().getUser(), s.getNote().getTitle(), s.getNote().getBody(), s.getNote().getCreationDate(), s.getNote().getLastModification()), new User(s.getUser().getIduser(), s.getUser().getEmail(), s.getUser().getUsername(), s.getUser().getPassword())));
         }
         return result;
     }
 
     @Override
-    public List<Note> getSharedNotesById(long userid) {
-        List<Note> result = new ArrayList<>();
+    public List<SharedNote> getSharedNotesWithMe(long userid) {
+        List<SharedNote> result = new ArrayList<>();
 
         for (SharedNote sn : this.sharedNotes) {
             if (sn.getUser().getIduser() == userid) {
-                result.add(sn.getNote());
+                result.add(sn);
             }
-
-            //if (n.getUser().getIduser() == iduser) {
-            //  result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
-            //}
         }
         return result;
-        //return null;
+    }
+
+    @Override
+    public List<SharedNote> getSharedNotes(long userid) {
+        List<SharedNote> result = new ArrayList<>();
+
+        for (SharedNote sn : this.sharedNotes) {
+            if (sn.getNote().getUser().getIduser() == userid) {
+                result.add(sn);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -94,5 +104,14 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void delete(long sharedNoteId) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM sharedNote WHERE shared_note = ?");
+        ps.setLong(1, sharedNoteId);
+        ps.execute();
+        ps.close();
     }
 }

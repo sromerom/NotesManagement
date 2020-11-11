@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface SharedNoteService {
     public List<SharedNote> getAll();
-    public List<Note> getSharedNotes(long userid);
+    public List<SharedNote> getSharedNoteWithMe(long userid);
+    public List<SharedNote> getSharedNotes(long userid);
     public boolean shareNote(long noteid, String [] usernames);
+    public boolean deleteShareNote(long sharedNoteId);
 }

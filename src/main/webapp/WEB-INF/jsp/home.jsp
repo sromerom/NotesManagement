@@ -10,10 +10,11 @@
 <a href="/unlogin">Cerrar session</a>
 
 <a href="/create">Crea una nova nota</a>
+<a href="/"></a>
 <section id="siteNotes">
     <h2>Notes propies:</h2>
     <c:forEach var="note" items="${notes}">
-        <div>
+        <div style="background-color: burlywood; width: 100px; height: 200px">
             <h3>${note.title}</h3>
             <p>${note.body}</p>
             <a href="/edit?id=${note.idnote}">Update</a>
@@ -23,14 +24,30 @@
     </c:forEach>
 </section>
 <section id="siteSharedNotes">
-    <h2>Notes compartides amb tu:</h2>
-    <c:forEach var="sharedNote" items="${sharedNotes}">
-        <div>
-            <h3>${sharedNote.title}</h3>
-            <p>${sharedNote.body}</p>
-            <span>Nota compartida per ${sharedNote.user.username}</span>
-        </div>
-    </c:forEach>
+    <div>
+        <h2>Notes compartides amb tu:</h2>
+        <c:forEach var="sharedNote" items="${sharedNotesWithMe}">
+            <div style="background-color: cadetblue; width: 100px; height: 200px">
+                <h3>${sharedNote.note.title}</h3>
+                <p>${sharedNote.note.body}</p>
+                <span>Nota compartida per ${sharedNote.note.user.username}</span>
+                <a href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete share</a>
+            </div>
+        </c:forEach>
+    </div>
+    <div>
+        <h2>Notes que he compartit:</h2>
+        <c:forEach var="sharedNote" items="${sharedNotes}">
+            <div style="background-color: darkgoldenrod; width: 100px; height: 200px">
+                <h3>${sharedNote.note.title}</h3>
+                <p>${sharedNote.note.body}</p>
+                <a href="/edit?id=${sharedNote.note.idnote}">Update</a>
+                <a href="/delete?id=${sharedNote.note.idnote}">Delete</a>
+                <a href="/users?id=${sharedNote.note.idnote}">Share With Users!</a>
+                <a href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete share</a>
+            </div>
+        </c:forEach>
+    </div>
 </section>
 </body>
 </html>
