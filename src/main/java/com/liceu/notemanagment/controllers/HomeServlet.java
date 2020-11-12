@@ -23,8 +23,22 @@ public class HomeServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         Long userid = (Long) session.getAttribute("userid");
+        String titleFilter = req.getParameter("titleFilter");
+        String initDateFilter = req.getParameter("noteStart");
+        String endDateFilter = req.getParameter("noteEnd");
 
-        req.setAttribute("notes", ns.getNotesFromUser((long) session.getAttribute("userid")));
+        System.out.println(titleFilter);
+        System.out.println(initDateFilter);
+        System.out.println(endDateFilter);
+
+        if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
+            System.out.println("Aplicamos filter");
+            req.setAttribute("notes", ns.filter(userid, titleFilter, initDateFilter, endDateFilter));
+        } else {
+            System.out.println("No aplicamos filter...");
+            req.setAttribute("notes", ns.getNotesFromUser(userid));
+        }
+
         req.setAttribute("sharedNotesWithMe", sns.getSharedNoteWithMe(userid));
         req.setAttribute("sharedNotes", sns.getSharedNotes(userid));
         System.out.println(sns.getSharedNoteWithMe(userid));

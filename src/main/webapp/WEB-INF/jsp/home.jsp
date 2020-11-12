@@ -10,11 +10,17 @@
 <a href="/unlogin">Cerrar session</a>
 
 <a href="/create">Crea una nova nota</a>
-<a href="/"></a>
+<form action="/home" method="GET">
+    <input type="text" name="titleFilter" placeholder="titol">
+    <input type="date" id="start" name="noteStart">
+    <input type="date" id="end" name="noteEnd">
+    <button type="submit">Search</button>
+</form>
+<a href="/home">Restore</a>
 <section id="siteNotes">
     <h2>Notes propies:</h2>
     <c:forEach var="note" items="${notes}">
-        <div style="background-color: burlywood; width: 100px; height: 200px">
+        <div style="background-color: burlywood;">
             <h3>${note.title}</h3>
             <p>${note.body}</p>
             <a href="/edit?id=${note.idnote}">Update</a>
@@ -27,7 +33,7 @@
     <div>
         <h2>Notes compartides amb tu:</h2>
         <c:forEach var="sharedNote" items="${sharedNotesWithMe}">
-            <div style="background-color: cadetblue; width: 100px; height: 200px">
+            <div style="background-color: cadetblue;">
                 <h3>${sharedNote.note.title}</h3>
                 <p>${sharedNote.note.body}</p>
                 <span>Nota compartida per ${sharedNote.note.user.username}</span>
@@ -38,7 +44,7 @@
     <div>
         <h2>Notes que he compartit:</h2>
         <c:forEach var="sharedNote" items="${sharedNotes}">
-            <div style="background-color: darkgoldenrod; width: 100px; height: 200px">
+            <div style="background-color: darkgoldenrod;">
                 <h3>${sharedNote.note.title}</h3>
                 <p>${sharedNote.note.body}</p>
                 <a href="/edit?id=${sharedNote.note.idnote}">Update</a>

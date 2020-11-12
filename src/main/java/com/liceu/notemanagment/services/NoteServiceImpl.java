@@ -24,6 +24,47 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public boolean checkFilter(String title, String initDate, String endDate) {
+        if (title != null && initDate != null && endDate != null) {
+
+            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) {
+                return true;
+            }
+
+            if (!title.equals("") && initDate.equals("") && endDate.equals("")) {
+                return true;
+            }
+
+            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
+    @Override
+    public List<Note> filter(long userid, String title, String initDate, String endDate) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            if (checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                System.out.println("filter");
+                System.out.println(nd.filterByTitle(userid, title));
+                return nd.filterByTitle(userid, title);
+            } else if (checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
+            } else if (checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+
+                return nd.filterAll(userid, title, initDate, endDate);
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
     public Note getNoteById(long id) {
         NoteDao nd = new NoteDaoImpl();
         return nd.getNoteById(id);
@@ -102,5 +143,24 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
         return true;
+    }
+
+    private String checkTypeFilter(String title, String initDate, String endDate) {
+        if (title != null && initDate != null && endDate != null) {
+
+            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) {
+                return "filterAll";
+            }
+
+            if (!title.equals("") && initDate.equals("") && endDate.equals("")) {
+                return "filterByTitle";
+            }
+
+            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) {
+                return "filterByDate";
+            }
+
+        }
+        return null;
     }
 }

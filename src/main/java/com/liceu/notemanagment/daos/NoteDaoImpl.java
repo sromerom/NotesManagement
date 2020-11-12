@@ -1,6 +1,8 @@
 package com.liceu.notemanagment.daos;
+
 import com.liceu.notemanagment.model.Note;
 import com.liceu.notemanagment.model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +57,92 @@ public class NoteDaoImpl implements NoteDao {
             if (n.getUser().getIduser() == iduser) {
                 result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
             }
+        }
+        return result;
+    }
+
+    @Override
+    public List<Note> filterByTitle(long userid, String titol) throws Exception {
+        List<Note> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ?");
+        ps.setLong(1, userid);
+        ps.setString(2, "%" + titol + "%");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            long noteid = rs.getLong(1);
+            String title = rs.getString(2);
+            String body = rs.getString(3);
+            String creationDate = rs.getString(4);
+            String lastModificationDate = rs.getString(5);
+            String email = rs.getString(6);
+            String username = rs.getString(7);
+            String password = rs.getString(8);
+
+            //2020-11-10 12:46:03
+            Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
+            System.out.println("Note: " + note);
+            result.add(note);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Note> filterByDate(long userid, String initDate, String endDate) throws Exception {
+        List<Note> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ?");
+        ps.setLong(1, userid);
+        //2020-11-12 00:00:00
+        //2020-11-12 23:59:59
+        ps.setString(2, initDate);
+        ps.setString(3, endDate);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            long noteid = rs.getLong(1);
+            String title = rs.getString(2);
+            String body = rs.getString(3);
+            String creationDate = rs.getString(4);
+            String lastModificationDate = rs.getString(5);
+            String email = rs.getString(6);
+            String username = rs.getString(7);
+            String password = rs.getString(8);
+
+            //2020-11-10 12:46:03
+            Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
+            System.out.println("Note: " + note);
+            result.add(note);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Note> filterAll(long userid, String title, String initDate, String endDate) throws Exception{
+        List<Note> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title = ? AND creationDate > ? AND lastModificationDate < ?");
+        ps.setLong(1, userid);
+        //2020-11-12 00:00:00
+        //2020-11-12 23:59:59
+        ps.setString(2, title);
+        ps.setString(3, initDate);
+        ps.setString(4, endDate);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            long noteid = rs.getLong(1);
+            String titleActual = rs.getString(2);
+            String body = rs.getString(3);
+            String creationDate = rs.getString(4);
+            String lastModificationDate = rs.getString(5);
+            String email = rs.getString(6);
+            String username = rs.getString(7);
+            String password = rs.getString(8);
+
+            //2020-11-10 12:46:03
+            Note note = new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
+            result.add(note);
         }
         return result;
     }
