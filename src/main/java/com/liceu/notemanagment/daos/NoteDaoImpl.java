@@ -50,15 +50,50 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> getAllNotesFromUser(long iduser) {
+    public List<Note> getAllNotesFromUser(long userid, int offset) throws Exception{
+        List<Note> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? LIMIT 10 OFFSET ?");
+        ps.setLong(1, userid);
+        ps.setInt(2, offset);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            long noteid = rs.getLong(1);
+            String title = rs.getString(2);
+            String body = rs.getString(3);
+            String creationDate = rs.getString(4);
+            String lastModificationDate = rs.getString(5);
+            long useridNote = rs.getLong(6);
+            String email = rs.getString(7);
+            String username = rs.getString(8);
+            String password = rs.getString(9);
+
+            //2020-11-10 12:46:03
+            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
+            result.add(note);
+        }
+        ps.close();
+        return result;
+        /*
         List<Note> result = new ArrayList<>();
 
         for (Note n : this.notes) {
-            if (n.getUser().getIduser() == iduser) {
+            if (n.getUser().getIduser() == userid) {
                 result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
             }
         }
         return result;
+         */
+    }
+
+    @Override
+    public long getNotesLengthFromUser(long userid) throws Exception{
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT COUNT(note_id) FROM note WHERE user_iduser = ?");
+        ps.setLong(1, userid);
+        ResultSet rs = ps.executeQuery();
+        long totalNotes = rs.getInt(1);
+        return totalNotes;
     }
 
     @Override

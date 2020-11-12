@@ -27,11 +27,13 @@ public class ShareNoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         //Long userid = (Long) session.getAttribute("userid");
-        String [] sharedUsers = req.getParameterValues("share");
+        //String [] sharedUsers = req.getParameterValues("share");
+        String [] sharedUsers = req.getParameterValues("states[]");
         Long noteid = Long.parseLong(req.getParameter("noteid"));
         SharedNoteService sns = new SharedNoteServiceImpl();
         System.out.println(Arrays.toString(sharedUsers));
         System.out.println("Note id: " + noteid);
+
 
         boolean noError = sns.shareNote(noteid, sharedUsers);
         if (noError) {
@@ -42,6 +44,7 @@ public class ShareNoteServlet extends HttpServlet {
 
         System.out.println("No s'ha compartit la nota correctament...");
         req.setAttribute("noerror", noError);
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);
     }

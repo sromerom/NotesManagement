@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface NoteDao {
     public List<Note> getAllNotes();
-    public List<Note> getAllNotesFromUser(long iduser);
+    public List<Note> getAllNotesFromUser(long userid, int offset) throws Exception;
+    public long getNotesLengthFromUser(long userid) throws Exception;
     public List<Note> filterByTitle(long userid, String titol) throws Exception;
     public List<Note> filterByDate(long userid, String initDate, String endDate) throws Exception;
     List<Note> filterAll(long userid, String title, String initDate, String endDate) throws Exception;

@@ -4,7 +4,8 @@ import java.util.List;
 
 public interface NoteService {
     public List<Note> getAll();
-    public List<Note> getNotesFromUser(long id);
+    public List<Note> getNotesFromUser(long id, int offset);
+    public long getNotesLength(long id);
     public boolean checkFilter(String title, String initDate, String endDate);
     public List<Note> filter(long userid, String title, String initDate, String endDate);
     public Note getNoteById(long id);

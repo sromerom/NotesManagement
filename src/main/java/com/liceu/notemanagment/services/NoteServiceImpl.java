@@ -18,9 +18,23 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getNotesFromUser(long id) {
+    public List<Note> getNotesFromUser(long id, int offset) {
         NoteDao nd = new NoteDaoImpl();
-        return nd.getAllNotesFromUser(id);
+        try {
+            return nd.getAllNotesFromUser(id, offset);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public long getNotesLength(long id) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getNotesLengthFromUser(id);
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     @Override
