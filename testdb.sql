@@ -41,4 +41,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Crear salt aleatorio
 //Todo al mismo idioma
 //variable conn
+//Implementar paginacion para las sharedNote
+//Crear detailPageNote
+//Implementar markdown
 
