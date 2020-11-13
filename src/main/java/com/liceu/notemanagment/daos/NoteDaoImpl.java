@@ -157,11 +157,11 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterAll(long userid, String title, String initDate, String endDate) throws Exception{
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title = ? AND creationDate > ? AND lastModificationDate < ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
-        ps.setString(2, title);
+        ps.setString(2, "%" + title + "%");
         ps.setString(3, initDate);
         ps.setString(4, endDate);
         ResultSet rs = ps.executeQuery();

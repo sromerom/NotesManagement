@@ -2,6 +2,7 @@ com\liceu\notemanagment\daos\UserDaoImpl.class
 com\liceu\notemanagment\services\NoteServiceImpl.class
 com\liceu\notemanagment\services\SharedNoteService.class
 com\liceu\notemanagment\services\NoteService.class
+com\liceu\notemanagment\services\Filter.class
 com\liceu\notemanagment\controllers\DeleteShareServlet.class
 com\liceu\notemanagment\controllers\UnloginServlet.class
 com\liceu\notemanagment\controllers\RegisterUserServlet.class

@@ -33,8 +33,12 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota3", "Esto es una nota3...", datetime('now','localtime'), datetime('now','localtime'));
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota4", "Esto es una nota4...", datetime('now','localtime'), datetime('now','localtime'));
 
-//TABLA N-M
+//TABLA N-M -->Hecho
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
 //Contraseñas fuertes
+//Crear validaciones
+//Crear salt aleatorio
+//Todo al mismo idioma
+//variable conn
 

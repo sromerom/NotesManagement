@@ -13,26 +13,64 @@
 
 <a href="/create">Crea una nova nota</a>
 <form action="/home" method="GET">
+    <select name="typeNote" id="note">
+        <option value="propies">Notes propies</option>
+        <option value="compartides">Notes compartides amb tu</option>
+        <option value="compartit">Notes teves que has compartit</option>
+    </select>
     <input type="text" name="titleFilter" placeholder="titol">
     <input type="date" id="start" name="noteStart">
     <input type="date" id="end" name="noteEnd">
+
     <button type="submit">Search</button>
 </form>
 <a href="/home">Restore</a>
 <section id="siteNotes">
-    <h2>Notes propies:</h2>
-    <c:forEach var="note" items="${notes}">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">${note.title}</h5>
-                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">By ${note.user.username}</h6>
-                <p class="card-text">${note.body}</p>
-                <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
-                <a class="card-link" href="/delete?id=${note.idnote}">Delete</a>
-                <a class="card-link" href="/users?id=${note.idnote}">Share</a>
-            </div>
-        </div>
-    </c:forEach>
+
+    <c:choose>
+        <c:when test="${not empty typeNote && typeNote != 'propies' || typeNote }">
+            <h2>Notes compartides:</h2>
+            <c:forEach var="sharedNote" items="${notes}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${sharedNote.note.title}</h5>
+                        <p class="card-text">${sharedNote.note.body}</p>
+                        <c:choose>
+                            <c:when test="${typeNote == 'compartides'}">
+                                <a class="card-link" href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete
+                                    share</a>
+                                <h6>Shared By ${sharedNote.note.user.username}</h6>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="card-link" href="/edit?id=${sharedNote.note.idnote}">Update</a>
+                                <a class="card-link" href="/delete?id=${sharedNote.note.idnote}">Delete</a>
+                                <a class="card-link" href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete
+                                    share</a>
+                                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
+                                    By ${note.user.username}</h6>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </c:forEach>
+        </c:when>
+        <c:otherwise>
+            <h2>Notes propies:</h2>
+            <c:forEach var="note" items="${notes}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">${note.title}</h5>
+                        <p class="card-text">${note.body}</p>
+                        <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
+                        <a class="card-link" href="/delete?id=${note.idnote}">Delete</a>
+                        <a class="card-link" href="/users?id=${note.idnote}">Share</a>
+                        <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">By ${note.user.username}</h6>
+                    </div>
+                </div>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
+
     <nav aria-label="Navigation for countries">
         <ul class="pagination">
             <c:if test="${currentPage != 1}">
@@ -57,6 +95,7 @@
         </ul>
     </nav>
 </section>
+<!--
 <section id="siteSharedNotes">
     <div>
         <h2>Notes compartides amb tu:</h2>
@@ -83,6 +122,7 @@
         </c:forEach>
     </div>
 </section>
+-->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

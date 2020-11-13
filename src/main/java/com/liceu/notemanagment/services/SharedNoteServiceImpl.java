@@ -27,7 +27,24 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public boolean shareNote(long noteid, String [] usernames) {
+    public List<SharedNote> filter(long userid, String title, String initDate, String endDate) {
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        try {
+            if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                return snd.filterSharedNotesWithMeByTitle(userid, title);
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                return snd.filterSharedNotesWithMeByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+                return snd.filterSharedNotesWithMeAll(userid, title, initDate + " 00:00:00", endDate + " 23:59:59");
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean shareNote(long noteid, String[] usernames) {
         try {
             SharedNoteDao snd = new SharedNoteDaoImpl();
             NoteDao nd = new NoteDaoImpl();
@@ -36,7 +53,7 @@ public class SharedNoteServiceImpl implements SharedNoteService {
             Note noteForShare = nd.getNoteById(noteid);
             List<SharedNote> sharedNotes = new ArrayList<>();
 
-            for (String username: usernames) {
+            for (String username : usernames) {
                 long userid = ud.getUserIdByUsername(username);
                 sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
             }

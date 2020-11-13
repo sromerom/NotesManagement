@@ -62,14 +62,13 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> filter(long userid, String title, String initDate, String endDate) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            if (checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+            if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
                 System.out.println("filter");
                 System.out.println(nd.filterByTitle(userid, title));
                 return nd.filterByTitle(userid, title);
-            } else if (checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
                 return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
-            } else if (checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
                 return nd.filterAll(userid, title, initDate, endDate);
             }
         } catch (Exception e) {
@@ -157,24 +156,5 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
         return true;
-    }
-
-    private String checkTypeFilter(String title, String initDate, String endDate) {
-        if (title != null && initDate != null && endDate != null) {
-
-            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) {
-                return "filterAll";
-            }
-
-            if (!title.equals("") && initDate.equals("") && endDate.equals("")) {
-                return "filterByTitle";
-            }
-
-            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) {
-                return "filterByDate";
-            }
-
-        }
-        return null;
     }
 }
