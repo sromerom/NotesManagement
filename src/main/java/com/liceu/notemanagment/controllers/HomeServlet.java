@@ -68,6 +68,7 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
+<<<<<<< HEAD
         */
         req.setAttribute("userid", userid);
         Integer offset = 0;
@@ -96,10 +97,16 @@ public class HomeServlet extends HttpServlet {
                 //offset -= 5;
             }
             /*
+=======
+        //Pagination
+        if (req.getParameter("currentPage") != null) {
+            currentPage = Integer.parseInt(req.getParameter("currentPage"));
+>>>>>>> 1daa1b8c848f10e0094a21fbdcde1935a93d3810
             if (currentPage != 1 || currentPage != 0) {
                 String offsetString = (currentPage - 1) + "0";
                 offset = Integer.parseInt(offsetString);
             }
+<<<<<<< HEAD
              */
         }
 
@@ -118,6 +125,15 @@ public class HomeServlet extends HttpServlet {
         //System.out.println("total pages: " + totalPages);
         System.out.println("current page: " + currentPage);
         //System.out.println("offset: " + offset);
+=======
+        }
+
+
+        //double totalPages = Math.ceil(ns.getNotesLength(userid) / PAGES_FOR_NOTE);
+        System.out.println("total pages: " + totalPages);
+        System.out.println("current page: " + currentPage);
+        System.out.println("offset: " + offset);
+>>>>>>> 1daa1b8c848f10e0094a21fbdcde1935a93d3810
 
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("currentPage", currentPage);

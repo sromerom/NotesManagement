@@ -48,4 +48,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //comprovar si un usuari pot veure o eliminar un nota en concret...
 //Acentos sqlite3
 //Controller comprova si hi ha dades a enviar abans de fer operacions
+<<<<<<< HEAD
 //DeleteShare mal implementado --> excepcion
+=======
+>>>>>>> 1daa1b8c848f10e0094a21fbdcde1935a93d3810
