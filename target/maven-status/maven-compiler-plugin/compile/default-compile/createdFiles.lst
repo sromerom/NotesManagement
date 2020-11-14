@@ -1,7 +1,2 @@
-<<<<<<< HEAD
 com\liceu\notemanagment\services\Filter.class
 com\liceu\notemanagment\controllers\DeleteShareServlet.class
-=======
-com/liceu/notemanagment/controllers/DeleteShareServlet.class
-com/liceu/notemanagment/services/Filter.class
->>>>>>> 1daa1b8c848f10e0094a21fbdcde1935a93d3810
