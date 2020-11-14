@@ -50,7 +50,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception{
+    public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? LIMIT ? OFFSET ?");
@@ -88,7 +88,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public long getNotesLengthFromUser(long userid) throws Exception{
+    public long getNotesLengthFromUser(long userid) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT COUNT(note_id) FROM note WHERE user_iduser = ?");
         ps.setLong(1, userid);
@@ -99,12 +99,14 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterByTitle(long userid, String titol) throws Exception {
+    public List<Note> filterByTitle(long userid, String titol, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setString(2, "%" + titol + "%");
+        ps.setInt(3, limit);
+        ps.setInt(4, offset);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
@@ -127,15 +129,17 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterByDate(long userid, String initDate, String endDate) throws Exception {
+    public List<Note> filterByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
         ps.setString(2, initDate);
         ps.setString(3, endDate);
+        ps.setInt(4, limit);
+        ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             long noteid = rs.getLong(1);
@@ -157,16 +161,18 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterAll(long userid, String title, String initDate, String endDate) throws Exception{
+    public List<Note> filterAll(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
         ps.setString(2, "%" + title + "%");
         ps.setString(3, initDate);
         ps.setString(4, endDate);
+        ps.setInt(5, limit);
+        ps.setInt(6, offset);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             long noteid = rs.getLong(1);

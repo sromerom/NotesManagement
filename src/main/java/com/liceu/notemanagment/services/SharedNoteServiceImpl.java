@@ -26,33 +26,61 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public List<SharedNote> getSharedNoteWithMe(long userid) {
-        //haredNoteDao snd = new SharedNoteDaoImpl();
-        //return snd.getSharedNotesWithMe(userid);
-        return null;
-    }
-
-    @Override
-    public List<SharedNote> getSharedNotes(long userid) {
+    public List<Note> getSharedNoteWithMe(long userid, int offset) {
         SharedNoteDao snd = new SharedNoteDaoImpl();
-        return snd.getSharedNotes(userid);
-    }
-
-    @Override
-    public List<SharedNote> filter(long userid, String title, String initDate, String endDate) {
-        SharedNoteDao snd = new SharedNoteDaoImpl();
+        List<Note> result = new ArrayList<>();
         try {
-            if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                return snd.filterSharedNotesWithMeByTitle(userid, title);
-            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                return snd.filterSharedNotesWithMeByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
-            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                return snd.filterSharedNotesWithMeAll(userid, title, initDate + " 00:00:00", endDate + " 23:59:59");
+            List<SharedNote> sharedNotes = snd.getSharedNotesWithMe(userid, 5, offset);
+            for (SharedNote sn : sharedNotes) {
+                result.add(sn.getNote());
             }
+
+            return result;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        return null;
+    }
+
+    @Override
+    public long getLengthSharedNoteWithMe(long userid) {
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        try {
+            return snd.getSharedNotesWithMeLength(userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public List<Note> getSharedNotes(long userid, int offset) {
+        //return snd.getSharedNotes(userid);
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        List<Note> result = new ArrayList<>();
+        try {
+            List<SharedNote> ownerSharedNotes = snd.getSharedNotes(userid, 5, offset);
+            System.out.println(ownerSharedNotes);
+            for (SharedNote sn : ownerSharedNotes) {
+                result.add(sn.getNote());
+            }
+
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public long getLengthSharedNotes(long userid) {
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        try {
+            return snd.getSharedNotesLength(userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override

@@ -86,14 +86,36 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public long getNotesLength(long id) {
+    public List<Note> getCreatedNotes(long id, int offset) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getAllNotesFromUser(id, 5, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public long getAllNotesLength(long id) {
         NoteDao nd = new NoteDaoImpl();
         SharedNoteDao sns = new SharedNoteDaoImpl();
         try {
             System.out.println("Tamaño propias: " + nd.getNotesLengthFromUser(id));
-            System.out.println("Tamaño shared: " + sns.getSharedNotesLengthFromUser(id));
-            return nd.getNotesLengthFromUser(id) + sns.getSharedNotesLengthFromUser(id);
+            System.out.println("Tamaño shared: " + sns.getSharedNotesWithMeLength(id));
+            return nd.getNotesLengthFromUser(id) + sns.getSharedNotesWithMeLength(id);
         } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public long getCreatedNotesLength(long id) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getNotesLengthFromUser(id);
+        } catch (Exception e) {
+            e.printStackTrace();
             return -1;
         }
     }
@@ -120,28 +142,60 @@ public class NoteServiceImpl implements NoteService {
 
 
     @Override
-    public List<Note> filter(long userid, String title, String initDate, String endDate) {
+    public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
         SharedNoteDao snd = new SharedNoteDaoImpl();
         List<Note> createdNotes = new ArrayList<>();
         List<SharedNote> sharedNotes = new ArrayList<>();
         List<Note> allNotes = new ArrayList<>();
         try {
-            if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                System.out.println("filter");
-                System.out.println(nd.filterByTitle(userid, title));
+            if (type == null || type.equals("")) {
+                System.out.println("filtramos todo...");
+                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                    //return nd.filterByTitle(userid, title);
+                    createdNotes = nd.filterByTitle(userid, title, 5, offset);
+                    sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title, 5, offset);
+                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                    createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59", 5, offset);
+                    sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
+                    //return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
+                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+                    createdNotes = nd.filterAll(userid, title, initDate, endDate, 5, offset);
+                    sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate, 5, offset);
+                    //return nd.filterAll(userid, title, initDate, endDate);
+                }
+            } else {
+                System.out.println("filtramos solo lo seleccionado...");
+                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                    if (!type.equals("propies")) {
+                        System.out.println("filter sharedNotes by title");
+                        sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title, 5, offset);
+                    } else {
+                        System.out.println("filter createdNotes by title");
+                        createdNotes = nd.filterByTitle(userid, title, 5, offset);
+                    }
+                }
 
-                //return nd.filterByTitle(userid, title);
-                createdNotes = nd.filterByTitle(userid, title);
-                sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title);
-            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
-                sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate);
-                //return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
-            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                createdNotes = nd.filterAll(userid, title, initDate, endDate);
-                sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate);
-                //return nd.filterAll(userid, title, initDate, endDate);
+                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                    if (!type.equals("propies")) {
+                        System.out.println("filter sharedNotes by date");
+                        sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
+                    } else {
+                        System.out.println("filter createdNotes by date");
+                        createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59", 5, offset);
+                    }
+                }
+
+                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll") && !type.equals("propies")) {
+
+                    if (!type.equals("propies")) {
+                        System.out.println("filter sharedNotes by all");
+                        sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
+                    } else {
+                        System.out.println("filter createdNotes by all");
+                        sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate, 5, offset);
+                    }
+                }
             }
 
             for (Note n : createdNotes) {

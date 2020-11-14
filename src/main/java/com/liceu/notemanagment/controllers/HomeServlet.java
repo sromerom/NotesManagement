@@ -1,9 +1,6 @@
 package com.liceu.notemanagment.controllers;
 
-import com.liceu.notemanagment.services.NoteService;
-import com.liceu.notemanagment.services.NoteServiceImpl;
-import com.liceu.notemanagment.services.SharedNoteService;
-import com.liceu.notemanagment.services.SharedNoteServiceImpl;
+import com.liceu.notemanagment.services.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -23,40 +20,70 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NoteService ns = new NoteServiceImpl();
         SharedNoteService sns = new SharedNoteServiceImpl();
-
         HttpSession session = req.getSession();
-        Long userid = (Long) session.getAttribute("userid");
 
-        /*
-        //Params filtre
+        Long userid = (Long) session.getAttribute("userid");
+        req.setAttribute("userid", userid);
+        Integer offset = 0;
+        Integer currentPage = 1;
+        int totalPages = 0;
+
+        //Params filtres
         String typeNoteDisplay = req.getParameter("typeNote");
         String titleFilter = req.getParameter("titleFilter");
+        req.setAttribute("titleFilter", titleFilter);
         String initDateFilter = req.getParameter("noteStart");
+        req.setAttribute("initDate", initDateFilter);
         String endDateFilter = req.getParameter("noteEnd");
+        req.setAttribute("endDate", endDateFilter);
 
-        double totalPages = 0;
+        System.out.println("type: " + typeNoteDisplay);
+
+        //Pagination
+        String filterURL = Filter.getURLFilter(typeNoteDisplay, titleFilter, initDateFilter, endDateFilter);
+        System.out.println("Filter URLLLLLLLLLLLLLLLLLLLLLLLL: " + filterURL);
+        req.setAttribute("filterURL", filterURL);
+        if (req.getParameter("currentPage") != null) {
+            int actualCurrentPage = Integer.parseInt(req.getParameter("currentPage"));
+            if (actualCurrentPage > currentPage) {
+                offset = (actualCurrentPage - 1) * 5;
+                currentPage = actualCurrentPage;
+            } else if (actualCurrentPage < currentPage) {
+                offset = (actualCurrentPage - 1) * 5;
+                currentPage = actualCurrentPage;
+            }
+        }
+
+        //Filter per mostrar nomes notes en especific
         if (typeNoteDisplay != null && !typeNoteDisplay.equals("")) {
             if (typeNoteDisplay.equals("compartides")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
-                req.setAttribute("notes", sns.getSharedNoteWithMe(userid));
+                req.setAttribute("notes", sns.getSharedNoteWithMe(userid, offset));
                 //Cambiar a metode
-                totalPages = Math.ceil(sns.getSharedNoteWithMe(userid).size() / PAGES_FOR_NOTE);
+                //totalPages = (int) Math.ceil(sns.getSharedNoteWithMe(userid, offset).size() / PAGES_FOR_NOTE);
+                totalPages = (int) Math.ceil(sns.getLengthSharedNoteWithMe(userid) / PAGES_FOR_NOTE);
             } else if (typeNoteDisplay.equals("compartit")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
-                req.setAttribute("notes", sns.getSharedNotes(userid));
-                totalPages = Math.ceil(sns.getSharedNotes(userid).size() / PAGES_FOR_NOTE);
+                req.setAttribute("notes", sns.getSharedNotes(userid, offset));
+                totalPages = (int) Math.ceil(sns.getLengthSharedNotes(userid) / PAGES_FOR_NOTE);
             } else {
                 req.setAttribute("typeNote", typeNoteDisplay);
-                req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
-                totalPages = Math.ceil(ns.getNotesLength(userid) / PAGES_FOR_NOTE);
+                req.setAttribute("notes", ns.getCreatedNotes(userid, offset));
+                totalPages = (int) Math.ceil(ns.getCreatedNotesLength(userid) / PAGES_FOR_NOTE);
             }
         } else {
-            typeNoteDisplay = "propies";
-            req.setAttribute("typeNote", typeNoteDisplay);
             req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
-            totalPages = Math.ceil(ns.getNotesLength(userid) / PAGES_FOR_NOTE);
+            totalPages = (int) Math.ceil(ns.getAllNotesLength(userid) / (PAGES_FOR_NOTE));
         }
 
+        //Aplicam filtres
+        if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
+            System.out.println("Aplicamos filter");
+            req.setAttribute("notes", ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset));
+            totalPages = (int) Math.ceil(ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset).size() / (PAGES_FOR_NOTE));
+        }
+
+        /*
         //Aplicam filtres
         if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
             if (!typeNoteDisplay.equals("propies")) {
@@ -68,64 +95,15 @@ public class HomeServlet extends HttpServlet {
             }
         }
 
-        */
-        req.setAttribute("userid", userid);
-        Integer offset = 0;
-        Integer currentPage = 1;
-        int totalPages = 0;
-        //Params filtre
-        String typeNoteDisplay = req.getParameter("typeNote");
-        String titleFilter = req.getParameter("titleFilter");
-        String initDateFilter = req.getParameter("noteStart");
-        String endDateFilter = req.getParameter("noteEnd");
-
-        //Pagination
-        if (req.getParameter("currentPage") != null) {
-            int actualCurrentPage = Integer.parseInt(req.getParameter("currentPage"));
-            System.out.println("Actual page: " + actualCurrentPage);
-            System.out.println("Anterior page: " + currentPage);
-            //3 > 1?
-            System.out.println(actualCurrentPage + " > " + currentPage + " ?");
-            if (actualCurrentPage > currentPage) {
-                //offset = 5 * (actualCurrentPage - currentPage);
-                offset = (actualCurrentPage - 1) * 5;
-                currentPage = actualCurrentPage;
-            } else if (actualCurrentPage < currentPage) {
-                offset = (actualCurrentPage - 1) * 5;
-                currentPage = actualCurrentPage;
-                //offset -= 5;
-            }
-            /*
-            if (currentPage != 1 || currentPage != 0) {
-                String offsetString = (currentPage - 1) + "0";
-                offset = Integer.parseInt(offsetString);
-            }
-             */
-        }
+         */
 
 
-        //Aplicam filtres
-        if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
-            req.setAttribute("notes", ns.filter(userid, titleFilter, initDateFilter, endDateFilter));
-            totalPages = (int) Math.round(ns.filter(userid, titleFilter, initDateFilter, endDateFilter).size() / (PAGES_FOR_NOTE));
-        } else {
-            req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
-            totalPages = (int) Math.round(ns.getNotesLength(userid) / (PAGES_FOR_NOTE));
-        }
 
-
-        //double totalPages = Math.ceil((ns.getNotesLength(userid) + sns.getSharedNotesLength(userid)) / (PAGES_FOR_NOTE));
-        //System.out.println("total pages: " + totalPages);
         System.out.println("current page: " + currentPage);
-        //System.out.println("offset: " + offset);
-
+        System.out.println("totalPages " + totalPages);
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("currentPage", currentPage);
         req.setAttribute("totalPages", totalPages);
-
-        //req.setAttribute("sharedNotesWithMe", sns.getSharedNoteWithMe(userid));
-        //req.setAttribute("sharedNotes", sns.getSharedNotes(userid));
-        //System.out.println(sns.getSharedNoteWithMe(userid));
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
         dispatcher.forward(req, resp);

@@ -37,15 +37,19 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
 //Contraseñas fuertes
-//Crear validaciones
-//Crear salt aleatorio
+//Crear validaciones ###################################
+//Crear salt aleatorio ###################################
 //Todo al mismo idioma
 //variable conn
-//Implementar paginacion para las sharedNote
-//Crear detailPageNote
-//Implementar markdown
-//cambiar eliminacion de una nota de get por post
-//comprovar si un usuari pot veure o eliminar un nota en concret...
+//Implementar paginacion para las sharedNote -->Hecho
+//Crear detailPageNote ###################################
+//Implementar markdown ###################################
+//cambiar eliminacion de una nota de get por post ###################################
+//comprovar si un usuari pot veure o eliminar un nota en concret... ###################################
 //Acentos sqlite3
 //Controller comprova si hi ha dades a enviar abans de fer operacions
 //DeleteShare mal implementado --> excepcion
+//Cambiar el nombre del proyecto
+//e.printStackTrace();
+//hacer filtro de las notas creadas que has compartido ###################################
+//Arreglar fallo de paginacion, te añade un boton extra

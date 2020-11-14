@@ -14,19 +14,58 @@
 <a href="/create">Crea una nova nota</a>
 <form action="/home" method="GET">
     <select name="typeNote" id="note">
-        <option value="propies">Notes propies</option>
-        <option value="compartides">Notes compartides amb tu</option>
-        <option value="compartit">Notes teves que has compartit</option>
+        <!-- <option selected="true" disabled="disabled">seleccione la marca</option> -->
+        <c:choose>
+            <c:when test="${typeNote == 'compartides'}">
+                <option disabled="disabled">Selecciona tipus de nota</option>
+                <option value="propies">Notes propies</option>
+                <option selected="true" value="compartides">Notes compartides amb tu</option>
+                <option value="compartit">Notes teves que has compartit</option>
+            </c:when>
+            <c:when test="${typeNote == 'compartit'}">
+                <option disabled="disabled">Selecciona tipus de nota</option>
+                <option value="propies">Notes propies</option>
+                <option value="compartides">Notes compartides amb tu</option>
+                <option selected="true" value="compartit">Notes teves que has compartit</option>
+            </c:when>
+            <c:when test="${typeNote == 'propies'}">
+                <option disabled="disabled">Selecciona tipus de nota</option>
+                <option selected="true" value="propies">Notes propies</option>
+                <option value="compartides">Notes compartides amb tu</option>
+                <option value="compartit">Notes teves que has compartit</option>
+            </c:when>
+            <c:otherwise>
+                <option selected="true" disabled="disabled">Selecciona tipus de nota</option>
+                <option value="propies">Notes propies</option>
+                <option value="compartides">Notes compartides amb tu</option>
+                <option value="compartit">Notes teves que has compartit</option>
+            </c:otherwise>
+        </c:choose>
     </select>
-    <input type="text" name="titleFilter" placeholder="titol">
-    <input type="date" id="start" name="noteStart">
-    <input type="date" id="end" name="noteEnd">
+    <input type="text" name="titleFilter" placeholder="titol" value="${titleFilter}">
+    <input type="date" id="start" name="noteStart" value="${initDate}">
+    <input type="date" id="end" name="noteEnd" value="${endDate}">
 
     <button type="submit">Search</button>
 </form>
 <a href="/home">Restore</a>
 <section id="siteNotes">
-    <h2>Notes compartides amb tu:</h2>
+
+    <c:choose>
+        <c:when test="${typeNote == 'compartides'}">
+            <h2>Notes que han compartit amb tu:</h2>
+        </c:when>
+        <c:when test="${typeNote == 'compartit'}">
+            <h2>Notes que has compartit:</h2>
+        </c:when>
+        <c:when test="${typeNote == 'propies'}">
+            <h2>Notes que has creat:</h2>
+        </c:when>
+        <c:otherwise>
+            <h2>Totes les notes:</h2>
+        </c:otherwise>
+    </c:choose>
+
     <c:forEach var="note" items="${notes}">
         <c:choose>
             <c:when test="${note.user.iduser == userid}">
@@ -59,7 +98,7 @@
         <ul class="pagination">
             <c:if test="${currentPage != 1}">
                 <li class="page-item"><a class="page-link"
-                                         href="/home?currentPage=${currentPage-1}">Previous</a>
+                                         href="/home?currentPage=${currentPage-1}&${filterURL}">Previous</a>
                 </li>
             </c:if>
 
@@ -70,13 +109,15 @@
                                 class="sr-only">(current)</span></a></li>
                     </c:when>
                     <c:otherwise>
-                        <li class="page-item"><a class="page-link" href="/home?currentPage=${i}">${i}</a></li>
+                        <li class="page-item"><a class="page-link" href="/home?currentPage=${i}&${filterURL}">${i}</a>
+                        </li>
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
 
             <c:if test="${currentPage lt totalPages}">
-                <li class="page-item"><a class="page-link" href="/home?currentPage=${currentPage+1}">Next</a>
+                <li class="page-item"><a class="page-link"
+                                         href="/home?currentPage=${currentPage+1}&${filterURL}">Next</a>
                 </li>
             </c:if>
         </ul>
