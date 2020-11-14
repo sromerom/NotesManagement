@@ -1,13 +1,12 @@
 package com.liceu.notemanagment.services;
 
-import com.liceu.notemanagment.daos.NoteDao;
-import com.liceu.notemanagment.daos.NoteDaoImpl;
-import com.liceu.notemanagment.daos.UserDao;
-import com.liceu.notemanagment.daos.UserDaoImpl;
+import com.liceu.notemanagment.daos.*;
 import com.liceu.notemanagment.model.Note;
+import com.liceu.notemanagment.model.SharedNote;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteServiceImpl implements NoteService {
@@ -20,8 +19,67 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> getNotesFromUser(long id, int offset) {
         NoteDao nd = new NoteDaoImpl();
+        SharedNoteDao sns = new SharedNoteDaoImpl();
+
         try {
-            return nd.getAllNotesFromUser(id, offset);
+            //long notesLength = nd.getNotesLengthFromUser(id);
+            //long sharedNotesLength = sns.getSharedNotesLengthFromUser(id);
+            int parsedOffset = offset;
+            //int limitCreated = 5;
+            //int limitShared = 5;
+            int limit = 5;
+            if (offset != 0) {
+
+            }
+
+            int actualLengthCreatedNotes = nd.getAllNotesFromUser(id, limit, parsedOffset).size();
+            int actualLengthSharedNotes = sns.getSharedNotesWithMe(id, limit, parsedOffset).size();
+
+            System.out.println("createdNotes: " + actualLengthCreatedNotes);
+            System.out.println("sharedNotes: " + actualLengthSharedNotes);
+            /*
+            if (actualLengthCreatedNotes - actualLengthSharedNotes != 0 && actualLengthCreatedNotes + actualLengthSharedNotes >= 5) {
+                int diff = actualLengthCreatedNotes - actualLengthSharedNotes;
+                if (diff > 0) {
+                    limitCreated = limitCreated + (diff);
+                }
+                if (diff < 0) {
+                    limitShared = limitShared + (diff);
+                }
+            }
+
+             */
+            /*
+            if (offset != 0) {
+                parsedOffset = parsedOffset - 5;
+                if (offset > sharedNotesLength) {
+                    limit = (int) (parsedOffset + (offset - sharedNotesLength));
+
+                } else if (offset > notesLength) {
+                    limit = (int) (parsedOffset + (offset - notesLength));
+                }
+            }
+             */
+            System.out.println("offset: " + parsedOffset);
+            //System.out.println("limitCreated: " + limitCreated);
+            //System.out.println("limitShared: " + limitShared);
+
+
+            List<Note> createdNotes = nd.getAllNotesFromUser(id, limit, offset);
+            List<SharedNote> sharedNotes = sns.getSharedNotesWithMe(id, limit, offset);
+            List<Note> allNotes = new ArrayList<>();
+
+            for (Note n : createdNotes) {
+                allNotes.add(n);
+            }
+
+            for (SharedNote sn : sharedNotes) {
+                allNotes.add(sn.getNote());
+            }
+
+            //return nd.getAllNotesFromUser(id, offset);
+            //System.out.println(allNotes);
+            return allNotes;
         } catch (Exception e) {
             return null;
         }
@@ -30,8 +88,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public long getNotesLength(long id) {
         NoteDao nd = new NoteDaoImpl();
+        SharedNoteDao sns = new SharedNoteDaoImpl();
         try {
-            return nd.getNotesLengthFromUser(id);
+            System.out.println("Tamaño propias: " + nd.getNotesLengthFromUser(id));
+            System.out.println("Tamaño shared: " + sns.getSharedNotesLengthFromUser(id));
+            return nd.getNotesLengthFromUser(id) + sns.getSharedNotesLengthFromUser(id);
         } catch (Exception e) {
             return -1;
         }
@@ -61,20 +122,40 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> filter(long userid, String title, String initDate, String endDate) {
         NoteDao nd = new NoteDaoImpl();
+        SharedNoteDao snd = new SharedNoteDaoImpl();
+        List<Note> createdNotes = new ArrayList<>();
+        List<SharedNote> sharedNotes = new ArrayList<>();
+        List<Note> allNotes = new ArrayList<>();
         try {
             if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
                 System.out.println("filter");
                 System.out.println(nd.filterByTitle(userid, title));
-                return nd.filterByTitle(userid, title);
+
+                //return nd.filterByTitle(userid, title);
+                createdNotes = nd.filterByTitle(userid, title);
+                sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title);
             } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
+                createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
+                sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate);
+                //return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
             } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                return nd.filterAll(userid, title, initDate, endDate);
+                createdNotes = nd.filterAll(userid, title, initDate, endDate);
+                sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate);
+                //return nd.filterAll(userid, title, initDate, endDate);
             }
+
+            for (Note n : createdNotes) {
+                allNotes.add(n);
+            }
+
+            for (SharedNote sn : sharedNotes) {
+                allNotes.add(sn.getNote());
+            }
+
         } catch (Exception e) {
             return null;
         }
-        return null;
+        return allNotes;
     }
 
     @Override

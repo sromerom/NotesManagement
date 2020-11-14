@@ -15,9 +15,21 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public List<SharedNote> getSharedNoteWithMe(long userid) {
+    public long getSharedNoteId(long noteid, long userid) {
         SharedNoteDao snd = new SharedNoteDaoImpl();
-        return snd.getSharedNotesWithMe(userid);
+        try {
+            return snd.getSharedNoteId(noteid, userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public List<SharedNote> getSharedNoteWithMe(long userid) {
+        //haredNoteDao snd = new SharedNoteDaoImpl();
+        //return snd.getSharedNotesWithMe(userid);
+        return null;
     }
 
     @Override

@@ -44,4 +44,8 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Implementar paginacion para las sharedNote
 //Crear detailPageNote
 //Implementar markdown
-
+//cambiar eliminacion de una nota de get por post
+//comprovar si un usuari pot veure o eliminar un nota en concret...
+//Acentos sqlite3
+//Controller comprova si hi ha dades a enviar abans de fer operacions
+//DeleteShare mal implementado --> excepcion

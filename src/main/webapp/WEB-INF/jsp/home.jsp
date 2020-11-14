@@ -26,38 +26,11 @@
 </form>
 <a href="/home">Restore</a>
 <section id="siteNotes">
-
-    <c:choose>
-        <c:when test="${not empty typeNote && typeNote != 'propies' || typeNote }">
-            <h2>Notes compartides:</h2>
-            <c:forEach var="sharedNote" items="${notes}">
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">${sharedNote.note.title}</h5>
-                        <p class="card-text">${sharedNote.note.body}</p>
-                        <c:choose>
-                            <c:when test="${typeNote == 'compartides'}">
-                                <a class="card-link" href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete
-                                    share</a>
-                                <h6>Shared By ${sharedNote.note.user.username}</h6>
-                            </c:when>
-                            <c:otherwise>
-                                <a class="card-link" href="/edit?id=${sharedNote.note.idnote}">Update</a>
-                                <a class="card-link" href="/delete?id=${sharedNote.note.idnote}">Delete</a>
-                                <a class="card-link" href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete
-                                    share</a>
-                                <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
-                                    By ${note.user.username}</h6>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-            </c:forEach>
-        </c:when>
-        <c:otherwise>
-            <h2>Notes propies:</h2>
-            <c:forEach var="note" items="${notes}">
-                <div class="card" style="width: 18rem;">
+    <h2>Notes compartides amb tu:</h2>
+    <c:forEach var="note" items="${notes}">
+        <c:choose>
+            <c:when test="${note.user.iduser == userid}">
+                <div class="card" style="width: 18rem; background-color: cornflowerblue">
                     <div class="card-body">
                         <h5 class="card-title">${note.title}</h5>
                         <p class="card-text">${note.body}</p>
@@ -67,14 +40,27 @@
                         <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">By ${note.user.username}</h6>
                     </div>
                 </div>
-            </c:forEach>
-        </c:otherwise>
-    </c:choose>
-
+            </c:when>
+            <c:otherwise>
+                <div class="card" style="width: 18rem; background-color: lightcoral">
+                    <div class="card-body">
+                        <h5 class="card-title">${note.title}</h5>
+                        <p class="card-text">${note.body}</p>
+                        <!-- <a class="card-link" href="/deleteShare?idShareNote={$note.idShareNote}">Delete share</a> -->
+                        <a class="card-link" href="/deleteShare?noteid=${note.idnote}&userid=${userid}">Delete share</a>
+                        <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">Shared
+                            By ${note.user.username}</h6>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </c:forEach>
     <nav aria-label="Navigation for countries">
         <ul class="pagination">
             <c:if test="${currentPage != 1}">
-                <li class="page-item"><a class="page-link" href="/home?currentPage=${currentPage-1}">Previous</a></li>
+                <li class="page-item"><a class="page-link"
+                                         href="/home?currentPage=${currentPage-1}">Previous</a>
+                </li>
             </c:if>
 
             <c:forEach begin="1" end="${totalPages}" var="i">
@@ -90,7 +76,8 @@
             </c:forEach>
 
             <c:if test="${currentPage lt totalPages}">
-                <li class="page-item"><a class="page-link" href="/home?currentPage=${currentPage+1}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="/home?currentPage=${currentPage+1}">Next</a>
+                </li>
             </c:if>
         </ul>
     </nav>

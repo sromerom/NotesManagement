@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface SharedNoteService {
     public List<SharedNote> getAll();
+    public long getSharedNoteId(long noteid, long userid);
     public List<SharedNote> getSharedNoteWithMe(long userid);
     public List<SharedNote> getSharedNotes(long userid);
     public List<SharedNote> filter(long userid, String title, String initDate, String endDate);

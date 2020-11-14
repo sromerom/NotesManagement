@@ -50,12 +50,13 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> getAllNotesFromUser(long userid, int offset) throws Exception{
+    public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception{
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? LIMIT 10 OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
-        ps.setInt(2, offset);
+        ps.setInt(2, limit);
+        ps.setInt(3, offset);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             long noteid = rs.getLong(1);
@@ -93,6 +94,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setLong(1, userid);
         ResultSet rs = ps.executeQuery();
         long totalNotes = rs.getInt(1);
+        ps.close();
         return totalNotes;
     }
 
@@ -120,7 +122,7 @@ public class NoteDaoImpl implements NoteDao {
             System.out.println("Note: " + note);
             result.add(note);
         }
-
+        ps.close();
         return result;
     }
 
@@ -150,6 +152,7 @@ public class NoteDaoImpl implements NoteDao {
             System.out.println("Note: " + note);
             result.add(note);
         }
+        ps.close();
         return result;
     }
 
@@ -179,6 +182,7 @@ public class NoteDaoImpl implements NoteDao {
             Note note = new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
             result.add(note);
         }
+        ps.close();
         return result;
     }
 
