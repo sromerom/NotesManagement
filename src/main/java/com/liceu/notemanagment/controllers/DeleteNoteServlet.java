@@ -13,6 +13,7 @@ import java.io.IOException;
 @WebServlet(value = "/delete")
 public class DeleteNoteServlet extends HttpServlet {
     private Long noteid = null;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("id") != null) {
@@ -20,8 +21,8 @@ public class DeleteNoteServlet extends HttpServlet {
             NoteService ns = new NoteServiceImpl();
             req.setAttribute("action", "/delete");
             req.setAttribute("noteid", noteid);
-            req.setAttribute("title", ns.getTitleById(noteid));
-            req.setAttribute("body", ns.getBodyById(noteid));
+            req.setAttribute("title", ns.getNoteById(noteid).getTitle());
+            req.setAttribute("body", ns.getNoteById(noteid).getBody());
 
             boolean noError = ns.deleteNote(noteid);
             resp.sendRedirect(req.getContextPath() + "/home");

@@ -16,6 +16,7 @@ import java.io.IOException;
 public class EditNoteServlet extends HttpServlet {
 
     private Long noteid = null;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("id") != null) {
@@ -23,8 +24,8 @@ public class EditNoteServlet extends HttpServlet {
             NoteService ns = new NoteServiceImpl();
             req.setAttribute("action", "/edit");
             req.setAttribute("noteid", noteid);
-            req.setAttribute("title", ns.getTitleById(noteid));
-            req.setAttribute("body", ns.getBodyById(noteid));
+            req.setAttribute("title", ns.getNoteById(noteid).getTitle());
+            req.setAttribute("body", ns.getNoteById(noteid).getBody());
         }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");

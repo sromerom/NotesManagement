@@ -53,3 +53,4 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //e.printStackTrace();
 //hacer filtro de las notas creadas que has compartido ###################################
 //Arreglar fallo de paginacion, te añade un boton extra
+//En delete, sobra cosas...

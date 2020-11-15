@@ -3,6 +3,9 @@ package com.liceu.notemanagment.services;
 import com.liceu.notemanagment.daos.*;
 import com.liceu.notemanagment.model.Note;
 import com.liceu.notemanagment.model.SharedNote;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -219,15 +222,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public String getTitleById(long noteid) {
-        NoteDao nd = new NoteDaoImpl();
-        return nd.getNoteById(noteid).getTitle();
-    }
-
-    @Override
-    public String getBodyById(long noteid) {
-        NoteDao nd = new NoteDaoImpl();
-        return nd.getNoteById(noteid).getBody();
+    public String getParsedBodyNote(String body) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(body);
+        HtmlRenderer renderer = HtmlRenderer.builder().escapeHtml(true).sanitizeUrls(true).build();
+        return renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
     }
 
     @Override

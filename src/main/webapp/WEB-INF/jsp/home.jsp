@@ -70,26 +70,32 @@
         <c:choose>
             <c:when test="${note.user.iduser == userid}">
                 <div class="card" style="width: 18rem; background-color: cornflowerblue">
-                    <div class="card-body">
-                        <h5 class="card-title">${note.title}</h5>
-                        <p class="card-text">${note.body}</p>
-                        <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
-                        <a class="card-link" href="/delete?id=${note.idnote}">Delete</a>
-                        <a class="card-link" href="/users?id=${note.idnote}">Share</a>
-                        <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">By ${note.user.username}</h6>
-                    </div>
+                    <a href="/detail?id=${note.idnote}">
+                        <div class="card-body">
+                            <h5 class="card-title">${note.title}</h5>
+                            <p class="card-text">${note.body}</p>
+                            <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
+                            <a class="card-link" href="/delete?id=${note.idnote}">Delete</a>
+                            <a class="card-link" href="/users?id=${note.idnote}">Share</a>
+                            <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
+                                By ${note.user.username}</h6>
+                        </div>
+                    </a>
                 </div>
             </c:when>
             <c:otherwise>
                 <div class="card" style="width: 18rem; background-color: lightcoral">
-                    <div class="card-body">
-                        <h5 class="card-title">${note.title}</h5>
-                        <p class="card-text">${note.body}</p>
-                        <!-- <a class="card-link" href="/deleteShare?idShareNote={$note.idShareNote}">Delete share</a> -->
-                        <a class="card-link" href="/deleteShare?noteid=${note.idnote}&userid=${userid}">Delete share</a>
-                        <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">Shared
-                            By ${note.user.username}</h6>
-                    </div>
+                    <a href="/detail?id=${note.idnote}">
+                        <div class="card-body">
+                            <h5 class="card-title">${note.title}</h5>
+                            <p class="card-text">${note.body}</p>
+                            <!-- <a class="card-link" href="/deleteShare?idShareNote={$note.idShareNote}">Delete share</a> -->
+                            <a class="card-link" href="/deleteShare?noteid=${note.idnote}&userid=${userid}">Delete
+                                share</a>
+                            <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">Shared
+                                By ${note.user.username}</h6>
+                        </div>
+                    </a>
                 </div>
             </c:otherwise>
         </c:choose>
