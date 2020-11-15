@@ -53,7 +53,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setInt(2, limit);
         ps.setInt(3, offset);
@@ -102,7 +102,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterByTitle(long userid, String titol, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setString(2, "%" + titol + "%");
         ps.setInt(3, limit);
@@ -132,7 +132,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
@@ -164,7 +164,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterAll(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59

@@ -66,7 +66,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public List<SharedNote> getSharedNotesWithMe(long userid, int limit, int offset) throws SQLException {
         List<SharedNote> result = new ArrayList<>();
         Connection c = Database.getConnection();
-        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? LIMIT ? OFFSET ?");
+        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ?  ORDER BY s.shared_note DESC LIMIT ? OFFSET ?");
         all.setLong(1, userid);
         all.setInt(2, limit);
         all.setInt(3, offset);
@@ -117,7 +117,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public List<SharedNote> getSharedNotes(long userid, int limit, int offset) throws Exception {
         List<SharedNote> result = new ArrayList<>();
         Connection c = Database.getConnection();
-        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE note.user_iduser = ? LIMIT ? OFFSET ?");
+        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE note.user_iduser = ?  ORDER BY s.shared_note DESC LIMIT ? OFFSET ?");
         all.setLong(1, userid);
         all.setInt(2, limit);
         all.setInt(3, offset);
@@ -203,7 +203,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
         List<SharedNote> result = new ArrayList<>();
         Connection c = Database.getConnection();
         System.out.println(userid + " " + titol);
-        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND note.title LIKE ? LIMIT ? OFFSET ?");
+        PreparedStatement all = c.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND note.title LIKE ?  ORDER BY s.shared_note DESC LIMIT ? OFFSET ?");
         all.setLong(1, userid);
         all.setString(2, "%" + titol + "%");
         all.setInt(3, limit);
@@ -245,7 +245,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public List<SharedNote> filterSharedNotesWithMeByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
         List<SharedNote> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement all = conn.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
+        PreparedStatement all = conn.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND creationDate > ? AND lastModificationDate < ?  ORDER BY s.shared_note DESC LIMIT ? OFFSET ?");
         all.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
@@ -290,7 +290,7 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     public List<SharedNote> filterSharedNotesWithMeAll(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception {
         List<SharedNote> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement all = conn.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? LIMIT ? OFFSET ?");
+        PreparedStatement all = conn.prepareStatement("SELECT shared_note, s.user_id, email, username, password, s.note_id, user_iduser, title, body, creationDate, lastModificationDate FROM sharedNote AS s INNER JOIN user ON user.user_id = s.user_id INNER JOIN note ON note.note_id = s.note_id WHERE s.user_id = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ?  ORDER BY s.shared_note DESC LIMIT ? OFFSET ?");
         all.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
