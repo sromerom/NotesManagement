@@ -84,25 +84,28 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public boolean shareNote(long noteid, String[] usernames) {
+    public boolean shareNote(long useridOwner, long noteid, String[] usernames) {
         try {
             SharedNoteDao snd = new SharedNoteDaoImpl();
             NoteDao nd = new NoteDaoImpl();
             UserDao ud = new UserDaoImpl();
 
-            Note noteForShare = nd.getNoteById(noteid);
+            Note noteForShare = nd.getNoteById(useridOwner, noteid);
             List<SharedNote> sharedNotes = new ArrayList<>();
 
-            for (String username : usernames) {
-                long userid = ud.getUserIdByUsername(username);
-                sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
+            if (noteForShare != null) {
+                for (String username : usernames) {
+                    long userid = ud.getUserIdByUsername(username);
+                    sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
+                }
+                snd.create(sharedNotes);
+                return true;
             }
-            snd.create(sharedNotes);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
+        return false;
     }
 
     @Override

@@ -193,14 +193,22 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public Note getNoteById(long id) {
-
-        for (Note n : this.notes) {
-            if (n.getIdnote() == id) {
-                return n;
-            }
-        }
-        return null;
+    public Note getNoteById(long userid, long noteid) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND note_id = ?");
+        ps.setLong(1, userid);
+        ps.setLong(2, noteid);
+        ResultSet rs = ps.executeQuery();
+        String titleActual = rs.getString(1);
+        String body = rs.getString(2);
+        String creationDate = rs.getString(3);
+        String lastModificationDate = rs.getString(4);
+        String email = rs.getString(5);
+        String username = rs.getString(6);
+        String password = rs.getString(7);
+        rs.close();
+        ps.close();
+        return new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
     }
 
     @Override

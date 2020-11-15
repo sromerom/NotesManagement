@@ -26,6 +26,7 @@ public class ShareNoteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        Long userid = (Long) session.getAttribute("userid");
         //Long userid = (Long) session.getAttribute("userid");
         //String [] sharedUsers = req.getParameterValues("share");
         String [] sharedUsers = req.getParameterValues("states[]");
@@ -35,7 +36,7 @@ public class ShareNoteServlet extends HttpServlet {
         System.out.println("Note id: " + noteid);
 
 
-        boolean noError = sns.shareNote(noteid, sharedUsers);
+        boolean noError = sns.shareNote(userid, noteid, sharedUsers);
         if (noError) {
             System.out.println("S'ha compartit la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");

@@ -10,11 +10,11 @@ public interface NoteService {
     public long getCreatedNotesLength(long id);
     public boolean checkFilter(String title, String initDate, String endDate);
     public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset);
-    public Note getNoteById(long id);
+    public Note getNoteById(long userid, long noteid);
     //public String getTitleById(long noteid);
     //public String getBodyById(long noteid);
     public String getParsedBodyNote(String body);
-    public boolean addNote(long iduser, String title, String body);
-    public boolean editNote(long idnote, String title, String body);
-    public boolean deleteNote(long idnote);
+    public boolean addNote(long userid, String title, String body);
+    public boolean editNote(long userid, long idnote, String title, String body);
+    public boolean deleteNote(long userid, long idnote);
 }

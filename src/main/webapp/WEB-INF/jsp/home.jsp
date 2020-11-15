@@ -75,7 +75,10 @@
                             <h5 class="card-title">${note.title}</h5>
                             <p class="card-text">${note.body}</p>
                             <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
-                            <a class="card-link" href="/delete?id=${note.idnote}">Delete</a>
+                            <form method="POST" action="/delete"><input type="hidden" name="noteid"
+                                                                        value="${note.idnote}">
+                                <button type="submit">Delete</button>
+                            </form>
                             <a class="card-link" href="/users?id=${note.idnote}">Share</a>
                             <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
                                 By ${note.user.username}</h6>
@@ -89,9 +92,10 @@
                         <div class="card-body">
                             <h5 class="card-title">${note.title}</h5>
                             <p class="card-text">${note.body}</p>
-                            <!-- <a class="card-link" href="/deleteShare?idShareNote={$note.idShareNote}">Delete share</a> -->
-                            <a class="card-link" href="/deleteShare?noteid=${note.idnote}&userid=${userid}">Delete
-                                share</a>
+                            <form method="POST" action="/deleteShare">
+                                <input type="hidden" name="noteid" value="${note.idnote}">
+                                <button type="submit">Delete Share</button>
+                            </form>
                             <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">Shared
                                 By ${note.user.username}</h6>
                         </div>
@@ -123,40 +127,11 @@
 
             <c:if test="${currentPage lt totalPages}">
                 <li class="page-item"><a class="page-link"
-                                         href="/home?currentPage=${currentPage+1}&${filterURL}">Next</a>
-                </li>
+                                         href="/home?currentPage=${currentPage+1}&${filterURL}">Next</a></li>
             </c:if>
         </ul>
     </nav>
 </section>
-<!--
-<section id="siteSharedNotes">
-    <div>
-        <h2>Notes compartides amb tu:</h2>
-        <c:forEach var="sharedNote" items="${sharedNotesWithMe}">
-            <div style="background-color: cadetblue;">
-                <h3>${sharedNote.note.title}</h3>
-                <p>${sharedNote.note.body}</p>
-                <span>Nota compartida per ${sharedNote.note.user.username}</span>
-                <a href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete share</a>
-            </div>
-        </c:forEach>
-    </div>
-    <div>
-        <h2>Notes que he compartit:</h2>
-        <c:forEach var="sharedNote" items="${sharedNotes}">
-            <div style="background-color: darkgoldenrod;">
-                <h3>${sharedNote.note.title}</h3>
-                <p>${sharedNote.note.body}</p>
-                <a href="/edit?id=${sharedNote.note.idnote}">Update</a>
-                <a href="/delete?id=${sharedNote.note.idnote}">Delete</a>
-                <a href="/users?id=${sharedNote.note.idnote}">Share With Users!</a>
-                <a href="/deleteShare?idShareNote=${sharedNote.idShareNote}">Delete share</a>
-            </div>
-        </c:forEach>
-    </div>
-</section>
--->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

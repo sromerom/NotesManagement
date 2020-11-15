@@ -23,18 +23,16 @@ public class DetailNoteServlet extends HttpServlet {
         if (req.getParameter("id") != null) {
             noteid = Long.parseLong(req.getParameter("id"));
             NoteService ns = new NoteServiceImpl();
-            //req.setAttribute("noteid", noteid);
-            //req.setAttribute("title", ns.getTitleById(noteid));
-            //req.setAttribute("body", ns.getBodyById(noteid));
-            req.setAttribute("note", ns.getNoteById(noteid));
-
+            HttpSession session = req.getSession();
+            Long userid = (Long) session.getAttribute("userid");
+            System.out.println("Para enviar!!!!!! " + userid);
             resp.setContentType("text/html");
             PrintWriter out = resp.getWriter();
             out.print("<html>");
             out.print("<head><title></title></head>");
             out.print("<body>");
-            out.print("<h1>" + ns.getNoteById(noteid).getTitle() + "</h1>");
-            out.print(ns.getParsedBodyNote(ns.getNoteById(noteid).getBody()));
+            out.print("<h1>" + ns.getNoteById(userid, noteid).getTitle() + "</h1>");
+            out.print(ns.getParsedBodyNote(ns.getNoteById(userid, noteid).getBody()));
             out.print("</body>");
             out.print("</html>");
         }

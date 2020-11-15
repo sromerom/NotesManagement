@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(value = "/deleteShare")
@@ -16,12 +17,17 @@ public class DeleteShareServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("noteid") != null && req.getParameter("userid") != null) {
-            //sharedNoteId = Long.parseLong(req.getParameter("idShareNote"));
+        resp.sendRedirect(req.getContextPath() + "/home");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getParameter("noteid") != null) {
             SharedNoteService sns = new SharedNoteServiceImpl();
-            System.out.println("noteid: " + Long.parseLong(req.getParameter("noteid")));
-            System.out.println("userid: " + Long.parseLong(req.getParameter("userid")));
-            long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));
+            HttpSession session = req.getSession();
+            Long userid = (Long) session.getAttribute("userid");
+            //long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));
+            long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), userid);
             boolean noError = false;
             System.out.println("shareNoteId: " + sharedNoteId);
             if (sharedNoteId != -1) {
@@ -32,8 +38,6 @@ public class DeleteShareServlet extends HttpServlet {
             }
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
-        } else {
-            System.out.println("Nop");
         }
     }
 }

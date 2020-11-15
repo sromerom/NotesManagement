@@ -1,5 +1,7 @@
 package com.liceu.notemanagment.controllers;
 
+import com.liceu.notemanagment.services.NoteService;
+import com.liceu.notemanagment.services.NoteServiceImpl;
 import com.liceu.notemanagment.services.UserService;
 import com.liceu.notemanagment.services.UserServiceImpl;
 
@@ -14,18 +16,22 @@ import java.io.IOException;
 
 @WebServlet(value = "/users")
 public class UsersServlet extends HttpServlet {
-    private Long noteid = null;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("id") != null) {
-            noteid = Long.parseLong(req.getParameter("id"));
-        }
         UserService us = new UserServiceImpl();
-        HttpSession session = req.getSession();
-        req.setAttribute("users", us.getAll());
-        req.setAttribute("noteid", noteid);
-        //req.setAttribute("notes", ns.getNotesFromUser((long) session.getAttribute("userid")));
-        System.out.println(us.getAll());
+        NoteService ns = new NoteServiceImpl();
+        if (req.getParameter("id") != null) {
+            long noteid = Long.parseLong(req.getParameter("id"));
+            HttpSession session = req.getSession();
+            Long userid = (Long) session.getAttribute("userid");
+            req.setAttribute("users", us.getAll());
+            req.setAttribute("noteid", noteid);
+
+            if (ns.getNoteById(userid, noteid) == null) {
+                resp.sendRedirect(req.getContextPath() + "/home");
+                return;
+            }
+        }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);

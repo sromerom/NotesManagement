@@ -216,9 +216,14 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note getNoteById(long id) {
+    public Note getNoteById(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
-        return nd.getNoteById(id);
+        try {
+            return nd.getNoteById(userid, noteid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -230,7 +235,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean addNote(long iduser, String title, String body) {
+    public boolean addNote(long userid, String title, String body) {
         //ES CORRECTE EMPRAR ALTRES DAOS EN UN SERVICE QUE ES DE NOTE?
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
@@ -245,7 +250,7 @@ public class NoteServiceImpl implements NoteService {
         String date = myDateObj.format(myFormatObj);
 
         try {
-            nd.create(new Note(0, ud.getUserById(iduser), title, body, date, date));
+            nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
         } catch (Exception e) {
             return false;
         }
@@ -257,7 +262,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean editNote(long idnote, String title, String body) {
+    public boolean editNote(long userid, long idnote, String title, String body) {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
         //2020-11-10 12:46:03
@@ -270,9 +275,10 @@ public class NoteServiceImpl implements NoteService {
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String lastModificationDate = myDateObj.format(myFormatObj);
-        Note noteToUpdate = nd.getNoteById(idnote);
 
         try {
+
+            Note noteToUpdate = nd.getNoteById(userid, idnote);
             nd.update(new Note(idnote, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
         } catch (Exception e) {
             return false;
@@ -282,13 +288,18 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean deleteNote(long idnote) {
+    public boolean deleteNote(long userid, long idnote) {
         NoteDao nd = new NoteDaoImpl();
+
         try {
-            nd.delete(idnote);
+            Note note = nd.getNoteById(userid, idnote);
+            if (note != null) {
+                nd.delete(idnote);
+                return true;
+            }
         } catch (Exception e) {
             return false;
         }
-        return true;
+        return false;
     }
 }
