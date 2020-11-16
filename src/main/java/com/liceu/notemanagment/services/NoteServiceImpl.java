@@ -20,7 +20,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getNotesFromUser(long id, int offset) {
+    public List<Note> getNotesFromUser(long userid, int offset) {
         NoteDao nd = new NoteDaoImpl();
         SharedNoteDao sns = new SharedNoteDaoImpl();
 
@@ -35,11 +35,11 @@ public class NoteServiceImpl implements NoteService {
 
             }
 
-            int actualLengthCreatedNotes = nd.getAllNotesFromUser(id, limit, parsedOffset).size();
-            int actualLengthSharedNotes = sns.getSharedNotesWithMe(id, limit, parsedOffset).size();
+            int actualLengthCreatedNotes = nd.getAllNotesFromUser(userid, limit, parsedOffset).size();
+            int actualLengthSharedNotes = sns.getSharedNotesWithMe(userid, limit, parsedOffset).size();
 
             System.out.println("createdNotes: " + actualLengthCreatedNotes);
-            System.out.println("sharedNotes: " + actualLengthSharedNotes);
+            System.out.println("sharedNotesWithMe: " + actualLengthSharedNotes);
             /*
             if (actualLengthCreatedNotes - actualLengthSharedNotes != 0 && actualLengthCreatedNotes + actualLengthSharedNotes >= 5) {
                 int diff = actualLengthCreatedNotes - actualLengthSharedNotes;
@@ -68,15 +68,24 @@ public class NoteServiceImpl implements NoteService {
             //System.out.println("limitShared: " + limitShared);
 
 
-            List<Note> createdNotes = nd.getAllNotesFromUser(id, limit, offset);
-            List<SharedNote> sharedNotes = sns.getSharedNotesWithMe(id, limit, offset);
+            List<Note> createdNotes = nd.getAllNotesFromUser(userid, limit, offset);
+            List<SharedNote> sharedNotes = sns.getSharedNotes(userid, 100, 0);
+            List<SharedNote> sharedNotesWithMe = sns.getSharedNotesWithMe(userid, limit, offset);
             List<Note> allNotes = new ArrayList<>();
 
-            for (Note n : createdNotes) {
-                allNotes.add(n);
+            for (int i = 0; i < createdNotes.size(); i++) {
+                for (int j = 0; j < sharedNotes.size(); j++) {
+                    if(sharedNotes.get(j).getNote().getIdnote() == createdNotes.get(i).getIdnote()) {
+                        System.out.println("Es miaaaaa y compartidaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        createdNotes.get(i).setisShared(true);
+                        sharedNotes.remove(j);
+                        break;
+                    }
+                }
+                allNotes.add(createdNotes.get(i));
             }
 
-            for (SharedNote sn : sharedNotes) {
+            for (SharedNote sn : sharedNotesWithMe) {
                 allNotes.add(sn.getNote());
             }
 

@@ -66,25 +66,51 @@
         </c:otherwise>
     </c:choose>
 
+    <!-- <c:if test="note.isShared == true"><p>Esta compartida y es creada por ti!!</p></c:if> -->
     <c:forEach var="note" items="${notes}">
         <c:choose>
             <c:when test="${note.user.iduser == userid}">
-                <div class="card" style="width: 18rem; background-color: cornflowerblue">
-                    <a href="/detail?id=${note.idnote}">
-                        <div class="card-body">
-                            <h5 class="card-title">${note.title}</h5>
-                            <p class="card-text">${note.body}</p>
-                            <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
-                            <form method="POST" action="/delete"><input type="hidden" name="noteid"
-                                                                        value="${note.idnote}">
-                                <button type="submit">Delete</button>
-                            </form>
-                            <a class="card-link" href="/users?id=${note.idnote}">Share</a>
-                            <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
-                                By ${note.user.username}</h6>
+                <c:choose>
+                    <c:when test="${note.isShared == true || typeNote == 'compartit'}">
+                        <div class="card" style="width: 18rem; background-color: cadetblue">
+                            <a href="/detail?id=${note.idnote}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${note.title}</h5>
+                                    <p class="card-text">${note.body}</p>
+                                    <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
+                                    <form method="POST" action="/delete"><input type="hidden" name="noteid"
+                                                                                value="${note.idnote}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                    <form method="POST" action="/deleteShare">
+                                        <input type="hidden" name="noteid" value="${note.idnote}">
+                                        <button type="submit">Delete Share</button>
+                                    </form>
+                                    <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
+                                        By ${note.user.username}</h6>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="card" style="width: 18rem; background-color: cornflowerblue">
+                            <a href="/detail?id=${note.idnote}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${note.title}</h5>
+                                    <p class="card-text">${note.body}</p>
+                                    <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
+                                    <form method="POST" action="/delete"><input type="hidden" name="noteid"
+                                                                                value="${note.idnote}">
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                    <a class="card-link" href="/users?id=${note.idnote}">Share</a>
+                                    <h6 class="card-subtitle mb-2 text-muted" style="font-size: 10px;">
+                                        By ${note.user.username}</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </c:when>
             <c:otherwise>
                 <div class="card" style="width: 18rem; background-color: lightcoral">

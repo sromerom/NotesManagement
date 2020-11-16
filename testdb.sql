@@ -33,6 +33,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota3", "Esto es una nota3...", datetime('now','localtime'), datetime('now','localtime'));
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota4", "Esto es una nota4...", datetime('now','localtime'), datetime('now','localtime'));
 
+-------------------------------------------------POR HACER...-------------------------------------------------------
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
 //Contraseñas fuertes
@@ -49,11 +50,11 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Arreglar fallo de paginacion, te añade un boton extra ###################################
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
-//Comprobar que nadie pueda crear y eliminar notas compartidas que no sean suyas... ############################
 //Hacer diseño presentable ##############################
 //Evitar poder compartirse una nota a si mismo ############################
 // Arreglar fallo del login (Error 500) ############################
----------------HECHAS------------------------------------------------------------------------------------------
+//Intentar arreglar fallo de diseño (quitar dao, modelo y service de sharedNote...)
+-------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
 //Crear detailPageNote --> Hecho
@@ -61,3 +62,5 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //comprovar si un usuari pot veure, editar o eliminar un nota en concret... ################################### --> Hecho
 //cambiar eliminacion de una nota de get por post ################################### --> Hecho
 //En delete, sobra cosas... --> Hecho
+//Comprobar que nadie pueda crear y eliminar notas compartidas que no sean suyas... ############################ --> Hecho
+//Arreglar las opciones que se encuentras en las notas creadas que han sido compartidas ################################ --> Hecho

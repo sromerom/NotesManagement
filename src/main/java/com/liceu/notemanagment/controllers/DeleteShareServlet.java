@@ -25,13 +25,14 @@ public class DeleteShareServlet extends HttpServlet {
         if (req.getParameter("noteid") != null) {
             SharedNoteService sns = new SharedNoteServiceImpl();
             HttpSession session = req.getSession();
-            Long userid = (Long) session.getAttribute("userid");
+            long userid = (long) session.getAttribute("userid");
+            long noteid = Long.parseLong(req.getParameter("noteid"));
             //long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));
-            long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), userid);
+            long sharedNoteId = sns.getSharedNoteId(noteid, userid);
             boolean noError = false;
             System.out.println("shareNoteId: " + sharedNoteId);
             if (sharedNoteId != -1) {
-                noError = sns.deleteShareNote(sharedNoteId);
+                noError = sns.deleteShareNote(userid, noteid, sharedNoteId);
             }
             if (!noError) {
                 System.out.println("Error eliminant el share");

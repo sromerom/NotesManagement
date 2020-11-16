@@ -12,7 +12,7 @@ public interface SharedNoteDao {
 
     public List<SharedNote> getSharedNotes(long userid, int limit, int offset) throws Exception;
 
-    public long getSharedNoteId(long noteid, long userid) throws Exception;
+    public long getSharedNoteId(long noteid) throws Exception;
 
     public long getSharedNotesWithMeLength(long userid) throws Exception;
 

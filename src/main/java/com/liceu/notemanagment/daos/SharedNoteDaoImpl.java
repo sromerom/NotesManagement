@@ -165,11 +165,10 @@ public class SharedNoteDaoImpl implements SharedNoteDao {
     }
 
     @Override
-    public long getSharedNoteId(long noteid, long userid) throws Exception {
+    public long getSharedNoteId(long noteid) throws Exception {
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT shared_note FROM sharedNote WHERE note_id = ? AND user_id = ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT shared_note FROM sharedNote WHERE note_id = ?");
         ps.setLong(1, noteid);
-        ps.setLong(2, userid);
         ResultSet rs = ps.executeQuery();
         long sharedNoteId = rs.getLong(1);
         ps.close();

@@ -10,6 +10,7 @@ public class Note {
     private String body;
     private String creationDate;
     private String lastModification;
+    private boolean isShared;
 
     public Note(long idnote, User user, String title, String body, String creationDate, String lastModification) {
         this.setIdnote(idnote);
@@ -18,18 +19,19 @@ public class Note {
         this.setBody(body);
         this.setCreationDate(creationDate);
         this.setLastModification(lastModification);
+        this.isShared = false;
     }
-
 
     @Override
     public String toString() {
         return "Note{" +
-                "idnote=" + getIdnote() +
-                ", user=" + getUser() +
-                ", title='" + getTitle() + '\'' +
-                ", body='" + getBody() + '\'' +
-                ", creationDate=" + getCreationDate() +
-                ", lastModification=" + getLastModification() +
+                "idnote=" + idnote +
+                ", user=" + user +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", lastModification='" + lastModification + '\'' +
+                ", isShared=" + isShared +
                 '}';
     }
 
@@ -79,5 +81,13 @@ public class Note {
 
     public void setLastModification(String lastModification) {
         this.lastModification = lastModification;
+    }
+
+    public boolean getisShared() {
+        return isShared;
+    }
+
+    public void setisShared(boolean shared) {
+        isShared = shared;
     }
 }

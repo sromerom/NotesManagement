@@ -18,7 +18,7 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     public long getSharedNoteId(long noteid, long userid) {
         SharedNoteDao snd = new SharedNoteDaoImpl();
         try {
-            return snd.getSharedNoteId(noteid, userid);
+            return snd.getSharedNoteId(noteid);
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
@@ -109,14 +109,50 @@ public class SharedNoteServiceImpl implements SharedNoteService {
     }
 
     @Override
-    public boolean deleteShareNote(long sharedNoteId) {
+    public boolean deleteShareNote(long userid, long noteid, long sharedNoteId) {
         try {
+            //1 36
             SharedNoteDao snd = new SharedNoteDaoImpl();
-            snd.delete(sharedNoteId);
+            NoteDao nd = new NoteDaoImpl();
+            List<SharedNote> sharedNotes = snd.getSharedNotes(userid, 50, 0);
+            List<SharedNote> sharedWithMe = snd.getSharedNotesWithMe(userid, 50, 0);
+            boolean canDelete = false;
+
+            for (SharedNote sn : sharedWithMe) {
+                if (sn.getUser().getIduser() == userid && sn.getIdShareNote() == sharedNoteId) {
+                    System.out.println(sn.getNote().getIdnote() + " =? " + noteid);
+                    System.out.println("Eliminamos nota que nos han compartido...");
+                    canDelete = true;
+                    break;
+                } else {
+                    canDelete = false;
+                }
+            }
+
+            if (canDelete) {
+                snd.delete(sharedNoteId);
+                return true;
+            }
+
+            for (SharedNote sn : sharedNotes) {
+                if (sn.getNote().getIdnote() == noteid && sn.getIdShareNote() == sharedNoteId) {
+                    System.out.println("Eliminamos nota que hemos compartido...");
+                    canDelete = true;
+                    break;
+                } else {
+                    canDelete = false;
+                }
+            }
+
+            if (canDelete) {
+                snd.delete(sharedNoteId);
+                return true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
+        return false;
     }
 }

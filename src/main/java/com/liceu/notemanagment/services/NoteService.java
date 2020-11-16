@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface NoteService {
     public List<Note> getAll();
-    public List<Note> getNotesFromUser(long id, int offset);
+    public List<Note> getNotesFromUser(long userid, int offset);
     public List<Note> getCreatedNotes(long id, int offset);
     public long getAllNotesLength(long id);
     public long getCreatedNotesLength(long id);

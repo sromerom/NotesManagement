@@ -13,5 +13,5 @@ public interface SharedNoteService {
     public long getLengthSharedNotes(long userid);
     //public List<SharedNote> filter(long userid, String title, String initDate, String endDate, int offset);
     public boolean shareNote(long userid, long noteid, String [] usernames);
-    public boolean deleteShareNote(long sharedNoteId);
+    public boolean deleteShareNote(long userid, long noteid, long sharedNoteId);
 }

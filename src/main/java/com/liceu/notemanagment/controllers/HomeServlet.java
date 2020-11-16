@@ -98,7 +98,6 @@ public class HomeServlet extends HttpServlet {
          */
 
 
-
         System.out.println("current page: " + currentPage);
         System.out.println("totalPages " + totalPages);
         req.setAttribute("totalPages", totalPages);
