@@ -67,6 +67,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Acabar hacer filtros de busqueda #################################
 //escape script markdown ?????
 //Poder ver el detail de las notas compartidas ########################
+//include header.jsp en cada pagina per no repetir codi ########################
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho

@@ -163,18 +163,16 @@ public class NoteServiceImpl implements NoteService {
         String date = myDateObj.format(myFormatObj);
 
         try {
-            if (!checkHTMLTags(title) && !checkHTMLTags(body)) {
-                nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
-                return true;
-            }
+
+            nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
+            return true;
+
         } catch (Exception e) {
             return false;
         }
 
-
         //public Note(long idnote, User user, String title, String body, Date creationDate, Date lastModification) {
         //nd.create(new Note(0, iduser, title, body, formatter.format(date), formatter.format(date)));
-        return false;
     }
 
     @Override

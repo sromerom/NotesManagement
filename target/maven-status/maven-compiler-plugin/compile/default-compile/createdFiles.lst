@@ -1,4 +1,2 @@
-com\liceu\notemanagment\services\Filter.class
-com\liceu\notemanagment\controllers\DeleteShareServlet.class
-com\liceu\notemanagment\services\HashUtil.class
-com\liceu\notemanagment\controllers\DetailNoteServlet.class
+com/liceu/notemanagment/services/HashUtil.class
+com/liceu/notemanagment/controllers/DetailNoteServlet.class
