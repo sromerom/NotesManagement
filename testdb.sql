@@ -65,7 +65,8 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //testear aplicacion ########################################
 //Hacer diseño presentable ##############################
 //Acabar hacer filtros de busqueda #################################
-//escape script markdown
+//escape script markdown ?????
+//Poder ver el detail de las notas compartidas ########################
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
