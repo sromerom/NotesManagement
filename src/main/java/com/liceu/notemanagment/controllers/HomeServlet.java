@@ -14,12 +14,11 @@ import java.io.IOException;
 @WebServlet(value = "/home")
 public class HomeServlet extends HttpServlet {
 
-    private final double PAGES_FOR_NOTE = 5.0;
+    private final double PAGES_FOR_NOTE = 10.0;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NoteService ns = new NoteServiceImpl();
-        SharedNoteService sns = new SharedNoteServiceImpl();
         HttpSession session = req.getSession();
 
         Long userid = (Long) session.getAttribute("userid");
@@ -46,10 +45,10 @@ public class HomeServlet extends HttpServlet {
         if (req.getParameter("currentPage") != null) {
             int actualCurrentPage = Integer.parseInt(req.getParameter("currentPage"));
             if (actualCurrentPage > currentPage) {
-                offset = (actualCurrentPage - 1) * 5;
+                offset = (actualCurrentPage - 1) * 10;
                 currentPage = actualCurrentPage;
             } else if (actualCurrentPage < currentPage) {
-                offset = (actualCurrentPage - 1) * 5;
+                offset = (actualCurrentPage - 1) * 10;
                 currentPage = actualCurrentPage;
             }
         }
@@ -58,20 +57,21 @@ public class HomeServlet extends HttpServlet {
         if (typeNoteDisplay != null && !typeNoteDisplay.equals("")) {
             if (typeNoteDisplay.equals("compartides")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
-                req.setAttribute("notes", sns.getSharedNoteWithMe(userid, offset));
+                req.setAttribute("notes", ns.getSharedNoteWithMe(userid, offset));
                 //Cambiar a metode
                 //totalPages = (int) Math.ceil(sns.getSharedNoteWithMe(userid, offset).size() / PAGES_FOR_NOTE);
-                totalPages = (int) Math.ceil(sns.getLengthSharedNoteWithMe(userid) / PAGES_FOR_NOTE);
+                totalPages = (int) Math.ceil(ns.getLengthSharedNoteWithMe(userid) / PAGES_FOR_NOTE);
             } else if (typeNoteDisplay.equals("compartit")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
-                req.setAttribute("notes", sns.getSharedNotes(userid, offset));
-                totalPages = (int) Math.ceil(sns.getLengthSharedNotes(userid) / PAGES_FOR_NOTE);
+                req.setAttribute("notes", ns.getSharedNotes(userid, offset));
+                totalPages = (int) Math.ceil(ns.getLengthSharedNotes(userid) / PAGES_FOR_NOTE);
             } else {
                 req.setAttribute("typeNote", typeNoteDisplay);
                 req.setAttribute("notes", ns.getCreatedNotes(userid, offset));
                 totalPages = (int) Math.ceil(ns.getCreatedNotesLength(userid) / PAGES_FOR_NOTE);
             }
         } else {
+            req.setAttribute("typeNote", "allNotes");
             req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
             totalPages = (int) Math.ceil(ns.getAllNotesLength(userid) / (PAGES_FOR_NOTE));
         }
@@ -82,21 +82,6 @@ public class HomeServlet extends HttpServlet {
             req.setAttribute("notes", ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset));
             totalPages = (int) Math.ceil(ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset).size() / (PAGES_FOR_NOTE));
         }
-
-        /*
-        //Aplicam filtres
-        if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
-            if (!typeNoteDisplay.equals("propies")) {
-                System.out.println("Aplicamos filter a shared notes");
-                req.setAttribute("notes", sns.filter(userid, titleFilter, initDateFilter, endDateFilter));
-            } else {
-                System.out.println("Aplicamos filter a created notes");
-                req.setAttribute("notes", ns.filter(userid, titleFilter, initDateFilter, endDateFilter));
-            }
-        }
-
-         */
-
 
         System.out.println("current page: " + currentPage);
         System.out.println("totalPages " + totalPages);

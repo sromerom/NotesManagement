@@ -65,13 +65,11 @@
             <h2>Totes les notes:</h2>
         </c:otherwise>
     </c:choose>
-
-    <!-- <c:if test="note.isShared == true"><p>Esta compartida y es creada por ti!!</p></c:if> -->
     <c:forEach var="note" items="${notes}">
         <c:choose>
             <c:when test="${note.user.iduser == userid}">
                 <c:choose>
-                    <c:when test="${note.isShared == true || typeNote == 'compartit'}">
+                    <c:when test="${typeNote == 'compartit'}">
                         <div class="card" style="width: 18rem; background-color: cadetblue">
                             <a href="/detail?id=${note.idnote}">
                                 <div class="card-body">

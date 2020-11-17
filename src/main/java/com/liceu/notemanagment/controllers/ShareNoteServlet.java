@@ -2,9 +2,6 @@ package com.liceu.notemanagment.controllers;
 
 import com.liceu.notemanagment.services.NoteService;
 import com.liceu.notemanagment.services.NoteServiceImpl;
-import com.liceu.notemanagment.services.SharedNoteService;
-import com.liceu.notemanagment.services.SharedNoteServiceImpl;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,12 +28,12 @@ public class ShareNoteServlet extends HttpServlet {
         //String [] sharedUsers = req.getParameterValues("share");
         String [] sharedUsers = req.getParameterValues("states[]");
         Long noteid = Long.parseLong(req.getParameter("noteid"));
-        SharedNoteService sns = new SharedNoteServiceImpl();
+        NoteService ns = new NoteServiceImpl();
         System.out.println(Arrays.toString(sharedUsers));
         System.out.println("Note id: " + noteid);
 
 
-        boolean noError = sns.shareNote(userid, noteid, sharedUsers);
+        boolean noError = ns.shareNote(userid, noteid, sharedUsers);
         if (noError) {
             System.out.println("S'ha compartit la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");

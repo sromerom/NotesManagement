@@ -1,8 +1,6 @@
 package com.liceu.notemanagment.model;
 
 
-import java.util.Date;
-
 public class Note {
     private long idnote;
     private User user;
@@ -10,7 +8,6 @@ public class Note {
     private String body;
     private String creationDate;
     private String lastModification;
-    private boolean isShared;
 
     public Note(long idnote, User user, String title, String body, String creationDate, String lastModification) {
         this.setIdnote(idnote);
@@ -19,7 +16,6 @@ public class Note {
         this.setBody(body);
         this.setCreationDate(creationDate);
         this.setLastModification(lastModification);
-        this.isShared = false;
     }
 
     @Override
@@ -31,7 +27,6 @@ public class Note {
                 ", body='" + body + '\'' +
                 ", creationDate='" + creationDate + '\'' +
                 ", lastModification='" + lastModification + '\'' +
-                ", isShared=" + isShared +
                 '}';
     }
 
@@ -83,11 +78,4 @@ public class Note {
         this.lastModification = lastModification;
     }
 
-    public boolean getisShared() {
-        return isShared;
-    }
-
-    public void setisShared(boolean shared) {
-        isShared = shared;
-    }
 }

@@ -1,8 +1,7 @@
 package com.liceu.notemanagment.controllers;
 
-import com.liceu.notemanagment.services.SharedNoteService;
-import com.liceu.notemanagment.services.SharedNoteServiceImpl;
-
+import com.liceu.notemanagment.services.NoteService;
+import com.liceu.notemanagment.services.NoteServiceImpl;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,16 +22,16 @@ public class DeleteShareServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("noteid") != null) {
-            SharedNoteService sns = new SharedNoteServiceImpl();
+            NoteService ns = new NoteServiceImpl();
             HttpSession session = req.getSession();
             long userid = (long) session.getAttribute("userid");
             long noteid = Long.parseLong(req.getParameter("noteid"));
             //long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));
-            long sharedNoteId = sns.getSharedNoteId(noteid, userid);
+            long sharedNoteId = ns.getSharedNoteId(noteid);
             boolean noError = false;
             System.out.println("shareNoteId: " + sharedNoteId);
             if (sharedNoteId != -1) {
-                noError = sns.deleteShareNote(userid, noteid, sharedNoteId);
+                noError = ns.deleteShareNote(userid, noteid, sharedNoteId);
             }
             if (!noError) {
                 System.out.println("Error eliminant el share");

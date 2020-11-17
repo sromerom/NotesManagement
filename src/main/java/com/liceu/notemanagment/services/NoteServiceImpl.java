@@ -2,7 +2,7 @@ package com.liceu.notemanagment.services;
 
 import com.liceu.notemanagment.daos.*;
 import com.liceu.notemanagment.model.Note;
-import com.liceu.notemanagment.model.SharedNote;
+import com.liceu.notemanagment.model.User;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteServiceImpl implements NoteService {
+    private final int LIMIT = 10;
+
     @Override
     public List<Note> getAll() {
         NoteDao nd = new NoteDaoImpl();
@@ -22,77 +24,10 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> getNotesFromUser(long userid, int offset) {
         NoteDao nd = new NoteDaoImpl();
-        SharedNoteDao sns = new SharedNoteDaoImpl();
-
         try {
-            //long notesLength = nd.getNotesLengthFromUser(id);
-            //long sharedNotesLength = sns.getSharedNotesLengthFromUser(id);
-            int parsedOffset = offset;
-            //int limitCreated = 5;
-            //int limitShared = 5;
-            int limit = 5;
-            if (offset != 0) {
-
-            }
-
-            int actualLengthCreatedNotes = nd.getAllNotesFromUser(userid, limit, parsedOffset).size();
-            int actualLengthSharedNotes = sns.getSharedNotesWithMe(userid, limit, parsedOffset).size();
-
-            System.out.println("createdNotes: " + actualLengthCreatedNotes);
-            System.out.println("sharedNotesWithMe: " + actualLengthSharedNotes);
-            /*
-            if (actualLengthCreatedNotes - actualLengthSharedNotes != 0 && actualLengthCreatedNotes + actualLengthSharedNotes >= 5) {
-                int diff = actualLengthCreatedNotes - actualLengthSharedNotes;
-                if (diff > 0) {
-                    limitCreated = limitCreated + (diff);
-                }
-                if (diff < 0) {
-                    limitShared = limitShared + (diff);
-                }
-            }
-
-             */
-            /*
-            if (offset != 0) {
-                parsedOffset = parsedOffset - 5;
-                if (offset > sharedNotesLength) {
-                    limit = (int) (parsedOffset + (offset - sharedNotesLength));
-
-                } else if (offset > notesLength) {
-                    limit = (int) (parsedOffset + (offset - notesLength));
-                }
-            }
-             */
-            System.out.println("offset: " + parsedOffset);
-            //System.out.println("limitCreated: " + limitCreated);
-            //System.out.println("limitShared: " + limitShared);
-
-
-            List<Note> createdNotes = nd.getAllNotesFromUser(userid, limit, offset);
-            List<SharedNote> sharedNotes = sns.getSharedNotes(userid, 100, 0);
-            List<SharedNote> sharedNotesWithMe = sns.getSharedNotesWithMe(userid, limit, offset);
-            List<Note> allNotes = new ArrayList<>();
-
-            for (int i = 0; i < createdNotes.size(); i++) {
-                for (int j = 0; j < sharedNotes.size(); j++) {
-                    if(sharedNotes.get(j).getNote().getIdnote() == createdNotes.get(i).getIdnote()) {
-                        System.out.println("Es miaaaaa y compartidaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                        createdNotes.get(i).setisShared(true);
-                        sharedNotes.remove(j);
-                        break;
-                    }
-                }
-                allNotes.add(createdNotes.get(i));
-            }
-
-            for (SharedNote sn : sharedNotesWithMe) {
-                allNotes.add(sn.getNote());
-            }
-
-            //return nd.getAllNotesFromUser(id, offset);
-            //System.out.println(allNotes);
-            return allNotes;
+            return nd.getAllNotesFromUser(userid, LIMIT, offset);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -101,7 +36,7 @@ public class NoteServiceImpl implements NoteService {
     public List<Note> getCreatedNotes(long id, int offset) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            return nd.getAllNotesFromUser(id, 5, offset);
+            return nd.getCreatedNotesFromUser(id, LIMIT, offset);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -111,11 +46,8 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public long getAllNotesLength(long id) {
         NoteDao nd = new NoteDaoImpl();
-        SharedNoteDao sns = new SharedNoteDaoImpl();
         try {
-            System.out.println("Tamaño propias: " + nd.getNotesLengthFromUser(id));
-            System.out.println("Tamaño shared: " + sns.getSharedNotesWithMeLength(id));
-            return nd.getNotesLengthFromUser(id) + sns.getSharedNotesWithMeLength(id);
+            return nd.getNotesLengthFromUser(id) + nd.getSharedNotesWithMeLength(id);
         } catch (Exception e) {
             return -1;
         }
@@ -156,72 +88,23 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
-        SharedNoteDao snd = new SharedNoteDaoImpl();
-        List<Note> createdNotes = new ArrayList<>();
-        List<SharedNote> sharedNotes = new ArrayList<>();
-        List<Note> allNotes = new ArrayList<>();
+        System.out.println("filtramos todo...");
         try {
-            if (type == null || type.equals("")) {
-                System.out.println("filtramos todo...");
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                    //return nd.filterByTitle(userid, title);
-                    createdNotes = nd.filterByTitle(userid, title, 5, offset);
-                    sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title, 5, offset);
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                    createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59", 5, offset);
-                    sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
-                    //return nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59");
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                    createdNotes = nd.filterAll(userid, title, initDate, endDate, 5, offset);
-                    sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate, 5, offset);
-                    //return nd.filterAll(userid, title, initDate, endDate);
-                }
-            } else {
-                System.out.println("filtramos solo lo seleccionado...");
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                    if (!type.equals("propies")) {
-                        System.out.println("filter sharedNotes by title");
-                        sharedNotes = snd.filterSharedNotesWithMeByTitle(userid, title, 5, offset);
-                    } else {
-                        System.out.println("filter createdNotes by title");
-                        createdNotes = nd.filterByTitle(userid, title, 5, offset);
-                    }
-                }
-
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                    if (!type.equals("propies")) {
-                        System.out.println("filter sharedNotes by date");
-                        sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
-                    } else {
-                        System.out.println("filter createdNotes by date");
-                        createdNotes = nd.filterByDate(userid, initDate + " 00:00:00", endDate + " 23:59:59", 5, offset);
-                    }
-                }
-
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll") && !type.equals("propies")) {
-
-                    if (!type.equals("propies")) {
-                        System.out.println("filter sharedNotes by all");
-                        sharedNotes = snd.filterSharedNotesWithMeByDate(userid, initDate, endDate, 5, offset);
-                    } else {
-                        System.out.println("filter createdNotes by all");
-                        sharedNotes = snd.filterSharedNotesWithMeAll(userid, title, initDate, endDate, 5, offset);
-                    }
-                }
+            if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                return nd.filterByTitle(userid, title, LIMIT, offset);
+                //return nd.filterByTitleAllTypeNotes(userid, title, LIMIT, offset);
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                return nd.filterByDate(userid, initDate, endDate, LIMIT, offset);
+                //return nd.filterByDateAllTypeNotes(userid, initDate, endDate, LIMIT, offset);
+            } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+                return nd.filterAll(userid, title, initDate, endDate, LIMIT, offset);
+                //return nd.filterAllAllTypeNotes(userid, title, initDate, endDate, LIMIT, offset);
             }
-
-            for (Note n : createdNotes) {
-                allNotes.add(n);
-            }
-
-            for (SharedNote sn : sharedNotes) {
-                allNotes.add(sn.getNote());
-            }
-
+            return null;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        return allNotes;
     }
 
     @Override
@@ -307,6 +190,107 @@ public class NoteServiceImpl implements NoteService {
                 return true;
             }
         } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public long getSharedNoteId(long noteid) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getSharedNoteId(noteid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public List<Note> getSharedNoteWithMe(long userid, int offset) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            System.out.println(nd.getSharedNotesWithMe(userid, LIMIT, offset));
+            return nd.getSharedNotesWithMe(userid, LIMIT, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Note> getSharedNotes(long userid, int offset) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getSharedNotes(userid, LIMIT, offset);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public long getLengthSharedNoteWithMe(long userid) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getSharedNotesWithMeLength(userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public long getLengthSharedNotes(long userid) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.getSharedNotesLength(userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    @Override
+    public boolean shareNote(long useridOwner, long noteid, String[] usernames) {
+        NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
+
+        try {
+            Note noteForShare = nd.getNoteById(useridOwner, noteid);
+            List<User> users = new ArrayList<>();
+            if (noteForShare != null) {
+                for (String username : usernames) {
+                    long userid = ud.getUserIdByUsername(username);
+                    User user = ud.getUserById(userid);
+                    users.add(user);
+                    //sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
+                }
+                nd.createShare(noteForShare, users);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteShareNote(long userid, long noteid, long sharedNoteId) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            List<Note> sharedNotes = nd.getSharedNotes(userid, 50, 0);
+            List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
+            long[] sharedNote = nd.getSharedNoteById(sharedNoteId);
+            boolean canDelete = false;
+
+            if (sharedNote[0] == noteid && sharedNote[1] == userid) {
+                nd.deleteShare(sharedNoteId);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return false;
