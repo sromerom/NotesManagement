@@ -41,6 +41,8 @@ public interface NoteDao {
 
     public List<Note> getSharedNotes(long userid, int limit, int offset) throws Exception;
 
+    public boolean sharedNoteExists(long userid, long noteid) throws Exception;
+
     public long[] getSharedNoteById(long shareNoteId) throws Exception;
 
     public long getSharedNoteId(long noteid) throws Exception;

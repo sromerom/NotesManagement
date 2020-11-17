@@ -21,9 +21,9 @@ public class DeleteShareServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getParameter("noteid") != null) {
+        HttpSession session = req.getSession();
+        if (req.getParameter("noteid") != null && session.getAttribute("userid") != null) {
             NoteService ns = new NoteServiceImpl();
-            HttpSession session = req.getSession();
             long userid = (long) session.getAttribute("userid");
             long noteid = Long.parseLong(req.getParameter("noteid"));
             //long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));

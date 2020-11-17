@@ -57,7 +57,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //variable conn
 //Acentos sqlite3
 //Controller comprova si hi ha dades a enviar abans de fer operacions #######################
-//DeleteShare mal implementado (excepcion)
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
 //hacer filtro de las notas creadas que has compartido ###################################
@@ -65,9 +64,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
 //Hacer diseño presentable ##############################
-// Arreglar fallo del login (Error 500) ############################
-//Acabar hacer filtros de busqueda
-//Revisar eliminacion de notas compartidas
+//Acabar hacer filtros de busqueda #################################
 //escape script markdown
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
@@ -82,3 +79,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Intentar arreglar fallo de diseño (quitar dao, modelo y service de sharedNote...) --> Hecho
 //Evitar poder compartirse una nota a si mismo ############################ --> Hecho
 //Crear salt aleatorio ################################### --> Hecho
+//DeleteShare mal implementado (excepcion) --> Hecho
+//Revisar eliminacion de notas compartidas --> Hecho
+//Arreglar fallo del login (Error 500) ############################ --> Hecho

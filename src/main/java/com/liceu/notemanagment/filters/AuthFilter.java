@@ -57,6 +57,7 @@ public class AuthFilter implements Filter {
             //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
             //dispatcher.forward(servletRequest, servletResponse);
             resp.sendRedirect(req.getContextPath() + "/home");
+            return;
         }
 
         //Si s'arriba fins aqui, voldra dir dues coses:

@@ -277,22 +277,31 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean shareNote(long useridOwner, long noteid, String[] usernames) {
+    public boolean shareNote(long userWhoShares, long noteid, String[] usernames) {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
 
         try {
-            Note noteForShare = nd.getNoteById(useridOwner, noteid);
+            Note noteForShare = nd.getNoteById(userWhoShares, noteid);
+
             List<User> users = new ArrayList<>();
             if (noteForShare != null) {
                 for (String username : usernames) {
                     long userid = ud.getUserIdByUsername(username);
-                    User user = ud.getUserById(userid);
-                    users.add(user);
+                    System.out.println(nd.sharedNoteExists(userid, noteid));
+                    if (!nd.sharedNoteExists(userid, noteid)) {
+                        User user = ud.getUserById(userid);
+                        users.add(user);
+                    }
                     //sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
                 }
-                nd.createShare(noteForShare, users);
-                return true;
+
+                if (users.size() != 0) {
+                    nd.createShare(noteForShare, users);
+                    return true;
+                } else {
+                    return false;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

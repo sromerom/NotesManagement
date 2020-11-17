@@ -3,10 +3,7 @@ package com.liceu.notemanagment.daos;
 import com.liceu.notemanagment.model.Note;
 import com.liceu.notemanagment.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -423,7 +420,18 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public long[] getSharedNoteById(long shareNoteId) throws Exception{
+    public boolean sharedNoteExists(long userid, long noteid) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM sharedNote INNER JOIN user ON sharedNote.user_id = user.user_id WHERE user.user_id = ? AND note_id = ?");
+        System.out.println("userid: " + userid + " & " + "noteid: " + noteid);
+        ps.setLong(1, userid);
+        ps.setLong(2, noteid);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+    }
+
+    @Override
+    public long[] getSharedNoteById(long shareNoteId) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, user_id FROM sharedNote WHERE shared_note = ?");
         ps.setLong(1, shareNoteId);
