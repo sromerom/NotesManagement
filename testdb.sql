@@ -14,31 +14,45 @@ title VARCHAR(150),
 body TEXT,
 creationDate DATETIME,
 lastModificationDate DATETIME,
-FOREIGN KEY(user_iduser) REFERENCES user(iduser));
+FOREIGN KEY(user_iduser) REFERENCES user(iduser) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
 CREATE TABLE IF NOT EXISTS sharedNote(
 shared_note INTEGER PRIMARY KEY AUTOINCREMENT,
 note_id INTEGER NOT NULL,
 user_id INTEGER NOT NULL,
-FOREIGN KEY(note_id) REFERENCES note(note_id) ON DELETE CASCADE,
-FOREIGN KEY(user_id) REFERENCES user(iduser) ON DELETE CASCADE);
+FOREIGN KEY(note_id) REFERENCES note(note_id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY(user_id) REFERENCES user(iduser) ON DELETE CASCADE ON UPDATE CASCADE);
 
 //INSERTS
-INSERT INTO user (email, username, password) values ("sromerom@esliceu.net", "sromerom", "ABCD1234");
+
 
 //Notas del usuario sromerom
-INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota", "Esto es una nota...", datetime('now','localtime'), datetime('now','localtime'));
-INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota2", "Esto es una nota2...", datetime('now','localtime'), datetime('now','localtime'));
-INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota3", "Esto es una nota3...", datetime('now','localtime'), datetime('now','localtime'));
-INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota4", "Esto es una nota4...", datetime('now','localtime'), datetime('now','localtime'));
+//INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota4", "Esto es una nota4...", datetime('now','localtime'), datetime('now','localtime'));
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 1", "Body note 1 example", '2020-11-10 12:00:00', '2020-11-10 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 2", "Body note 2 example", '2020-11-10 12:00:00', '2020-11-10 12:00:00');
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 3", "Body note 3 example", '2020-11-11 12:00:00', '2020-11-11 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 4", "Body note 4 example", '2020-11-11 12:00:00', '2020-11-11 12:00:00');
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 5", "Body note 5 example", '2020-11-12 12:00:00', '2020-11-12 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 6", "Body note 6 example", '2020-11-12 12:00:00', '2020-11-12 12:00:00');
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 7", "Body note 7 example", '2020-11-13 12:00:00', '2020-11-13 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 8", "Body note 8 example", '2020-11-13 12:00:00', '2020-11-13 12:00:00');
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 9", "Body note 9 example", '2020-11-14 12:00:00', '2020-11-14 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 10", "Body note 10 example", '2020-11-14 12:00:00', '2020-11-14 12:00:00');
+
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 11", "Body note 11 example", '2020-11-15 12:00:00', '2020-11-15 12:00:00');
+INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 12", "Body note 12 example", '2020-11-15 12:00:00', '2020-11-15 12:00:00');
 
 -------------------------------------------------POR HACER...-------------------------------------------------------
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
 //Contraseñas fuertes
 //Crear validaciones ###################################
-//Crear salt aleatorio ###################################
 //Todo al mismo idioma
 //variable conn
 //Acentos sqlite3
@@ -51,9 +65,10 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
 //Hacer diseño presentable ##############################
-//Evitar poder compartirse una nota a si mismo ############################
 // Arreglar fallo del login (Error 500) ############################
-//Intentar arreglar fallo de diseño (quitar dao, modelo y service de sharedNote...)
+//Acabar hacer filtros de busqueda
+//Revisar eliminacion de notas compartidas
+//escape script markdown
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -64,3 +79,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //En delete, sobra cosas... --> Hecho
 //Comprobar que nadie pueda crear y eliminar notas compartidas que no sean suyas... ############################ --> Hecho
 //Arreglar las opciones que se encuentras en las notas creadas que han sido compartidas ################################ --> Hecho
+//Intentar arreglar fallo de diseño (quitar dao, modelo y service de sharedNote...) --> Hecho
+//Evitar poder compartirse una nota a si mismo ############################ --> Hecho
+//Crear salt aleatorio ################################### --> Hecho

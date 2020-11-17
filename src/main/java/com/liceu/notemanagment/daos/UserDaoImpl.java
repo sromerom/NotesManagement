@@ -34,12 +34,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        List<User> resultat = new ArrayList<>();
-        for (User u : this.users) {
-            resultat.add(new User(u.getIduser(), u.getEmail(), u.getUsername(), u.getPassword()));
+    public List<User> getAllUsers(long userid) throws Exception {
+        List<User> result = new ArrayList<>();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE NOT user_id = ?");
+        ps.setLong(1, userid);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            long actualUserid = rs.getLong(1);
+            String email = rs.getString(2);
+            String username = rs.getString(3);
+            String password = rs.getString(4);
+            User user = new User(actualUserid, email, username, password);
+            result.add(user);
         }
-        return resultat;
+        return result;
     }
 
     @Override
@@ -85,7 +95,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void update(User user) throws Exception{
+    public void update(User user) throws Exception {
         Iterator<User> it = this.users.iterator();
         while (it.hasNext()) {
             User u = it.next();
@@ -98,6 +108,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteUser(User user) throws Exception{
+    public void deleteUser(User user) throws Exception {
     }
 }

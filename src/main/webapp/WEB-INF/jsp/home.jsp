@@ -74,7 +74,7 @@
                             <a href="/detail?id=${note.idnote}">
                                 <div class="card-body">
                                     <h5 class="card-title">${note.title}</h5>
-                                    <p class="card-text">${note.body}</p>
+                                    <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 11; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
                                     <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
                                     <form method="POST" action="/delete"><input type="hidden" name="noteid"
                                                                                 value="${note.idnote}">
@@ -95,7 +95,7 @@
                             <a href="/detail?id=${note.idnote}">
                                 <div class="card-body">
                                     <h5 class="card-title">${note.title}</h5>
-                                    <p class="card-text">${note.body}</p>
+                                    <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 11; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
                                     <a class="card-link" href="/edit?id=${note.idnote}">Update</a>
                                     <form method="POST" action="/delete"><input type="hidden" name="noteid"
                                                                                 value="${note.idnote}">
@@ -115,7 +115,7 @@
                     <a href="/detail?id=${note.idnote}">
                         <div class="card-body">
                             <h5 class="card-title">${note.title}</h5>
-                            <p class="card-text">${note.body}</p>
+                            <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 11; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
                             <form method="POST" action="/deleteShare">
                                 <input type="hidden" name="noteid" value="${note.idnote}">
                                 <button type="submit">Delete Share</button>

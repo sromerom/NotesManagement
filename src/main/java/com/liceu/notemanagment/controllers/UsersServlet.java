@@ -24,7 +24,7 @@ public class UsersServlet extends HttpServlet {
             long noteid = Long.parseLong(req.getParameter("id"));
             HttpSession session = req.getSession();
             Long userid = (Long) session.getAttribute("userid");
-            req.setAttribute("users", us.getAll());
+            req.setAttribute("users", us.getAll(userid));
             req.setAttribute("noteid", noteid);
 
             if (ns.getNoteById(userid, noteid) == null) {

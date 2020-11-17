@@ -3,11 +3,13 @@ package com.liceu.notemanagment.services;
 import com.liceu.notemanagment.model.Note;
 
 import java.util.List;
+import java.util.Map;
 
 public interface NoteService {
     public List<Note> getAll();
 
     public List<Note> getNotesFromUser(long userid, int offset);
+    //public Map<Note, Boolean> getNotesFromUser(long userid, int offset);
 
     public List<Note> getCreatedNotes(long id, int offset);
 

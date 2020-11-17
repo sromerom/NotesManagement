@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NoteServiceImpl implements NoteService {
     private final int LIMIT = 10;
@@ -23,9 +25,28 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getNotesFromUser(long userid, int offset) {
+        //Map<Note, Boolean> notesWithBooleans = new HashMap<>();
         NoteDao nd = new NoteDaoImpl();
         try {
+
+            /*
+            List<Note> notes = nd.getAllNotesFromUser(userid, LIMIT, offset);
+            List<Note> sharedNote = nd.getSharedNotesWithMe(userid, 100, offset);
+
+            for (int i = 0; i < notes.size(); i++) {
+                for (int j = 0; j < sharedNote.size(); j++) {
+                    if (sharedNote.get(j).getUser().getIduser() == notes.get(i).getUser().getIduser()) {
+                        notesWithBooleans.put(notes.get(i), true);
+                        sharedNote.remove(j);
+                        break;
+                    }
+                }
+                notesWithBooleans.put(notes.get(i), false);
+            }
+             */
+
             return nd.getAllNotesFromUser(userid, LIMIT, offset);
+            //return notesWithBooleans;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -142,7 +163,10 @@ public class NoteServiceImpl implements NoteService {
         String date = myDateObj.format(myFormatObj);
 
         try {
-            nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
+            if (!checkHTMLTags(title) && !checkHTMLTags(body)) {
+                nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
+                return true;
+            }
         } catch (Exception e) {
             return false;
         }
@@ -150,7 +174,7 @@ public class NoteServiceImpl implements NoteService {
 
         //public Note(long idnote, User user, String title, String body, Date creationDate, Date lastModification) {
         //nd.create(new Note(0, iduser, title, body, formatter.format(date), formatter.format(date)));
-        return true;
+        return false;
     }
 
     @Override
@@ -169,14 +193,15 @@ public class NoteServiceImpl implements NoteService {
         String lastModificationDate = myDateObj.format(myFormatObj);
 
         try {
-
-            Note noteToUpdate = nd.getNoteById(userid, idnote);
-            nd.update(new Note(idnote, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
+            if (!checkHTMLTags(title) && !checkHTMLTags(body)) {
+                Note noteToUpdate = nd.getNoteById(userid, idnote);
+                nd.update(new Note(idnote, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
+                return true;
+            }
         } catch (Exception e) {
             return false;
         }
-
-        return true;
+        return false;
     }
 
     @Override
@@ -285,7 +310,29 @@ public class NoteServiceImpl implements NoteService {
             long[] sharedNote = nd.getSharedNoteById(sharedNoteId);
             boolean canDelete = false;
 
-            if (sharedNote[0] == noteid && sharedNote[1] == userid) {
+            for (Note n : sharedWithMe) {
+                System.out.println(n.getIdnote() + " =? " + noteid);
+                if (n.getIdnote() == noteid) {
+                    System.out.println("Eliminamos nota que nos han compartido");
+                    canDelete = true;
+                }
+            }
+
+            System.out.println("can delete? " + canDelete);
+            if (canDelete) {
+                nd.deleteShare(sharedNoteId);
+                return true;
+            }
+
+
+            for (Note n : sharedNotes) {
+                if (n.getUser().getIduser() == userid && n.getIdnote() == noteid) {
+                    System.out.println("Eliminamos nota que hemos compartido");
+                    canDelete = true;
+                }
+            }
+
+            if (canDelete) {
                 nd.deleteShare(sharedNoteId);
                 return true;
             }
@@ -294,5 +341,16 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
         return false;
+    }
+
+    private boolean checkHTMLTags(String body) {
+        Pattern pattern = Pattern.compile("<.+?>");
+        Matcher matcher = pattern.matcher(body);
+        boolean matchFound = matcher.find();
+        if (matchFound) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.liceu.notemanagment.model.User;
 import java.util.List;
 
 public interface UserDao {
-    public List<User> getAllUsers();
+    public List<User> getAllUsers(long userid) throws Exception;
 
     public User getUserById(long id);
 

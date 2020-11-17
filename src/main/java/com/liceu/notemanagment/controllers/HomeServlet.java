@@ -72,6 +72,7 @@ public class HomeServlet extends HttpServlet {
             }
         } else {
             req.setAttribute("typeNote", "allNotes");
+            //System.out.println(ns.getNotesFromUser(userid, offset));
             req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
             totalPages = (int) Math.ceil(ns.getAllNotesLength(userid) / (PAGES_FOR_NOTE));
         }
