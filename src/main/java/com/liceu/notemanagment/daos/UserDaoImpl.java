@@ -63,13 +63,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean existsUserWithUsername(String username) {
-        for (User user : this.users) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean existsUserWithUsername(String username) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE username = ?");
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
+    }
+
+    @Override
+    public boolean existsUserWithEmail(String email) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE email = ?");
+        ps.setString(1, email);
+        ResultSet rs = ps.executeQuery();
+        return rs.next();
     }
 
     @Override

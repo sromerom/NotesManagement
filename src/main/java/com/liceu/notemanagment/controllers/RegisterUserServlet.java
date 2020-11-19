@@ -24,14 +24,15 @@ public class RegisterUserServlet extends HttpServlet {
         String newEmail = req.getParameter("newEmail");
         String newUser = req.getParameter("newUser");
         String newPass = req.getParameter("newPass");
-
+        String newPassRepeat = req.getParameter("repeatPassword");
         UserService us = new UserServiceImpl();
-        boolean noError = us.createUser(newEmail, newUser, newPass);
 
-        if (noError) {
-            System.out.println("S'ha creat correctament");
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
+        boolean canRegister = us.checkRegister(newEmail, newUser, newPass, newPassRepeat);
+        boolean noError;
+        if (canRegister) {
+            noError = us.createUser(newEmail, newUser, newPass);
+        } else {
+            noError = false;
         }
 
         req.setAttribute("noerror", noError);

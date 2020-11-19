@@ -4,18 +4,87 @@
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
 </head>
 <body>
-<h1>Registra el teu usuari per poder accedir a la aplicació desde aquest formulari!</h1>
-<c:if test = "${noerror == false}">
-    <div><p>No s'ha pogut crear l'usuari correctament...</p></div>
-</c:if>
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-6">
+            <c:if test="${noerror == false}">
+                <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+                    Registration failed. Check all the input requirements.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </c:if>
+            <c:if test="${noerror == true}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    User Registration Successful. Now you can log in.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </c:if>
+            <!-- Form -->
+            <form method="POST" action="/register">
+                <h1>Register your user</h1>
+                <!-- Input fields -->
+                <div class="form-group mt-2">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com" name="newEmail"
+                           required>
+                    <small id="emailHelpBlock" class="form-text text-muted">
+                        Your email must be one that is not registered
+                    </small>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <input id="username" type="text" class="form-control rounded-right" name="newUser" required>
+                    <small id="userHelpBlock" class="form-text text-muted">
+                        Your username must have a minimum of 3 characters long, your username must be one that is not registered and must not contain
+                        spaces, special characters, or emoji
+                    </small>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="password" class="col-sm-2 col-form-label">Password</label>
+                    <input type="password" id="password" class="form-control"
+                           aria-describedby="passwordHelpBlock" name="newPass" required>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        Your password must have a minimum of 8 characters long, contain letters and numbers, and must not contain
+                        spaces, special characters, or emoji.
+                    </small>
+                </div>
+                <div class="form-group mt-2">
+                    <label for="repeatPassword" class="col-sm-2 col-form-label">Repeat Password</label>
+                    <input type="password" id="repeatPassword" class="form-control"
+                           aria-describedby="passwordHelpBlock" name="repeatPassword" required>
+                </div>
+                <button id="registerButton" type="submit" class="btn btn-primary btn-customized">Register
+                </button>
+                <!-- End input fields -->
+            </form>
+            <!-- Form end -->
+            <p><a href="/login">Go to login</a></p>
+        </div>
+    </div>
+</div>
 
+
+<!--
 <form method="POST" action="/register">
     Email <input type="text" name="newEmail"><br>
     Nom usuari: <input type="text" name="newUser"><br>
     Password: <input type="password" name="newPass"><br>
     <button type="submit">Register</button>
 </form>
+-->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
 </body>
 </html>

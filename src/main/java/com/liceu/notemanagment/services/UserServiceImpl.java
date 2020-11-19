@@ -4,15 +4,11 @@ import com.liceu.notemanagment.daos.UserDao;
 import com.liceu.notemanagment.daos.UserDaoImpl;
 import com.liceu.notemanagment.model.User;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserServiceImpl implements UserService {
     @Override
@@ -31,20 +27,50 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean validateUser(String username, String password) {
         UserDao ud = new UserDaoImpl();
-        if (ud.existsUserWithUsername(username)) {
-            System.out.println(username + " existe...");
-            long userid = ud.getUserIdByUsername(username);
-            String storedPassword = ud.getUserById(userid).getPassword();
-            System.out.println("Stored Password" + storedPassword);
-            try {
+
+
+        try {
+            if (ud.existsUserWithUsername(username)) {
+                System.out.println(username + " existe...");
+                long userid = ud.getUserIdByUsername(username);
+                String storedPassword = ud.getUserById(userid).getPassword();
+                System.out.println("Stored Password" + storedPassword);
                 return HashUtil.validatePassword(password, storedPassword);
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                return false;
-            } catch (InvalidKeySpecException e) {
-                e.printStackTrace();
-                return false;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkRegister(String email, String username, String password, String password2) {
+        UserDao ud = new UserDaoImpl();
+        Pattern patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+        Matcher matcherPassword = patternPassword.matcher(password);
+        boolean passwordMatch = matcherPassword.find();
+
+        Pattern patternUsername = Pattern.compile("^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
+        Matcher matcherUsername = patternUsername.matcher(username);
+        boolean usernameMatch = matcherUsername.find();
+
+        Pattern patternEmail = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        Matcher matcherEmail = patternEmail.matcher(email);
+        boolean emailMatch = matcherEmail.find();
+
+        try {
+            System.out.println("correct password? " + passwordMatch);
+            System.out.println("correct email? " + emailMatch);
+            System.out.println("indenticaly passwords? " + password.equals(password2));
+            System.out.println("exists username? " + ud.existsUserWithUsername(username));
+            System.out.println("exists email? " + ud.existsUserWithEmail(email));
+            if (password.equals(password2) && !ud.existsUserWithUsername(username) && !ud.existsUserWithEmail(email) && passwordMatch && emailMatch && usernameMatch) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return false;
     }
@@ -72,18 +98,8 @@ public class UserServiceImpl implements UserService {
                 ud.create(user);
                 return true;
             }
-            /*
-            if (!ud.existsUserWithUsername(username)) {
-                User user = new User(0, email, username, generatedSecuredPasswordHash);
-                ud.create(user);
-                return true;
-            } else {
-                return false;
-            }
-             */
-            //User user = new User(0, email, username, generatedSecuredPasswordHash);
-            //ud.create(user);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return false;

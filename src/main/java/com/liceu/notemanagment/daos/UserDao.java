@@ -8,7 +8,8 @@ public interface UserDao {
 
     public User getUserById(long id);
 
-    public boolean existsUserWithUsername(String username);
+    public boolean existsUserWithUsername(String username) throws Exception;
+    public boolean existsUserWithEmail(String email) throws Exception;
     public long getUserIdByUsername(String username);
 
     public void create(User user) throws Exception;

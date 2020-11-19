@@ -305,22 +305,32 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public Note getNoteById(long userid, long noteid) throws Exception {
+    public Note getNoteById(long noteid) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT user_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note_id = ?");
+        ps.setLong(1, noteid);
+        ResultSet rs = ps.executeQuery();
+        long userid = rs.getLong(1);
+        String titleActual = rs.getString(2);
+        String body = rs.getString(3);
+        String creationDate = rs.getString(4);
+        String lastModificationDate = rs.getString(5);
+        String email = rs.getString(6);
+        String username = rs.getString(7);
+        String password = rs.getString(8);
+        rs.close();
+        ps.close();
+        return new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
+    }
+
+    @Override
+    public boolean isOwnerNote(long userid, long noteid) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND note_id = ?");
         ps.setLong(1, userid);
         ps.setLong(2, noteid);
         ResultSet rs = ps.executeQuery();
-        String titleActual = rs.getString(1);
-        String body = rs.getString(2);
-        String creationDate = rs.getString(3);
-        String lastModificationDate = rs.getString(4);
-        String email = rs.getString(5);
-        String username = rs.getString(6);
-        String password = rs.getString(7);
-        rs.close();
-        ps.close();
-        return new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
+        return rs.next();
     }
 
     @Override
@@ -428,18 +438,6 @@ public class NoteDaoImpl implements NoteDao {
         ps.setLong(2, noteid);
         ResultSet rs = ps.executeQuery();
         return rs.next();
-    }
-
-    @Override
-    public long[] getSharedNoteById(long shareNoteId) throws Exception {
-        Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, user_id FROM sharedNote WHERE shared_note = ?");
-        ps.setLong(1, shareNoteId);
-        ResultSet rs = ps.executeQuery();
-        long noteid = rs.getLong(1);
-        long userid = rs.getLong(2);
-        ps.close();
-        return new long[]{noteid, userid};
     }
 
     @Override

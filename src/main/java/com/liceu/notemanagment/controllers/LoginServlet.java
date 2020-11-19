@@ -28,7 +28,8 @@ public class LoginServlet extends HttpServlet {
 
         UserService us = new UserServiceImpl();
 
-        if (us.validateUser(user, pass)) {
+
+        if (user != null && pass != null && us.validateUser(user, pass)) {
             System.out.println("Estas dentro!!");
 
             req.setAttribute("username", user);
@@ -43,6 +44,9 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
+
+        System.out.println("Error");
+        req.setAttribute("noerror", false);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
         dispatcher.forward(req, resp);
     }

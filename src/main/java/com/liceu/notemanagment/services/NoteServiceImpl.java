@@ -25,28 +25,9 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getNotesFromUser(long userid, int offset) {
-        //Map<Note, Boolean> notesWithBooleans = new HashMap<>();
         NoteDao nd = new NoteDaoImpl();
         try {
-
-            /*
-            List<Note> notes = nd.getAllNotesFromUser(userid, LIMIT, offset);
-            List<Note> sharedNote = nd.getSharedNotesWithMe(userid, 100, offset);
-
-            for (int i = 0; i < notes.size(); i++) {
-                for (int j = 0; j < sharedNote.size(); j++) {
-                    if (sharedNote.get(j).getUser().getIduser() == notes.get(i).getUser().getIduser()) {
-                        notesWithBooleans.put(notes.get(i), true);
-                        sharedNote.remove(j);
-                        break;
-                    }
-                }
-                notesWithBooleans.put(notes.get(i), false);
-            }
-             */
-
             return nd.getAllNotesFromUser(userid, LIMIT, offset);
-            //return notesWithBooleans;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -132,7 +113,10 @@ public class NoteServiceImpl implements NoteService {
     public Note getNoteById(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            return nd.getNoteById(userid, noteid);
+            if (nd.isOwnerNote(userid, noteid) || nd.sharedNoteExists(userid, noteid)) {
+                return nd.getNoteById(noteid);
+            }
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -163,11 +147,11 @@ public class NoteServiceImpl implements NoteService {
         String date = myDateObj.format(myFormatObj);
 
         try {
-
             nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -176,7 +160,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean editNote(long userid, long idnote, String title, String body) {
+    public boolean editNote(long userid, long noteid, String title, String body) {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
         //2020-11-10 12:46:03
@@ -191,9 +175,9 @@ public class NoteServiceImpl implements NoteService {
         String lastModificationDate = myDateObj.format(myFormatObj);
 
         try {
-            if (!checkHTMLTags(title) && !checkHTMLTags(body)) {
-                Note noteToUpdate = nd.getNoteById(userid, idnote);
-                nd.update(new Note(idnote, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
+            Note noteToUpdate = nd.getNoteById(noteid);
+            if (nd.isOwnerNote(userid, noteid)) {
+                nd.update(new Note(noteid, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
                 return true;
             }
         } catch (Exception e) {
@@ -203,16 +187,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean deleteNote(long userid, long idnote) {
+    public boolean deleteNote(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
 
         try {
-            Note note = nd.getNoteById(userid, idnote);
-            if (note != null) {
-                nd.delete(idnote);
+            if (nd.isOwnerNote(userid, noteid)) {
+                nd.delete(noteid);
                 return true;
             }
+
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
         return false;
@@ -280,7 +265,7 @@ public class NoteServiceImpl implements NoteService {
         UserDao ud = new UserDaoImpl();
 
         try {
-            Note noteForShare = nd.getNoteById(userWhoShares, noteid);
+            Note noteForShare = nd.getNoteById(noteid);
 
             List<User> users = new ArrayList<>();
             if (noteForShare != null) {
@@ -314,7 +299,6 @@ public class NoteServiceImpl implements NoteService {
         try {
             List<Note> sharedNotes = nd.getSharedNotes(userid, 50, 0);
             List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
-            long[] sharedNote = nd.getSharedNoteById(sharedNoteId);
             boolean canDelete = false;
 
             for (Note n : sharedWithMe) {

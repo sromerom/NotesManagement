@@ -40,6 +40,7 @@ public class CreateNoteServlet extends HttpServlet {
 
         System.out.println("No s'ha creat la nota correctament...");
         req.setAttribute("noerror", noError);
+        req.setAttribute("action", "/create");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);
     }

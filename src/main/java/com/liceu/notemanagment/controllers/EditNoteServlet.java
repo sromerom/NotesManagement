@@ -61,6 +61,8 @@ public class EditNoteServlet extends HttpServlet {
             return;
         }
 
+        req.setAttribute("noerror", noError);
+        req.setAttribute("action", "/edit");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);
     }

@@ -9,6 +9,7 @@ public interface UserService {
     boolean createUser(String email, String username, String password);
     //boolean existsUserLogin(String username, String password);
     boolean validateUser(String username, String password);
+    boolean checkRegister(String email, String username, String password, String password2);
     long getUserId(String username);
     long getIdByUser(User user);
 }

@@ -28,7 +28,9 @@ public interface NoteDao {
 
     List<Note> filterAllAllTypeNotes(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public Note getNoteById(long userid, long noteid) throws Exception;
+    public Note getNoteById(long noteid) throws Exception;
+
+    public boolean isOwnerNote(long userid, long noteid) throws Exception;
 
     public void create(Note note) throws Exception;
 
@@ -43,7 +45,6 @@ public interface NoteDao {
 
     public boolean sharedNoteExists(long userid, long noteid) throws Exception;
 
-    public long[] getSharedNoteById(long shareNoteId) throws Exception;
 
     public long getSharedNoteId(long noteid) throws Exception;
 
