@@ -68,6 +68,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //escape script markdown ?????
 //Utilizar dao user en dao note ##############################
 //hacer include de el header para no repetir codigo en los jsp
+//logout por post
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
