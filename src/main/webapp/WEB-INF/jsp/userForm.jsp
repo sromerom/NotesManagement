@@ -16,23 +16,36 @@
 <div class="container h-100">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-6">
-            <c:if test="${noerror == false && action == '/create'}">
-                <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+            <c:if test="${not empty noerror && action == '/create'}">
+                <c:choose>
+                    <c:when test="${noerror == false && action == '/create'}">
+                        <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
 
-                    The note could not be created successfully
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                            The note could not be created successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <h2>Se ha creao bien</h2>
+                    </c:otherwise>
+                </c:choose>
             </c:if>
-
-            <c:if test="${noerror == false && action == '/edit'}">
-                <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
-                    The note could not be edited successfully
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+            <c:if test="${not empty noerror && action == '/edit'}">
+                <c:choose>
+                    <c:when test="${noerror == false && action == '/edit'}">
+                        <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+                            The note could not be edited successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <h2>Se ha editao bien</h2>
+                    </c:otherwise>
+                </c:choose>
             </c:if>
             <form class="form-example" method="POST" action="${action}">
                 <c:if test="${action == '/create'}">

@@ -14,7 +14,7 @@ title VARCHAR(150),
 body TEXT,
 creationDate DATETIME,
 lastModificationDate DATETIME,
-FOREIGN KEY(user_iduser) REFERENCES user(iduser) ON DELETE CASCADE ON UPDATE CASCADE);
+FOREIGN KEY(user_iduser) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
 CREATE TABLE IF NOT EXISTS sharedNote(
@@ -22,7 +22,7 @@ shared_note INTEGER PRIMARY KEY AUTOINCREMENT,
 note_id INTEGER NOT NULL,
 user_id INTEGER NOT NULL,
 FOREIGN KEY(note_id) REFERENCES note(note_id) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY(user_id) REFERENCES user(iduser) ON DELETE CASCADE ON UPDATE CASCADE);
+FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCADE);
 
 //INSERTS
 
@@ -66,6 +66,8 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Hacer diseño presentable ##############################
 //Acabar hacer filtros de busqueda #################################
 //escape script markdown ?????
+//Utilizar dao user en dao note ##############################
+//hacer include de el header para no repetir codigo en los jsp
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
