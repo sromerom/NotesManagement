@@ -59,17 +59,15 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Controller comprova si hi ha dades a enviar abans de fer operacions #######################
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
-//hacer filtro de las notas creadas que has compartido ###################################
 //Arreglar fallo de paginacion, te añade un boton extra ###################################
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
-//Hacer diseño presentable ##############################
-//Acabar hacer filtros de busqueda #################################
 //escape script markdown ?????
 //Utilizar dao user en dao note ##############################
 //hacer include de el header para no repetir codigo en los jsp
 //logout por post
 //implementar csrf #############################
+//Renderizar nota a texto home --> Hecho
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -87,3 +85,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Revisar eliminacion de notas compartidas --> Hecho
 //Arreglar fallo del login (Error 500) ############################ --> Hecho
 //Poder ver el detail de las notas compartidas ######################## --> Hecho
+//hacer filtro de las notas creadas que has compartido ################################### --> Hecho
+//Hacer diseño presentable ############################## --> Hecho
+//Acabar hacer filtros de busqueda ################################# --> Hecho

@@ -25,6 +25,7 @@
         }
 
         .card {
+            position: relative;
             width: 18rem;
             margin-right: 15px;
             margin-bottom: 15px;
@@ -59,6 +60,7 @@
             justify-content: space-around;
             align-items: center;
             align-content: center;
+            z-index: 99;
         }
 
         .optionsButtons form label svg {
@@ -87,6 +89,20 @@
 
         .principalButton {
             background-color: #e01a4f !important;
+        }
+
+        /*Important:*/
+        .link-spanner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+
+            /* edit: fixes overlap error in IE7/8,
+               make sure you have an empty gif
+            background-image: url('empty.gif');*/
         }
     </style>
 </head>
@@ -215,7 +231,7 @@
                                     <p class="card-text"
                                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
                                     <div class="optionsButtons">
-                                        <a href="/edit?id=${note.idnote}">
+                                        <a href="/edit?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill"
                                                  fill="currentColor"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -224,7 +240,7 @@
                                             </svg>
                                         </a>
                                         <a data-toggle="modal" data-target="#modalDelete"
-                                           onclick="passNoteId('/delete', ${note.idnote})">
+                                           onclick="passNoteId('/delete', ${note.noteid})">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                  class="bi bi-trash-fill"
                                                  fill="currentColor"
@@ -234,7 +250,7 @@
                                             </svg>
                                         </a>
                                         <a data-toggle="modal" data-target="#modalDelete"
-                                           onclick="passNoteId('/deleteShare', ${note.idnote})">
+                                           onclick="passNoteId('/deleteShare', ${note.noteid})">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                  class="bi bi-person-x-fill"
                                                  fill="currentColor"
@@ -248,6 +264,9 @@
                                     <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
+                                <a href="/detail?id=${note.noteid}">
+                                    <span class="link-spanner"></span>
+                                </a>
                             </div>
                         </c:when>
                         <c:otherwise>
@@ -259,7 +278,7 @@
                                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
 
                                     <div class="optionsButtons">
-                                        <a href="/edit?id=${note.idnote}">
+                                        <a href="/edit?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill"
                                                  fill="currentColor"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -269,7 +288,7 @@
                                         </a>
 
                                         <a data-toggle="modal" data-target="#modalDelete"
-                                           onclick="passNoteId('/delete', ${note.idnote})">
+                                           onclick="passNoteId('/delete', ${note.noteid})">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                  class="bi bi-trash-fill"
                                                  fill="currentColor"
@@ -290,11 +309,11 @@
                                                           d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                                 </svg>
                                             </label>
-                                            <input type="hidden" name="noteid" value="${note.idnote}">
+                                            <input type="hidden" name="noteid" value="${note.noteid}">
                                         </form>
                                         -->
 
-                                        <a class="card-link" href="/users?id=${note.idnote}">
+                                        <a class="card-link" href="/users?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-share-fill"
                                                  fill="currentColor"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -307,6 +326,9 @@
                                     <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
+                                <a href="/detail?id=${note.noteid}">
+                                    <span class="link-spanner"></span>
+                                </a>
                             </div>
                         </c:otherwise>
                     </c:choose>
@@ -323,7 +345,7 @@
                                style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
 
                             <a data-toggle="modal" data-target="#modalDelete"
-                               onclick="passNoteId('/deleteShare', ${note.idnote})">
+                               onclick="passNoteId('/deleteShare', ${note.noteid})">
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-x-fill"
                                      fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -333,7 +355,7 @@
                             </a>
                             <!--
                             <form method="POST" action="/deleteShare">
-                                <input type="hidden" name="noteid" value="${note.idnote}">
+                                <input type="hidden" name="noteid" value="${note.noteid}">
                                 <label>
                                     <input type="submit">
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-x-fill"
@@ -348,6 +370,9 @@
                             <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                 Modification ${note.lastModification}</h6>
                         </div>
+                        <a href="/detail?id=${note.noteid}">
+                            <span class="link-spanner"></span>
+                        </a>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -430,6 +455,10 @@
             formModal.action = "/deleteShare"
         }
         document.querySelector("#deleteNoteHidden").value = noteid;
+    }
+
+    function divLinkeable(noteid) {
+
     }
 </script>
 </body>

@@ -25,6 +25,7 @@
         }
 
         .card {
+            position: relative;
             width: 18rem;
             margin-right: 15px;
             margin-bottom: 15px;
@@ -59,6 +60,7 @@
             justify-content: space-around;
             align-items: center;
             align-content: center;
+            z-index: 99;
         }
 
         .optionsButtons form label svg {
@@ -87,6 +89,20 @@
 
         .principalButton {
             background-color: #e01a4f !important;
+        }
+
+        /*Important:*/
+        .link-spanner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+
+            /* edit: fixes overlap error in IE7/8,
+               make sure you have an empty gif
+            background-image: url('empty.gif');*/
         }
     </style>
 </head>
@@ -248,6 +264,9 @@
                                     <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
+                                <a href="/detail?id=${note.idnote}">
+                                    <span class="link-spanner"></span>
+                                </a>
                             </div>
                         </c:when>
                         <c:otherwise>
@@ -307,6 +326,9 @@
                                     <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
+                                <a href="/detail?id=${note.idnote}">
+                                    <span class="link-spanner"></span>
+                                </a>
                             </div>
                         </c:otherwise>
                     </c:choose>
@@ -348,6 +370,9 @@
                             <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                 Modification ${note.lastModification}</h6>
                         </div>
+                        <a href="/detail?id=${note.idnote}">
+                            <span class="link-spanner"></span>
+                        </a>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -430,6 +455,10 @@
             formModal.action = "/deleteShare"
         }
         document.querySelector("#deleteNoteHidden").value = noteid;
+    }
+
+    function divLinkeable(noteid) {
+
     }
 </script>
 </body>

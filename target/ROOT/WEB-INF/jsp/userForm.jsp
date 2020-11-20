@@ -28,7 +28,12 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <h2>Se ha creao bien</h2>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            The note was created successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </c:otherwise>
                 </c:choose>
             </c:if>
@@ -43,7 +48,12 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <h2>Se ha editao bien</h2>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            The note was edited successfully
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </c:otherwise>
                 </c:choose>
             </c:if>

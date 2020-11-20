@@ -24,8 +24,9 @@ public interface NoteService {
 
     //public String getTitleById(long noteid);
     //public String getBodyById(long noteid);
-    public String getParsedBodyNote(String body);
+    public String getParsedBodyToHTML(String body);
 
+    public String getParsedBodyEscapeText(String body);
     public boolean addNote(long userid, String title, String body);
 
     public boolean editNote(long userid, long idnote, String title, String body);

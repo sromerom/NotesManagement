@@ -13,7 +13,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll(long userid) {
         UserDao ud = new UserDaoImpl();
-        List<User> users = null;
+        List<User> users;
         try {
             users = ud.getAllUsers(userid);
         } catch (Exception e) {

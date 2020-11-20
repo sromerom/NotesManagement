@@ -4,9 +4,11 @@ import com.liceu.sromerom.daos.*;
 import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Filter;
+import com.liceu.sromerom.utils.RenderableNote;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.text.TextContentRenderer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,9 +28,31 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> getNotesFromUser(long userid, int offset) {
+        List<Note> allNotes;
+        List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
         try {
-            return nd.getAllNotesFromUser(userid, LIMIT, offset);
+            List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
+            allNotes = nd.getAllNotesFromUser(userid, LIMIT, offset);
+            for (int i = 0; i < allNotes.size(); i++) {
+                /*
+                for (int j = 0; j < sharedNotes.size(); j++) {
+
+                    if (sharedNotes.get(j).getNoteid() == allNotes.get(i).getNoteid()) {
+
+                    }
+                }
+                 */
+                //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
+                renderableNotes.add(new RenderableNote(allNotes.get(i).getNoteid(), allNotes.get(i).getUser(), null, allNotes.get(i).getTitle(), allNotes.get(i).getBody(), allNotes.get(i).getCreationDate(), allNotes.get(i).getLastModification()));
+            }
+
+
+            for (Note n : allNotes) {
+                String bodyParsed = getParsedBodyEscapeText(n.getBody());
+                n.setBody(bodyParsed);
+            }
+            return allNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -70,18 +94,9 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public boolean checkFilter(String title, String initDate, String endDate) {
         if (title != null && initDate != null && endDate != null) {
-
-            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) {
-                return true;
-            }
-
-            if (!title.equals("") && initDate.equals("") && endDate.equals("")) {
-                return true;
-            }
-
-            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) {
-                return true;
-            }
+            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
+            if (!title.equals("") && initDate.equals("") && endDate.equals("")) return true;
+            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
 
         }
         return false;
@@ -91,7 +106,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
-
+        List<Note> notes = new ArrayList<>();
         String initDateParsed = "";
         String endDateParsed = "";
         if (!initDate.equals("") && !endDate.equals("") && initDate != null && endDate != null) {
@@ -107,53 +122,53 @@ public class NoteServiceImpl implements NoteService {
         try {
             if (type == null || type.equals("")) {
                 System.out.println("filtramos todo...");
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                    //return nd.filterByTitle(userid, title, LIMIT, offset);
-                    return nd.filterTypeOfNoteByTitle(userid, title, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
-                    //return nd.filterByDate(userid, initDate, endDate, LIMIT, offset);
-                    return nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                    //return nd.filterAll(userid, title, initDate, endDate, LIMIT, offset);
-                    return nd.filterAllTypeOfNote(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                switch (Filter.checkTypeFilter(title, initDate, endDate)) {
+                    case "filterByTitle":
+                        notes = nd.filterTypeOfNoteByTitle(userid, title, LIMIT, offset);
+                    case "filterByDate":
+                        notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                    case "filterAll":
+                        notes = nd.filterAllTypeOfNote(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
                 }
             } else {
                 System.out.println("filtramos solo lo seleccionado...");
                 if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
                     if (type.equals("compartides")) {
-                        System.out.println("Compartides by title!!");
-                        return nd.filterSharedNotesWithMeByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterSharedNotesWithMeByTitle(userid, title, LIMIT, offset);
                     } else if (type.equals("compartit")) {
-                        return nd.filterSharedNotesByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterSharedNotesByTitle(userid, title, LIMIT, offset);
                     } else {
-                        return nd.filterCreatedNotesByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterCreatedNotesByTitle(userid, title, LIMIT, offset);
                     }
                 }
                 if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
                     if (type.equals("compartides")) {
-                        return nd.filterSharedNotesWithMeByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterSharedNotesWithMeByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     } else if (type.equals("compartit")) {
-                        return nd.filterSharedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterSharedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     } else {
-                        return nd.filterCreatedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterCreatedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     }
                 }
                 if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
                     if (type.equals("compartides")) {
-                        return nd.filterAllSharedNotesWithMe(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotesWithMe(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
                     } else if (type.equals("compartit")) {
-                        return nd.filterAllSharedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
                     } else {
-                        return nd.filterAllCreatedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllCreatedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
                     }
                 }
             }
+            for (Note n : notes) {
+                String bodyParsed = getParsedBodyEscapeText(n.getBody());
+                n.setBody(bodyParsed);
+            }
+            return notes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return null;
     }
 
     @Override
@@ -171,23 +186,27 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public String getParsedBodyNote(String body) {
+    public String getParsedBodyToHTML(String body) {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(body);
+
+
         HtmlRenderer renderer = HtmlRenderer.builder().escapeHtml(true).sanitizeUrls(true).build();
-        return renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
+        return renderer.render(document);
+    }
+
+    @Override
+    public String getParsedBodyEscapeText(String body) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(body);
+        TextContentRenderer renderer2 = TextContentRenderer.builder().build();
+        return renderer2.render(document);
     }
 
     @Override
     public boolean addNote(long userid, String title, String body) {
-        //ES CORRECTE EMPRAR ALTRES DAOS EN UN SERVICE QUE ES DE NOTE?
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
-
-
-        //2020-11-10 12:46:03
-        //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        //String date = formatter.parse(formatter.format(new Date()));
 
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -202,21 +221,11 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
 
-        //public Note(long idnote, User user, String title, String body, Date creationDate, Date lastModification) {
-        //nd.create(new Note(0, iduser, title, body, formatter.format(date), formatter.format(date)));
     }
 
     @Override
     public boolean editNote(long userid, long noteid, String title, String body) {
         NoteDao nd = new NoteDaoImpl();
-        UserDao ud = new UserDaoImpl();
-        //2020-11-10 12:46:03
-        //With SimpleDateFormat
-        //String pattern = "yyyy-MM-dd HH:mm:ss";
-        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, new Locale("es", "ES"));
-        //String lastModificationDate = simpleDateFormat.format(new Date());
-
-        //With LocalDateTime
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String lastModificationDate = myDateObj.format(myFormatObj);
@@ -323,7 +332,6 @@ public class NoteServiceImpl implements NoteService {
                         User user = ud.getUserById(userid);
                         users.add(user);
                     }
-                    //sharedNotes.add(new SharedNote(0, noteForShare, ud.getUserById(userid)));
                 }
 
                 if (users.size() != 0) {
@@ -349,8 +357,8 @@ public class NoteServiceImpl implements NoteService {
             boolean canDelete = false;
 
             for (Note n : sharedWithMe) {
-                System.out.println(n.getIdnote() + " =? " + noteid);
-                if (n.getIdnote() == noteid) {
+                System.out.println(n.getNoteid() + " =? " + noteid);
+                if (n.getNoteid() == noteid) {
                     System.out.println("Eliminamos nota que nos han compartido");
                     canDelete = true;
                 }
@@ -364,7 +372,7 @@ public class NoteServiceImpl implements NoteService {
 
 
             for (Note n : sharedNotes) {
-                if (n.getUser().getIduser() == userid && n.getIdnote() == noteid) {
+                if (n.getUser().getIduser() == userid && n.getNoteid() == noteid) {
                     System.out.println("Eliminamos nota que hemos compartido");
                     canDelete = true;
                 }

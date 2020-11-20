@@ -1,33 +1,24 @@
-package com.liceu.sromerom.model;
+package com.liceu.sromerom.utils;
 
+import com.liceu.sromerom.model.User;
 
-public class Note {
+public class RenderableNote {
     private long noteid;
-    private User user;
+    private User noteOwner;
+    private User sharedUser;
     private String title;
     private String body;
     private String creationDate;
     private String lastModification;
 
-    public Note(long idnote, User user, String title, String body, String creationDate, String lastModification) {
-        this.setNoteid(idnote);
-        this.setUser(user);
-        this.setTitle(title);
-        this.setBody(body);
-        this.setCreationDate(creationDate);
-        this.setLastModification(lastModification);
-    }
-
-    @Override
-    public String toString() {
-        return "Note{" +
-                "idnote=" + noteid +
-                ", user=" + user +
-                ", title='" + title + '\'' +
-                ", body='" + body + '\'' +
-                ", creationDate='" + creationDate + '\'' +
-                ", lastModification='" + lastModification + '\'' +
-                '}';
+    public RenderableNote(long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification) {
+        this.noteid = noteid;
+        this.noteOwner = noteOwner;
+        this.sharedUser = sharedUser;
+        this.title = title;
+        this.body = body;
+        this.creationDate = creationDate;
+        this.lastModification = lastModification;
     }
 
     public long getNoteid() {
@@ -38,12 +29,20 @@ public class Note {
         this.noteid = noteid;
     }
 
-    public User getUser() {
-        return user;
+    public User getNoteOwner() {
+        return noteOwner;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setNoteOwner(User noteOwner) {
+        this.noteOwner = noteOwner;
+    }
+
+    public User getSharedUser() {
+        return sharedUser;
+    }
+
+    public void setSharedUser(User sharedUser) {
+        this.sharedUser = sharedUser;
     }
 
     public String getTitle() {
@@ -77,5 +76,4 @@ public class Note {
     public void setLastModification(String lastModification) {
         this.lastModification = lastModification;
     }
-
 }

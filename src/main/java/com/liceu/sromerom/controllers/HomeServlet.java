@@ -26,7 +26,7 @@ public class HomeServlet extends HttpServlet {
         req.setAttribute("userid", userid);
         Integer offset = 0;
         Integer currentPage = 1;
-        int totalPages = 0;
+        int totalPages;
 
         //Params filtres
         String typeNoteDisplay = req.getParameter("typeNote");
@@ -53,7 +53,6 @@ public class HomeServlet extends HttpServlet {
                 currentPage = actualCurrentPage;
             }
         }
-
         //Filter per mostrar nomes notes en especific
         if (typeNoteDisplay != null && !typeNoteDisplay.equals("")) {
             if (typeNoteDisplay.equals("compartides")) {

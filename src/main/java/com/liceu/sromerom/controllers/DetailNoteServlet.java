@@ -15,12 +15,10 @@ import java.io.PrintWriter;
 @WebServlet(value = "/detail")
 public class DetailNoteServlet extends HttpServlet {
 
-    private Long noteid = null;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("id") != null) {
-            noteid = Long.parseLong(req.getParameter("id"));
+            Long noteid = Long.parseLong(req.getParameter("id"));
             NoteService ns = new NoteServiceImpl();
             HttpSession session = req.getSession();
             Long userid = (Long) session.getAttribute("userid");
@@ -31,7 +29,7 @@ public class DetailNoteServlet extends HttpServlet {
             out.print("<head><title></title></head>");
             out.print("<body>");
             out.print("<h1>" + ns.getNoteById(userid, noteid).getTitle() + "</h1>");
-            out.print(ns.getParsedBodyNote(ns.getNoteById(userid, noteid).getBody()));
+            out.print(ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
             out.print("</body>");
             out.print("</html>");
         }

@@ -43,7 +43,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> getAllNotes() {
         List<Note> result = new ArrayList<>();
         for (Note n : this.notes) {
-            result.add(new Note(n.getIdnote(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
+            result.add(new Note(n.getNoteid(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
         }
         return result;
     }
@@ -368,7 +368,7 @@ public class NoteDaoImpl implements NoteDao {
 
 
         ps.setString(3, note.getLastModification());
-        ps.setLong(4, note.getIdnote());
+        ps.setLong(4, note.getNoteid());
         ps.execute();
         ps.close();
     }
@@ -661,7 +661,7 @@ public class NoteDaoImpl implements NoteDao {
         Connection c = Database.getConnection();
         PreparedStatement ps = c.prepareStatement("INSERT INTO sharedNote (note_id, user_id) VALUES (?,?)");
         for (User user : users) {
-            ps.setLong(1, noteForShare.getIdnote());
+            ps.setLong(1, noteForShare.getNoteid());
             ps.setLong(2, user.getIduser());
             //ps.setLong(2, sn.getUser().getIduser());
             ps.execute();
@@ -677,6 +677,4 @@ public class NoteDaoImpl implements NoteDao {
         ps.execute();
         ps.close();
     }
-
-
 }

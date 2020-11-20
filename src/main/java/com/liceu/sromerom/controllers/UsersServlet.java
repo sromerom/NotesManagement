@@ -31,6 +31,9 @@ public class UsersServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/home");
                 return;
             }
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
         }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");

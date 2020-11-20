@@ -8,23 +8,47 @@
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <style>
+        section {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+            margin: 15px;
+        }
         select {
             width: 100%;
+        }
+        button {
+            margin: 15px 15px;
         }
     </style>
 </head>
 <body>
+<section>
+    <h1>Share With Users</h1>
+    <form method="POST" action="/share">
+        <input type="hidden" id="noteid" name="noteid" value="${noteid}">
+        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+            <c:forEach var="user" items="${users}">
+                <option value="${user.username}">${user.username}</option>
+            </c:forEach>
+        </select>
+        <button type="submit" class="btn btn-success">Share</button>
+    </form>
+    <p><a href="${pageContext.request.contextPath}/home">Go to home</a></p>
+</section>
 
-<h1>Share With Users</h1>
-<form method="POST" action="/share">
-    <input type="hidden" id="noteid" name="noteid" value="${noteid}">
-    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-        <c:forEach var="user" items="${users}">
-            <option value="${user.username}">${user.username}</option>
-        </c:forEach>
-    </select>
-    <button type="submit" class="btn btn-success">Share</button>
-</form>
 <script
         src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
