@@ -352,34 +352,24 @@
                     <div class="card" style="width: 18rem; background-color: #f15946; color: white">
                         <div class="card-body">
                             <h5 class="card-title">${note.title}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Shared
-                                By ${note.owner.username}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
                             <p class="card-text"
                                style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
 
-                            <a data-toggle="modal" data-target="#modalDelete"
-                               onclick="passNoteId('/deleteShare', ${note.noteid})">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-x-fill"
-                                     fill="currentColor"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                          d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
-                                </svg>
-                            </a>
-                            <!--
-                            <form method="POST" action="/deleteShare">
-                                <input type="hidden" name="noteid" value="${note.noteid}">
-                                <label>
-                                    <input type="submit">
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-x-fill"
+                            <div class="optionsButtons">
+                                <a data-toggle="modal" data-target="#modalDelete"
+                                   onclick="passNoteId('/deleteAllShare', ${note.noteid})">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                         class="bi bi-person-x-fill"
                                          fill="currentColor"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
                                               d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
                                     </svg>
-                                </label>
-                            </form>
-                            -->
+                                </a>
+
+                            </div>
+
                             <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
                                 Modification ${note.lastModification}</h6>
                         </div>
@@ -465,7 +455,7 @@
             formModal.action = "/delete"
         } else {
             titleModal.innerText = "Are you sure to delete this share note?"
-            formModal.action = "/deleteShare"
+            formModal.action = "/deleteAllShare"
         }
         document.querySelector("#deleteNoteHidden").value = noteid;
     }

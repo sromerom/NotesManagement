@@ -132,14 +132,18 @@ public class NoteServiceImpl implements NoteService {
         try {
             if (type == null || type.equals("")) {
                 System.out.println("filtramos todo...");
-                switch (Filter.checkTypeFilter(title, initDate, endDate)) {
-                    case "filterByTitle":
-                        notes = nd.filterTypeOfNoteByTitle(userid, title, LIMIT, offset);
-                    case "filterByDate":
-                        notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
-                    case "filterAll":
-                        notes = nd.filterAllTypeOfNote(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                    notes = nd.filterTypeOfNoteByTitle(userid, title, LIMIT, offset);
+                    //return nd.filterByTitleAllTypeNotes(userid, title, LIMIT, offset);
+                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                    notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                    //return nd.filterByDateAllTypeNotes(userid, initDate, endDate, LIMIT, offset);
+                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+                    notes = nd.filterAllTypeOfNote(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                    //return nd.filterAllAllTypeNotes(userid, title, initDate, endDate, LIMIT, offset);
                 }
+
+
             } else {
                 System.out.println("filtramos solo lo seleccionado...");
                 if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
@@ -418,8 +422,19 @@ public class NoteServiceImpl implements NoteService {
     public boolean deleteAllShareNote(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
+            List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
+            boolean canDelete = false;
 
-            if (nd.isOwnerNote(userid, noteid)) {
+            for (Note n : sharedWithMe) {
+                System.out.println(n.getNoteid() + " =? " + noteid);
+                if (n.getNoteid() == noteid) {
+                    System.out.println("Eliminamos nota que nos han compartido");
+                    canDelete = true;
+                }
+            }
+
+            System.out.println("can delete? " + canDelete);
+            if (canDelete) {
                 nd.deleteAllSharesByNoteId(noteid);
                 return true;
             }
@@ -428,6 +443,18 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
         return false;
+
+
+        /*
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            nd.deleteAllSharesByNoteId(noteid);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+         */
     }
 
     private boolean checkHTMLTags(String body) {
