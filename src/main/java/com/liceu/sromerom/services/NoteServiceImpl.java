@@ -27,32 +27,34 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getNotesFromUser(long userid, int offset) {
+    public List<RenderableNote> getNotesFromUser(long userid, int offset) {
         List<Note> allNotes;
         List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
         try {
             List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
             allNotes = nd.getAllNotesFromUser(userid, LIMIT, offset);
-            for (int i = 0; i < allNotes.size(); i++) {
-                /*
+            for (Note allNote : allNotes) {
+                //User sharedUser = null;
+                List<User> sharedUsersFromNote = null;
                 for (int j = 0; j < sharedNotes.size(); j++) {
-
-                    if (sharedNotes.get(j).getNoteid() == allNotes.get(i).getNoteid()) {
-
+                    if (sharedNotes.get(j).getNoteid() == allNote.getNoteid()) {
+                        //sharedUser = sharedNotes.get(j).getUser();
+                        sharedUsersFromNote = ud.getUsersFromSharedNote(sharedNotes.get(j).getNoteid());
+                        sharedNotes.remove(j);
+                        break;
                     }
                 }
-                 */
                 //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
-                renderableNotes.add(new RenderableNote(allNotes.get(i).getNoteid(), allNotes.get(i).getUser(), null, allNotes.get(i).getTitle(), allNotes.get(i).getBody(), allNotes.get(i).getCreationDate(), allNotes.get(i).getLastModification()));
+                renderableNotes.add(new RenderableNote(allNote.getNoteid(), allNote.getUser(), sharedUsersFromNote, allNote.getTitle(), allNote.getBody(), allNote.getCreationDate(), allNote.getLastModification()));
             }
 
-
-            for (Note n : allNotes) {
-                String bodyParsed = getParsedBodyEscapeText(n.getBody());
-                n.setBody(bodyParsed);
+            for (RenderableNote rn : renderableNotes) {
+                String bodyParsed = getParsedBodyEscapeText(rn.getBody());
+                rn.setBody(bodyParsed);
             }
-            return allNotes;
+            return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -60,10 +62,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getCreatedNotes(long id, int offset) {
+    public List<RenderableNote> getCreatedNotes(long userid, int offset) {
+        List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
         try {
-            return nd.getCreatedNotesFromUser(id, LIMIT, offset);
+            List<Note> createdNotes = nd.getCreatedNotesFromUser(userid, LIMIT, offset);
+            for (Note n : createdNotes) {
+                renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), null, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
+            }
+            return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -96,7 +103,7 @@ public class NoteServiceImpl implements NoteService {
         if (title != null && initDate != null && endDate != null) {
             if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
             if (!title.equals("") && initDate.equals("") && endDate.equals("")) return true;
-            if (title.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
+            return title.equals("") && !initDate.equals("") && !endDate.equals("");
 
         }
         return false;
@@ -104,11 +111,14 @@ public class NoteServiceImpl implements NoteService {
 
 
     @Override
-    public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
+    public List<RenderableNote> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
         List<Note> notes = new ArrayList<>();
+        List<RenderableNote> renderableNotes = new ArrayList<>();
         String initDateParsed = "";
         String endDateParsed = "";
+
         if (!initDate.equals("") && !endDate.equals("") && initDate != null && endDate != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime initDateTime = LocalDateTime.parse(initDate);
@@ -160,11 +170,28 @@ public class NoteServiceImpl implements NoteService {
                     }
                 }
             }
+
+            List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
             for (Note n : notes) {
-                String bodyParsed = getParsedBodyEscapeText(n.getBody());
-                n.setBody(bodyParsed);
+                //User sharedUser = null;
+                List<User> sharedUsersFromNote = null;
+                for (int j = 0; j < sharedNotes.size(); j++) {
+                    if (sharedNotes.get(j).getNoteid() == n.getNoteid()) {
+                        //sharedUser = sharedNotes.get(j).getUser();
+                        sharedUsersFromNote = ud.getUsersFromSharedNote(sharedNotes.get(j).getNoteid());
+                        sharedNotes.remove(j);
+                        break;
+                    }
+                }
+                //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
+                renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), sharedUsersFromNote, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
             }
-            return notes;
+
+            for (RenderableNote rn : renderableNotes) {
+                String bodyParsed = getParsedBodyEscapeText(rn.getBody());
+                rn.setBody(bodyParsed);
+            }
+            return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -271,11 +298,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getSharedNoteWithMe(long userid, int offset) {
+    public List<RenderableNote> getSharedNoteWithMe(long userid, int offset) {
+        List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
         try {
-            System.out.println(nd.getSharedNotesWithMe(userid, LIMIT, offset));
-            return nd.getSharedNotesWithMe(userid, LIMIT, offset);
+            List<Note> sharedNotesWithMe = nd.getSharedNotesWithMe(userid, LIMIT, offset);
+            for (Note n : sharedNotesWithMe) {
+                renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), null, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
+            }
+            return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -283,10 +314,17 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> getSharedNotes(long userid, int offset) {
+    public List<RenderableNote> getSharedNotes(long userid, int offset) {
+        List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
         try {
-            return nd.getSharedNotes(userid, LIMIT, offset);
+            List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
+            for (Note n : sharedNotes) {
+                List<User> sharedUsersFromNote = ud.getUsersFromSharedNote(n.getNoteid());
+                renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), sharedUsersFromNote, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
+            }
+            return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -337,8 +375,6 @@ public class NoteServiceImpl implements NoteService {
                 if (users.size() != 0) {
                     nd.createShare(noteForShare, users);
                     return true;
-                } else {
-                    return false;
                 }
             }
         } catch (Exception e) {
@@ -349,37 +385,42 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean deleteShareNote(long userid, long noteid, long sharedNoteId) {
+    public boolean deleteShareNote(long userWhoDeleteShares, long noteid, String[] usernames) {
+        NoteDao nd = new NoteDaoImpl();
+        UserDao ud = new UserDaoImpl();
+        try {
+            Note noteForDeleteShare = nd.getNoteById(noteid);
+            List<User> users = new ArrayList<>();
+            if (noteForDeleteShare != null) {
+                for (String username : usernames) {
+                    long userid = ud.getUserIdByUsername(username);
+                    System.out.println(nd.sharedNoteExists(userid, noteid));
+                    if (nd.sharedNoteExists(userid, noteid)) {
+                        User user = ud.getUserById(userid);
+                        users.add(user);
+                    }
+                }
+                if (users.size() != 0) {
+                    //nd.createShare(noteForDeleteShare, users);
+                    nd.deleteShare(noteForDeleteShare, users);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllShareNote(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            List<Note> sharedNotes = nd.getSharedNotes(userid, 50, 0);
-            List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
-            boolean canDelete = false;
 
-            for (Note n : sharedWithMe) {
-                System.out.println(n.getNoteid() + " =? " + noteid);
-                if (n.getNoteid() == noteid) {
-                    System.out.println("Eliminamos nota que nos han compartido");
-                    canDelete = true;
-                }
-            }
-
-            System.out.println("can delete? " + canDelete);
-            if (canDelete) {
-                nd.deleteShare(sharedNoteId);
-                return true;
-            }
-
-
-            for (Note n : sharedNotes) {
-                if (n.getUser().getIduser() == userid && n.getNoteid() == noteid) {
-                    System.out.println("Eliminamos nota que hemos compartido");
-                    canDelete = true;
-                }
-            }
-
-            if (canDelete) {
-                nd.deleteShare(sharedNoteId);
+            if (nd.isOwnerNote(userid, noteid)) {
+                nd.deleteAllSharesByNoteId(noteid);
                 return true;
             }
         } catch (Exception e) {

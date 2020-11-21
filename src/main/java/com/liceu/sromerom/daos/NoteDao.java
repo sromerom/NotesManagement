@@ -67,6 +67,9 @@ public interface NoteDao {
 
     public void createShare(Note noteForShare, List<User> users) throws Exception;
 
-    public void deleteShare(long sharedNoteId) throws Exception;
+    public void deleteShare(Note noteForShare, List<User> users) throws Exception;
+
+    public void deleteAllSharesByNoteId(long noteid) throws Exception;
+
 
 }

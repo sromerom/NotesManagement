@@ -22,16 +22,9 @@ public class DetailNoteServlet extends HttpServlet {
             NoteService ns = new NoteServiceImpl();
             HttpSession session = req.getSession();
             Long userid = (Long) session.getAttribute("userid");
-            System.out.println("Para enviar!!!!!! " + userid);
-            resp.setContentType("text/html");
-            PrintWriter out = resp.getWriter();
-            out.print("<html>");
-            out.print("<head><title></title></head>");
-            out.print("<body>");
-            out.print("<h1>" + ns.getNoteById(userid, noteid).getTitle() + "</h1>");
-            out.print(ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
-            out.print("</body>");
-            out.print("</html>");
+
+            req.setAttribute("titleNote", ns.getNoteById(userid, noteid).getTitle());
+            req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
         }
         //super.doGet(req, resp);
 

@@ -346,7 +346,7 @@ public class NoteDaoImpl implements NoteDao {
     public void create(Note note) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) VALUES (?,?,?,?,?)");
-        ps.setLong(1, note.getUser().getIduser());
+        ps.setLong(1, note.getUser().getUserid());
         ps.setString(2, note.getTitle());
         ps.setString(3, note.getBody());
 
@@ -415,7 +415,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> getSharedNotes(long userid, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT sharedNote.note_id, title, body, creationDate, lastModificationDate, user_iduser, email, username, password FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id INNER JOIN user ON note.user_iduser = user.user_id WHERE note.user_iduser = ? ORDER BY sharedNote.shared_note DESC LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT DISTINCT sharedNote.note_id, title, body, creationDate, lastModificationDate, user_iduser, email, username, password FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id INNER JOIN user ON note.user_iduser = user.user_id WHERE note.user_iduser = ? ORDER BY sharedNote.shared_note DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setInt(2, limit);
         ps.setInt(3, offset);
@@ -662,7 +662,7 @@ public class NoteDaoImpl implements NoteDao {
         PreparedStatement ps = c.prepareStatement("INSERT INTO sharedNote (note_id, user_id) VALUES (?,?)");
         for (User user : users) {
             ps.setLong(1, noteForShare.getNoteid());
-            ps.setLong(2, user.getIduser());
+            ps.setLong(2, user.getUserid());
             //ps.setLong(2, sn.getUser().getIduser());
             ps.execute();
         }
@@ -670,10 +670,23 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public void deleteShare(long sharedNoteId) throws Exception {
+    public void deleteShare(Note noteForShare, List<User> users) throws Exception {
+        Connection c = Database.getConnection();
+        PreparedStatement ps = c.prepareStatement("DELETE FROM sharedNote WHERE note_id = ? AND user_id = ?");
+        for (User user : users) {
+            ps.setLong(1, noteForShare.getNoteid());
+            ps.setLong(2, user.getUserid());
+            //ps.setLong(2, sn.getUser().getIduser());
+            ps.execute();
+        }
+        ps.close();
+    }
+
+    @Override
+    public void deleteAllSharesByNoteId(long noteid) throws Exception {
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("DELETE FROM sharedNote WHERE shared_note = ?");
-        ps.setLong(1, sharedNoteId);
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM sharedNote WHERE note_id = ?");
+        ps.setLong(1, noteid);
         ps.execute();
         ps.close();
     }

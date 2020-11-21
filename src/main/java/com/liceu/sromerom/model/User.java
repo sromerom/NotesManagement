@@ -1,25 +1,25 @@
 package com.liceu.sromerom.model;
 
 public class User {
-    private long iduser;
+    private long userid;
     private String email;
     private String username;
     private String password;
 
-    public User(long iduser, String email, String username, String password) {
-        this.setIduser(iduser);
+    public User(long userid, String email, String username, String password) {
+        this.setUserid(userid);
         this.setEmail(email);
         this.setUsername(username);
         this.setPassword(password);
     }
 
 
-    public long getIduser() {
-        return iduser;
+    public long getUserid() {
+        return userid;
     }
 
-    public void setIduser(long iduser) {
-        this.iduser = iduser;
+    public void setUserid(long userid) {
+        this.userid = userid;
     }
 
     public String getEmail() {
@@ -49,7 +49,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "iduser=" + iduser +
+                "iduser=" + userid +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

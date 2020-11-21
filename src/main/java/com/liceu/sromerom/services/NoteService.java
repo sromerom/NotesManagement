@@ -1,16 +1,17 @@
 package com.liceu.sromerom.services;
 
 import com.liceu.sromerom.model.Note;
+import com.liceu.sromerom.utils.RenderableNote;
 
 import java.util.List;
 
 public interface NoteService {
     public List<Note> getAll();
 
-    public List<Note> getNotesFromUser(long userid, int offset);
+    public List<RenderableNote> getNotesFromUser(long userid, int offset);
     //public Map<Note, Boolean> getNotesFromUser(long userid, int offset);
 
-    public List<Note> getCreatedNotes(long id, int offset);
+    public List<RenderableNote> getCreatedNotes(long userid, int offset);
 
     public long getAllNotesLength(long id);
 
@@ -18,7 +19,7 @@ public interface NoteService {
 
     public boolean checkFilter(String title, String initDate, String endDate);
 
-    public List<Note> filter(long userid, String type, String title, String initDate, String endDate, int offset);
+    public List<RenderableNote> filter(long userid, String type, String title, String initDate, String endDate, int offset);
 
     public Note getNoteById(long userid, long noteid);
 
@@ -37,9 +38,9 @@ public interface NoteService {
 
     public long getSharedNoteId(long noteid);
 
-    public List<Note> getSharedNoteWithMe(long userid, int offset);
+    public List<RenderableNote> getSharedNoteWithMe(long userid, int offset);
 
-    public List<Note> getSharedNotes(long userid, int offset);
+    public List<RenderableNote> getSharedNotes(long userid, int offset);
 
     public long getLengthSharedNoteWithMe(long userid);
 
@@ -47,6 +48,8 @@ public interface NoteService {
 
     public boolean shareNote(long userid, long noteid, String[] usernames);
 
-    public boolean deleteShareNote(long userid, long noteid, long sharedNoteId);
+    public boolean deleteShareNote(long userid, long noteid, String[] usernames);
+
+    public boolean deleteAllShareNote(long userid, long noteid);
 
 }

@@ -14,21 +14,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(value = "/users")
-public class UsersServlet extends HttpServlet {
+@WebServlet(value = "/deleteShare")
+public class DeleteSpecificShareServlet extends HttpServlet {
+    private Long noteid = null;
+    private Long userid = null;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        /*
         UserService us = new UserServiceImpl();
         NoteService ns = new NoteServiceImpl();
         if (req.getParameter("id") != null) {
-            long noteid = Long.parseLong(req.getParameter("id"));
+            noteid = Long.parseLong(req.getParameter("id"));
             HttpSession session = req.getSession();
-            Long userid = (Long) session.getAttribute("userid");
+            userid = (Long) session.getAttribute("userid");
             req.setAttribute("users", us.getAll(userid));
-            req.setAttribute("noteid", noteid);
-
+            req.setAttribute("usersShared", us.getSharedUsers(noteid));
             if (ns.getNoteById(userid, noteid) == null) {
                 resp.sendRedirect(req.getContextPath() + "/home");
                 return;
@@ -37,16 +37,27 @@ public class UsersServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
-
+        req.setAttribute("noteid", noteid);
+        req.setAttribute("action", "/deleteShare");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);
-
-         */
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String[] sharedUsers = req.getParameterValues("states[]");
+        NoteService ns = new NoteServiceImpl();
+        UserService us = new UserServiceImpl();
+        boolean noError;
+
+        if (sharedUsers != null && us.existsUserShare(noteid, sharedUsers)) {
+            noError = ns.deleteShareNote(userid, noteid, sharedUsers);
+            req.setAttribute("noerror", noError);
+        }
+
+        req.setAttribute("action", "/deleteShare");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);
+
     }
 }

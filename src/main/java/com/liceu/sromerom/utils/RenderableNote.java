@@ -2,23 +2,38 @@ package com.liceu.sromerom.utils;
 
 import com.liceu.sromerom.model.User;
 
+import java.util.List;
+
 public class RenderableNote {
     private long noteid;
-    private User noteOwner;
-    private User sharedUser;
+    private User owner;
+    private List<User> sharedUsers;
     private String title;
     private String body;
     private String creationDate;
     private String lastModification;
 
-    public RenderableNote(long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification) {
+    public RenderableNote(long noteid, User noteOwner, List<User> sharedUsers, String title, String body, String creationDate, String lastModification) {
         this.noteid = noteid;
-        this.noteOwner = noteOwner;
-        this.sharedUser = sharedUser;
+        this.owner = noteOwner;
+        this.sharedUsers = sharedUsers;
         this.title = title;
         this.body = body;
         this.creationDate = creationDate;
         this.lastModification = lastModification;
+    }
+
+    @Override
+    public String toString() {
+        return "RenderableNote{" +
+                "noteid=" + noteid +
+                ", owner=" + owner +
+                ", sharedUsers=" + sharedUsers +
+                ", title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", creationDate='" + creationDate + '\'' +
+                ", lastModification='" + lastModification + '\'' +
+                '}';
     }
 
     public long getNoteid() {
@@ -29,20 +44,20 @@ public class RenderableNote {
         this.noteid = noteid;
     }
 
-    public User getNoteOwner() {
-        return noteOwner;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setNoteOwner(User noteOwner) {
-        this.noteOwner = noteOwner;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
-    public User getSharedUser() {
-        return sharedUser;
+    public List<User> getSharedUsers() {
+        return sharedUsers;
     }
 
-    public void setSharedUser(User sharedUser) {
-        this.sharedUser = sharedUser;
+    public void setSharedUsers(List<User> sharedUsers) {
+        this.sharedUsers = sharedUsers;
     }
 
     public String getTitle() {

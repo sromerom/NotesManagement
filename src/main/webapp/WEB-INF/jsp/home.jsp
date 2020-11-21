@@ -221,13 +221,19 @@
     <div id="siteNotes">
         <c:forEach var="note" items="${notes}">
             <c:choose>
-                <c:when test="${note.user.iduser == userid}">
+                <c:when test="${note.owner.userid == userid}">
                     <c:choose>
-                        <c:when test="${typeNote == 'compartit'}">
+                        <c:when test="${note.sharedUsers != null || typeNote == 'compartit'}">
                             <div class="card" style="width: 18rem; background-color: #53b3cb; color: black">
                                 <div class="card-body">
                                     <h5 class="card-title">${note.title}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Created By ${note.user.username}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
+                                    <h6>
+                                        Shared with
+                                        <c:forEach var="userS" items="${note.sharedUsers}">
+                                            ${userS.username},
+                                        </c:forEach>
+                                    </h6>
                                     <p class="card-text"
                                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
                                     <div class="optionsButtons">
@@ -249,8 +255,15 @@
                                                       d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                             </svg>
                                         </a>
-                                        <a data-toggle="modal" data-target="#modalDelete"
-                                           onclick="passNoteId('/deleteShare', ${note.noteid})">
+                                        <a class="card-link" href="/share?id=${note.noteid}">
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-share-fill"
+                                                 fill="currentColor"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                      d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="/deleteShare?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                  class="bi bi-person-x-fill"
                                                  fill="currentColor"
@@ -273,7 +286,7 @@
                             <div class="card" style="width: 18rem; background-color: #f9c22e; color: black">
                                 <div class="card-body">
                                     <h5 class="card-title">${note.title}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Created By ${note.user.username}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
                                     <p class="card-text"
                                        style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
 
@@ -313,7 +326,7 @@
                                         </form>
                                         -->
 
-                                        <a class="card-link" href="/users?id=${note.noteid}">
+                                        <a class="card-link" href="/share?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-share-fill"
                                                  fill="currentColor"
                                                  xmlns="http://www.w3.org/2000/svg">
@@ -340,7 +353,7 @@
                         <div class="card-body">
                             <h5 class="card-title">${note.title}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Shared
-                                By ${note.user.username}</h6>
+                                By ${note.owner.username}</h6>
                             <p class="card-text"
                                style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
 

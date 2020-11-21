@@ -9,6 +9,7 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\ShareNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DeleteNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\AuthFilter.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DeleteSpecificShareServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\UnloginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\CorsFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\utils\Database.java
@@ -22,5 +23,6 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\CreateNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\model\Note.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DeleteShareServlet.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\utils\RenderableNote.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\daos\NoteDao.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DetailNoteServlet.java

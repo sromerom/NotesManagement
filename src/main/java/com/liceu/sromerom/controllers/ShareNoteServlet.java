@@ -2,6 +2,9 @@ package com.liceu.sromerom.controllers;
 
 import com.liceu.sromerom.services.NoteService;
 import com.liceu.sromerom.services.NoteServiceImpl;
+import com.liceu.sromerom.services.UserService;
+import com.liceu.sromerom.services.UserServiceImpl;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,36 +17,51 @@ import java.util.Arrays;
 
 @WebServlet(value = "/share")
 public class ShareNoteServlet extends HttpServlet {
+
+    private Long noteid = null;
+    private Long userid = null;
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/share.jsp");
+
+        UserService us = new UserServiceImpl();
+        NoteService ns = new NoteServiceImpl();
+        if (req.getParameter("id") != null) {
+            noteid = Long.parseLong(req.getParameter("id"));
+            HttpSession session = req.getSession();
+            userid = (Long) session.getAttribute("userid");
+            req.setAttribute("users", us.getAll(userid));
+            req.setAttribute("usersShared", us.getSharedUsers(noteid));
+            if (ns.getNoteById(userid, noteid) == null) {
+                resp.sendRedirect(req.getContextPath() + "/home");
+                return;
+            }
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+
+        req.setAttribute("action", "/share");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        Long userid = (Long) session.getAttribute("userid");
         //Long userid = (Long) session.getAttribute("userid");
         //String [] sharedUsers = req.getParameterValues("share");
-        String [] sharedUsers = req.getParameterValues("states[]");
-        Long noteid = Long.parseLong(req.getParameter("noteid"));
+        String[] sharedUsers = req.getParameterValues("states[]");
         NoteService ns = new NoteServiceImpl();
-        System.out.println(Arrays.toString(sharedUsers));
-        System.out.println("Note id: " + noteid);
-
-
-        boolean noError = ns.shareNote(userid, noteid, sharedUsers);
-        if (noError) {
-            System.out.println("S'ha compartit la nota correctament...");
-            resp.sendRedirect(req.getContextPath() + "/home");
-            return;
+        UserService us = new UserServiceImpl();
+        boolean noError;
+        if (sharedUsers != null && !us.existsUserShare(noteid, sharedUsers)) {
+            noError = ns.shareNote(userid, noteid, sharedUsers);
+            req.setAttribute("noerror", noError);
         }
 
-        System.out.println("No s'ha compartit la nota correctament...");
-        req.setAttribute("noerror", noError);
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
+        req.setAttribute("action", "/share");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);
     }
 }

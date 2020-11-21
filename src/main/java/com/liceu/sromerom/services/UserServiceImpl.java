@@ -24,6 +24,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getSharedUsers(long noteid) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            return ud.getUsersFromSharedNote(noteid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public boolean validateUser(String username, String password) {
         UserDao ud = new UserDaoImpl();
 
@@ -82,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long getIdByUser(User user) {
-        return user.getIduser();
+        return user.getUserid();
     }
 
     @Override
@@ -101,6 +112,27 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return false;
         }
+        return false;
+    }
+
+    @Override
+    public boolean existsUserShare(long noteid, String[] sharedUsers) {
+        UserDao ud = new UserDaoImpl();
+
+        try {
+            List<User> usersShared = ud.getUsersFromSharedNote(noteid);
+            for (User user: usersShared) {
+                for (int i = 0; i < sharedUsers.length; i++) {
+                    if (user.getUsername().equals(sharedUsers[i])) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
         return false;
     }
 }

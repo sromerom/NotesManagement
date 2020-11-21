@@ -6,7 +6,10 @@ import java.util.List;
 public interface UserDao {
     public List<User> getAllUsers(long userid) throws Exception;
 
+    public List<User> getUsersFromSharedNote(long noteid) throws Exception;
+
     public User getUserById(long id);
+
 
     public boolean existsUserWithUsername(String username) throws Exception;
     public boolean existsUserWithEmail(String email) throws Exception;
