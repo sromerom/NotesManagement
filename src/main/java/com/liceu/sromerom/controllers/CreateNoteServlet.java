@@ -30,22 +30,20 @@ public class CreateNoteServlet extends HttpServlet {
         String body = req.getParameter("bodyContent");
 
 
-        boolean noError;
+        boolean noError = false;
         if (req.getParameter("title") != null && req.getParameter("bodyContent") != null) {
             //Cream la nota...
             noError = ns.addNote(iduser, title, body);
-            req.setAttribute("noerror", noError);
         }
 
 
-        /*
         if (noError) {
             System.out.println("S'ha creat la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
-         */
 
+        req.setAttribute("noerror", false);
         req.setAttribute("action", "/create");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);

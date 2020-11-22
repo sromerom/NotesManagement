@@ -14,45 +14,21 @@
 </head>
 <body>
 
-<c:if test="${not empty noerror && action == '/share'}">
-    <c:choose>
-        <c:when test="${noerror == false && action == '/share'}">
-            <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
-                The note could not be shared successfully
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                The note was shared successfully
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </c:otherwise>
-    </c:choose>
+<c:if test="${noerror == false && action == '/share'}">
+    <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+        The note could not be shared successfully
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 </c:if>
-<c:if test="${not empty noerror && action == '/deleteShare'}">
-    <c:choose>
-        <c:when test="${noerror == false && action == '/deleteShare'}">
-            <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
-                Share could not be deleted
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                Share was successfully removed
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </c:otherwise>
-    </c:choose>
+<c:if test="${noerror == false && action == '/deleteShare'}">
+    <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+        Share could not be deleted
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 </c:if>
 <section id="container">
     <div>

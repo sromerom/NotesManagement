@@ -32,11 +32,12 @@ public class DeleteShareServlet extends HttpServlet {
             if (sharedNoteId != -1) {
                 noError = ns.deleteAllShareNote(userid, noteid);
             }
-            if (!noError) {
-                System.out.println("Error eliminant el share");
+
+            if (noError) {
+                resp.sendRedirect(req.getContextPath() + "/home");
+                return;
             }
-            resp.sendRedirect(req.getContextPath() + "/home");
-            return;
+            System.out.println("Error eliminant el share");
         }
     }
 }

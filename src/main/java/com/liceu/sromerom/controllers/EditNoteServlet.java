@@ -58,14 +58,12 @@ public class EditNoteServlet extends HttpServlet {
             noError = ns.editNote(userid, noteid, title, body);
         }
 
-        /*
         if (noError) {
             System.out.println("S'ha actualitzat la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
-         */
-        req.setAttribute("noerror", noError);
+        req.setAttribute("noerror", false);
         req.setAttribute("action", "/edit");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userForm.jsp");
         dispatcher.forward(req, resp);

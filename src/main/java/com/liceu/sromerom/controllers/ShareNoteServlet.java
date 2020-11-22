@@ -54,12 +54,18 @@ public class ShareNoteServlet extends HttpServlet {
         String[] sharedUsers = req.getParameterValues("states[]");
         NoteService ns = new NoteServiceImpl();
         UserService us = new UserServiceImpl();
-        boolean noError;
+        boolean noError = false;
         if (sharedUsers != null && !us.existsUserShare(noteid, sharedUsers)) {
             noError = ns.shareNote(userid, noteid, sharedUsers);
-            req.setAttribute("noerror", noError);
         }
 
+        if (noError) {
+            System.out.println("S'ha compartit la nota correctament...");
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+
+        req.setAttribute("noerror", false);
         req.setAttribute("action", "/share");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
         dispatcher.forward(req, resp);

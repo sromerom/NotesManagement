@@ -422,6 +422,7 @@ public class NoteServiceImpl implements NoteService {
     public boolean deleteAllShareNote(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
+            List<Note> sharedNotes = nd.getSharedNotes(userid, 50, 0);
             List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
             boolean canDelete = false;
 
@@ -434,6 +435,18 @@ public class NoteServiceImpl implements NoteService {
             }
 
             System.out.println("can delete? " + canDelete);
+            if (canDelete) {
+                nd.deleteAllSharesByNoteId(noteid);
+                return true;
+            }
+
+            for (Note n : sharedNotes) {
+                if (n.getUser().getUserid() == userid && n.getNoteid() == noteid) {
+                    System.out.println("Eliminamos nota que hemos compartido");
+                    canDelete = true;
+                }
+            }
+
             if (canDelete) {
                 nd.deleteAllSharesByNoteId(noteid);
                 return true;
