@@ -7,32 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
-
-    private List<User> users = new ArrayList<>();
-
-    public UserDaoImpl() {
-        try {
-            Connection c = Database.getConnection();
-            PreparedStatement ps = c.prepareStatement("SELECT * FROM user");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                long userid = rs.getLong(1);
-                String email = rs.getString(2);
-                String username = rs.getString(3);
-                String password = rs.getString(4);
-                User user = new User(userid, email, username, password);
-                this.users.add(user);
-            }
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public List<User> getAllUsers(long userid) throws Exception {
@@ -73,13 +50,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(long id) {
-        for (User user : this.users) {
-            if (user.getUserid() == id) {
-                return user;
-            }
-        }
-        return null;
+    public User getUserById(long userid) throws Exception{
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE user_id = ?");
+        ps.setLong(1, userid);
+        ResultSet rs = ps.executeQuery();
+        return new User(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+
     }
 
     @Override
@@ -101,13 +78,12 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public long getUserIdByUsername(String username) {
-        for (User user : this.users) {
-            if (user.getUsername().equals(username)) {
-                return user.getUserid();
-            }
-        }
-        return -1;
+    public long getUserIdByUsername(String username) throws Exception{
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("SELECT user_id FROM user WHERE username = ?");
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        return rs.getLong(1);
     }
 
     @Override
@@ -120,22 +96,5 @@ public class UserDaoImpl implements UserDao {
         ps.execute();
         ps.close();
 
-    }
-
-    @Override
-    public void update(User user) throws Exception {
-        Iterator<User> it = this.users.iterator();
-        while (it.hasNext()) {
-            User u = it.next();
-            if (u.getUserid() == user.getUserid()) {
-                u.setEmail(user.getEmail());
-                u.setUsername(user.getUsername());
-                u.setPassword(user.getPassword());
-            }
-        }
-    }
-
-    @Override
-    public void deleteUser(User user) throws Exception {
     }
 }

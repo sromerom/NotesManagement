@@ -21,12 +21,6 @@ public class NoteServiceImpl implements NoteService {
     private final int LIMIT = 10;
 
     @Override
-    public List<Note> getAll() {
-        NoteDao nd = new NoteDaoImpl();
-        return nd.getAllNotes();
-    }
-
-    @Override
     public List<RenderableNote> getNotesFromUser(long userid, int offset) {
         List<Note> allNotes;
         List<RenderableNote> renderableNotes = new ArrayList<>();

@@ -33,7 +33,7 @@ public class EditNoteServlet extends HttpServlet {
                 req.setAttribute("title", ns.getNoteById(userid, noteid).getTitle());
                 req.setAttribute("body", ns.getNoteById(userid, noteid).getBody());
             } else {
-                resp.sendRedirect(req.getContextPath() + "/home");
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
             }
         } else {

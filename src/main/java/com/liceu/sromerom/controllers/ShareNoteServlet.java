@@ -38,7 +38,7 @@ public class ShareNoteServlet extends HttpServlet {
                 return;
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/home");
+            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
             return;
         }
 

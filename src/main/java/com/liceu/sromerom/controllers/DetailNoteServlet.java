@@ -3,6 +3,7 @@ package com.liceu.sromerom.controllers;
 import com.liceu.sromerom.services.NoteService;
 import com.liceu.sromerom.services.NoteServiceImpl;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,20 +19,22 @@ public class DetailNoteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getParameter("id") != null) {
-            Long noteid = Long.parseLong(req.getParameter("id"));
+            long noteid = Long.parseLong(req.getParameter("id"));
             NoteService ns = new NoteServiceImpl();
             HttpSession session = req.getSession();
             Long userid = (Long) session.getAttribute("userid");
-
-            req.setAttribute("titleNote", ns.getNoteById(userid, noteid).getTitle());
-            req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
+            PrintWriter pw = resp.getWriter();
+            if(ns.getNoteById(userid, noteid) != null) {
+                req.setAttribute("titleNote", ns.getNoteById(userid, noteid).getTitle());
+                req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+                return;
+            }
         }
-        //super.doGet(req, resp);
 
-    }
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/detail.jsp");
+        dispatcher.forward(req, resp);
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
     }
 }

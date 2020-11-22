@@ -1,23 +1,23 @@
 package com.liceu.sromerom.daos;
+
 import com.liceu.sromerom.model.User;
 
 import java.util.List;
 
 public interface UserDao {
-    public List<User> getAllUsers(long userid) throws Exception;
+    List<User> getAllUsers(long userid) throws Exception;
 
-    public List<User> getUsersFromSharedNote(long noteid) throws Exception;
+    List<User> getUsersFromSharedNote(long noteid) throws Exception;
 
-    public User getUserById(long id);
+    User getUserById(long userid) throws Exception;
 
 
-    public boolean existsUserWithUsername(String username) throws Exception;
-    public boolean existsUserWithEmail(String email) throws Exception;
-    public long getUserIdByUsername(String username);
+    boolean existsUserWithUsername(String username) throws Exception;
 
-    public void create(User user) throws Exception;
+    boolean existsUserWithEmail(String email) throws Exception;
 
-    public void update(User user) throws Exception;
+    long getUserIdByUsername(String username) throws Exception;
 
-    public void deleteUser(User user) throws Exception;
+    void create(User user) throws Exception;
+
 }

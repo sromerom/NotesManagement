@@ -1,4 +1,3 @@
-E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\UsersServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\RegisterUserServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\CheckCsrfTokenFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\HomeServlet.java
@@ -10,11 +9,13 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\ShareNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DeleteNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\AuthFilter.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DisplayAccessErrorServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\DeleteSpecificShareServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\UnloginServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\CorsFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\utils\Database.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\daos\UserDaoImpl.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\EditUserProfileServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\model\User.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\EditNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\daos\UserDao.java

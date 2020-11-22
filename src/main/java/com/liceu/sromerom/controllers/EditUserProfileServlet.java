@@ -14,39 +14,33 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(value = "/users")
-public class UsersServlet extends HttpServlet {
+@WebServlet(value = "/editProfile")
+public class EditUserProfileServlet extends HttpServlet {
+    private Long userid = null;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        /*
         UserService us = new UserServiceImpl();
-        NoteService ns = new NoteServiceImpl();
-        if (req.getParameter("id") != null) {
-            long noteid = Long.parseLong(req.getParameter("id"));
-            HttpSession session = req.getSession();
-            Long userid = (Long) session.getAttribute("userid");
-            req.setAttribute("users", us.getAll(userid));
-            req.setAttribute("noteid", noteid);
+        HttpSession session = req.getSession();
+        userid = (Long) session.getAttribute("userid");
 
-            if (ns.getNoteById(userid, noteid) == null) {
-                resp.sendRedirect(req.getContextPath() + "/home");
-                return;
-            }
+        req.setAttribute("action", "/edit");
+
+        if (userid != null && us.getUserById(userid) != null) {
+            req.setAttribute("username", us.getUserById(userid).getUsername());
+            req.setAttribute("email", us.getUserById(userid).getEmail());
         } else {
-            resp.sendRedirect(req.getContextPath() + "/home");
+            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
             return;
         }
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");
         dispatcher.forward(req, resp);
-
-         */
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");
         dispatcher.forward(req, resp);
     }
 }

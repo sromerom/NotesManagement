@@ -10,70 +10,17 @@ import java.util.List;
 
 public class NoteDaoImpl implements NoteDao {
 
-    List<Note> notes = new ArrayList<>();
-
-    public NoteDaoImpl() {
-        try {
-            Connection c = Database.getConnection();
-            PreparedStatement ps = c.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password  FROM note INNER JOIN user ON user.user_id = note.user_iduser");
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                long noteid = rs.getLong(1);
-                String title = rs.getString(2);
-                String body = rs.getString(3);
-                String creationDate = rs.getString(4);
-                String lastModificationDate = rs.getString(5);
-                long userid = rs.getLong(6);
-                String email = rs.getString(7);
-                String username = rs.getString(8);
-                String password = rs.getString(9);
-
-                //2020-11-10 12:46:03
-                Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
-                this.notes.add(note);
-            }
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<Note> getAllNotes() {
-        List<Note> result = new ArrayList<>();
-        for (Note n : this.notes) {
-            result.add(new Note(n.getNoteid(), n.getUser(), n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
-        }
-        return result;
-    }
-
     @Override
     public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        //PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note.user_iduser = ? OR note.note_id IN (SELECT sharedNote.note_id FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id WHERE sharedNote.user_id = ?) ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setLong(2, userid);
         ps.setInt(3, limit);
         ps.setInt(4, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -82,27 +29,12 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> getCreatedNotesFromUser(long userid, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON note.user_iduser = user.user_id WHERE user_iduser = ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON note.user_iduser = user.user_id WHERE user_iduser = ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setInt(2, limit);
         ps.setInt(3, offset);
         ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            String email = rs.getString(6);
-            String username = rs.getString(7);
-            String password = rs.getString(8);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
-            System.out.println("Note: " + note);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -122,28 +54,13 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterCreatedNotesByTitle(long userid, String titol, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setString(2, "%" + titol + "%");
         ps.setInt(3, limit);
         ps.setInt(4, offset);
         ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            String email = rs.getString(6);
-            String username = rs.getString(7);
-            String password = rs.getString(8);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
-            System.out.println("Note: " + note);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -152,7 +69,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterCreatedNotesByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
@@ -161,21 +78,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(4, limit);
         ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            String email = rs.getString(6);
-            String username = rs.getString(7);
-            String password = rs.getString(8);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(userid, email, username, password), title, body, creationDate, lastModificationDate);
-            System.out.println("Note: " + note);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -184,7 +87,7 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> filterAllCreatedNotes(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND title LIKE ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         //2020-11-12 00:00:00
         //2020-11-12 23:59:59
@@ -194,20 +97,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(5, limit);
         ps.setInt(6, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            String email = rs.getString(6);
-            String username = rs.getString(7);
-            String password = rs.getString(8);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -224,22 +114,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(5, limit);
         ps.setInt(6, offset);
         ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -259,21 +134,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(7, limit);
         ps.setInt(8, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -294,21 +155,7 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(9, limit);
         ps.setInt(10, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
         ps.close();
         return result;
     }
@@ -316,11 +163,11 @@ public class NoteDaoImpl implements NoteDao {
     @Override
     public Note getNoteById(long noteid) throws Exception {
         Connection conn = Database.getConnection();
-        PreparedStatement ps = conn.prepareStatement("SELECT user_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note_id = ?");
+        PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note_id = ?");
         ps.setLong(1, noteid);
         ResultSet rs = ps.executeQuery();
         long userid = rs.getLong(1);
-        String titleActual = rs.getString(2);
+        String actualTitle = rs.getString(2);
         String body = rs.getString(3);
         String creationDate = rs.getString(4);
         String lastModificationDate = rs.getString(5);
@@ -329,7 +176,7 @@ public class NoteDaoImpl implements NoteDao {
         String password = rs.getString(8);
         rs.close();
         ps.close();
-        return new Note(noteid, new User(userid, email, username, password), titleActual, body, creationDate, lastModificationDate);
+        return new Note(noteid, new User(userid, email, username, password), actualTitle, body, creationDate, lastModificationDate);
     }
 
     @Override
@@ -393,21 +240,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(2, limit);
         ps.setInt(3, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -420,21 +254,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(2, limit);
         ps.setInt(3, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String title = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), title, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -493,21 +314,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(4, limit);
         ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -522,21 +330,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(4, limit);
         ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -553,21 +348,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(6, limit);
         ps.setInt(7, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -582,21 +364,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(4, limit);
         ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -611,21 +380,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(4, limit);
         ps.setInt(5, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
@@ -642,28 +398,15 @@ public class NoteDaoImpl implements NoteDao {
         ps.setInt(6, limit);
         ps.setInt(7, offset);
         ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            long noteid = rs.getLong(1);
-            String titleActual = rs.getString(2);
-            String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
-            long useridNote = rs.getLong(6);
-            String email = rs.getString(7);
-            String username = rs.getString(8);
-            String password = rs.getString(9);
-
-            //2020-11-10 12:46:03
-            Note note = new Note(noteid, new User(useridNote, email, username, password), titleActual, body, creationDate, lastModificationDate);
-            result.add(note);
-        }
+        makeNote(result, rs);
+        ps.close();
         return result;
     }
 
     @Override
     public void createShare(Note noteForShare, List<User> users) throws Exception {
-        Connection c = Database.getConnection();
-        PreparedStatement ps = c.prepareStatement("INSERT INTO sharedNote (note_id, user_id) VALUES (?,?)");
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO sharedNote (note_id, user_id) VALUES (?,?)");
         for (User user : users) {
             ps.setLong(1, noteForShare.getNoteid());
             ps.setLong(2, user.getUserid());
@@ -675,8 +418,8 @@ public class NoteDaoImpl implements NoteDao {
 
     @Override
     public void deleteShare(Note noteForShare, List<User> users) throws Exception {
-        Connection c = Database.getConnection();
-        PreparedStatement ps = c.prepareStatement("DELETE FROM sharedNote WHERE note_id = ? AND user_id = ?");
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("DELETE FROM sharedNote WHERE note_id = ? AND user_id = ?");
         for (User user : users) {
             ps.setLong(1, noteForShare.getNoteid());
             ps.setLong(2, user.getUserid());
@@ -694,4 +437,23 @@ public class NoteDaoImpl implements NoteDao {
         ps.execute();
         ps.close();
     }
+
+    private void makeNote(List<Note> result, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            long noteid = rs.getLong(1);
+            String actualTitle = rs.getString(2);
+            String body = rs.getString(3);
+            String creationDate = rs.getString(4);
+            String lastModificationDate = rs.getString(5);
+            long useridNote = rs.getLong(6);
+            String email = rs.getString(7);
+            String username = rs.getString(8);
+            String password = rs.getString(9);
+
+            Note note = new Note(noteid, new User(useridNote, email, username, password), actualTitle, body, creationDate, lastModificationDate);
+            result.add(note);
+        }
+    }
 }
+
+

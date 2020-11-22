@@ -35,6 +35,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(long userid) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            return ud.getUserById(userid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public boolean validateUser(String username, String password) {
         UserDao ud = new UserDaoImpl();
 
@@ -88,14 +99,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public long getUserId(String username) {
         UserDao ud = new UserDaoImpl();
-        return ud.getUserIdByUsername(username);
+        try {
+            return ud.getUserIdByUsername(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
-
-    @Override
-    public long getIdByUser(User user) {
-        return user.getUserid();
-    }
-
     @Override
     public boolean createUser(String email, String username, String password) {
         try {
@@ -121,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
         try {
             List<User> usersShared = ud.getUsersFromSharedNote(noteid);
-            for (User user: usersShared) {
+            for (User user : usersShared) {
                 for (int i = 0; i < sharedUsers.length; i++) {
                     if (user.getUsername().equals(sharedUsers[i])) {
                         return true;

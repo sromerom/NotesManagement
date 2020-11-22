@@ -6,8 +6,6 @@ import com.liceu.sromerom.utils.RenderableNote;
 import java.util.List;
 
 public interface NoteService {
-    public List<Note> getAll();
-
     public List<RenderableNote> getNotesFromUser(long userid, int offset);
     //public Map<Note, Boolean> getNotesFromUser(long userid, int offset);
 

@@ -34,7 +34,7 @@ public class DeleteSpecificShareServlet extends HttpServlet {
                 return;
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/home");
+            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
             return;
         }
         req.setAttribute("noteid", noteid);

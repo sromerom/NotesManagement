@@ -9,7 +9,7 @@
 <body>
 
 <main>
-    <h1>${titleNote}</h1>
+    <h1><c:out value="${titleNote}"/></h1>
     <section>
         ${bodyNote}
     </section>

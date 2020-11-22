@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface NoteDao {
 
-    //Created Notes
-    public List<Note> getAllNotes();
-
     public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception;
 
     public List<Note> getCreatedNotesFromUser(long userid, int limit, int offset) throws Exception;

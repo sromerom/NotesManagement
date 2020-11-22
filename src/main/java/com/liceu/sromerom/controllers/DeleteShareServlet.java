@@ -31,6 +31,9 @@ public class DeleteShareServlet extends HttpServlet {
             System.out.println("shareNoteId: " + sharedNoteId);
             if (sharedNoteId != -1) {
                 noError = ns.deleteAllShareNote(userid, noteid);
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+                return;
             }
 
             if (noError) {

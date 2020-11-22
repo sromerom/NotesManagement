@@ -25,7 +25,7 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/create">Create note</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Edit your profile</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/editProfile">Edit your profile</a>
                 </li>
             </ul>
             <form method="POST" action="${pageContext.request.contextPath}/unlogin" class="inline">
@@ -35,7 +35,7 @@
                 </button>
             </form>
 
-            <span class="navbar-text" style="padding-right: .5rem; padding-left: .5rem;">Welcome sromerom</span>
+            <span class="navbar-text" style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession.username}!</span>
         </div>
     </nav>
 </header>
@@ -116,7 +116,7 @@
     <div id="siteNotes">
         <c:forEach var="note" items="${notes}">
             <c:choose>
-                <c:when test="${note.owner.userid == userid}">
+                <c:when test="${note.owner.userid == useridSession}">
                     <c:choose>
                         <c:when test="${note.sharedUsers != null || typeNote == 'compartit'}">
                             <div class="card" style="width: 18rem; background-color: #53b3cb; color: black">
@@ -169,7 +169,8 @@
                                         </a>
                                     </div>
 
-                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
+                                    <h6 class="card-subtitle mb-2 text-muted dateInfo"
+                                        style="font-size: 10px; margin-top: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
                                 <a href="/detail?id=${note.noteid}">
@@ -214,7 +215,8 @@
                                         </a>
                                     </div>
 
-                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
+                                    <h6 class="card-subtitle mb-2 text-muted dateInfo"
+                                        style="font-size: 10px; margin-top: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
                                 <a href="/detail?id=${note.noteid}">
@@ -248,7 +250,8 @@
 
                             </div>
 
-                            <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
+                            <h6 class="card-subtitle mb-2 text-muted dateInfo"
+                                style="font-size: 10px; margin-top: 10px;">Last
                                 Modification ${note.lastModification}</h6>
                         </div>
                         <a href="/detail?id=${note.noteid}">

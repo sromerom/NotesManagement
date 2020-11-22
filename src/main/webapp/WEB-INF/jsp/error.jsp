@@ -3,17 +3,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Detail Note</title>
+    <title>Access Error</title>
     <%@ include file="parts/header.jsp" %>
 </head>
 <body>
-
-<main>
-    <h1><c:out value="${titleNote}"/></h1>
-    <section>
-        ${bodyNote}
-    </section>
-</main>
+<h1 style="text-align: center">OOOPS! You don't have access to this note!</h1>
 <%@ include file="parts/footer.jsp" %>
 </body>
 </html>

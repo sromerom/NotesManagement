@@ -33,6 +33,9 @@ public class DeleteNoteServlet extends HttpServlet {
                 boolean noError = ns.deleteNote(userid, noteid);
                 resp.sendRedirect(req.getContextPath() + "/home");
                 return;
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+                return;
             }
         }
 

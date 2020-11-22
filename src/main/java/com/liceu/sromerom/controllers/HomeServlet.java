@@ -20,10 +20,12 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NoteService ns = new NoteServiceImpl();
+        UserService us = new UserServiceImpl();
         HttpSession session = req.getSession();
 
         Long userid = (Long) session.getAttribute("userid");
-        req.setAttribute("userid", userid);
+        req.setAttribute("usernameSession", us.getUserById(userid));
+        req.setAttribute("useridSession", userid);
         Integer offset = 0;
         Integer currentPage = 1;
         int totalPages;
