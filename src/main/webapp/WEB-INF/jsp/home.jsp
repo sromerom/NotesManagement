@@ -4,120 +4,8 @@
 <html>
 <head>
     <title>Home</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <style>
-        #containerNotes {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
-            text-align: center;
-            justify-content: center;
-        }
-
-        #siteNotes {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            justify-content: space-around;
-            width: 930px;
-            margin: auto;
-        }
-
-        .card {
-            position: relative;
-            width: 18rem;
-            margin-right: 15px;
-            margin-bottom: 15px;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .dateInfo {
-            margin-top: 10px;
-        }
-
-        #pagination {
-            text-align: center;
-            margin: auto;
-        }
-
-        form.hide-submit input[type="submit"] {
-            display: none;
-        }
-
-        form input[type="submit"] {
-            display: none;
-        }
-
-        .optionsButtons {
-            position: relative;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            align-content: center;
-            z-index: 99;
-        }
-
-        .optionsButtons form label svg {
-            position: absolute;
-            bottom: 3px;
-        }
-
-        svg {
-            color: black;
-        }
-
-        header {
-            background-color: #e01a4f;
-            color: white;
-        }
-
-
-        .nav-link, .navbar-brand {
-            color: white !important;
-        }
-
-        body {
-            /*background-color: #0c090d;*/
-            background-color: #e8e1e1;
-        }
-
-        .principalButton {
-            background-color: #e01a4f !important;
-        }
-
-        /*Important:*/
-        .link-spanner {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-
-            /* edit: fixes overlap error in IE7/8,
-               make sure you have an empty gif
-            background-image: url('empty.gif');*/
-        }
-
-        .link-button {
-            margin-top: 15px;
-            background: none;
-            border: none;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-
-        }
-    </style>
+    <link href="css/home.css" rel="stylesheet">
+    <%@ include file="parts/header.jsp" %>
 </head>
 <body>
 <header>
@@ -281,7 +169,7 @@
                                         </a>
                                     </div>
 
-                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
+                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
                                 <a href="/detail?id=${note.noteid}">
@@ -326,7 +214,7 @@
                                         </a>
                                     </div>
 
-                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
+                                    <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
                                         Modification ${note.lastModification}</h6>
                                 </div>
                                 <a href="/detail?id=${note.noteid}">
@@ -360,7 +248,7 @@
 
                             </div>
 
-                            <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px;">Last
+                            <h6 class="card-subtitle mb-2 text-muted dateInfo" style="font-size: 10px; margin-top: 10px;">Last
                                 Modification ${note.lastModification}</h6>
                         </div>
                         <a href="/detail?id=${note.noteid}">
@@ -429,31 +317,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
-<script>
-    function passNoteId(action, noteid) {
-        let titleModal = document.querySelector("#titleDeleteModal");
-        let formModal = document.querySelector("#formModal");
-
-        if (action == "/delete") {
-            titleModal.innerText = "Are you sure to delete this note?"
-            formModal.action = "/delete"
-        } else {
-            titleModal.innerText = "Are you sure to delete this share note?"
-            formModal.action = "/deleteAllShare"
-        }
-        document.querySelector("#deleteNoteHidden").value = noteid;
-    }
-
-    function divLinkeable(noteid) {
-
-    }
-</script>
+<%@ include file="parts/footer.jsp" %>
 </body>
 </html>

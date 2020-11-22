@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Detail Note</title>
+    <%@ include file="parts/header.jsp" %>
 </head>
 <body>
 
@@ -13,6 +14,6 @@
         ${bodyNote}
     </section>
 </main>
-
+<%@ include file="parts/footer.jsp" %>
 </body>
 </html>
