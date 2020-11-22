@@ -58,6 +58,7 @@
                 </c:choose>
             </c:if>
             <form class="form-example" method="POST" action="${action}">
+                <input type="hidden" name="_csrftoken" value="${csrfToken}">
                 <c:if test="${action == '/create'}">
                     <h1>Create a new Note</h1>
                     <div class="form-group mt-2">

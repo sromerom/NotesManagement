@@ -32,6 +32,7 @@
                     <input type="password" id="password" class="form-control"
                            aria-describedby="passwordHelpBlock" name="password" required>
                 </div>
+                <input type="hidden" name="_csrftoken" value="${csrfToken}">
                 <button type="submit" class="btn btn-primary btn-customized">Login</button>
                 <!-- End input fields -->
             </form>
@@ -41,13 +42,6 @@
     </div>
 </div>
 
-
-<!--
-<form method="POST" action="/login">
-    Nom usuari: <input type="text" name="username"><br>
-    Password: <input type="password" name="password"><br>
-    <button type="submit">Login</button>
-</form>-->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>

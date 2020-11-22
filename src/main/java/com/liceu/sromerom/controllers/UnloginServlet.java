@@ -11,7 +11,7 @@ import java.io.IOException;
 @WebServlet(value = "/unlogin")
 public class UnloginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         session.invalidate();
         resp.sendRedirect(req.getContextPath() + "/login");

@@ -1,5 +1,6 @@
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\UsersServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\RegisterUserServlet.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\CheckCsrfTokenFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\HomeServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\services\NoteService.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\utils\HashUtil.java
@@ -19,6 +20,7 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\mai
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\daos\UserDao.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\utils\Filter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\services\NoteServiceImpl.java
+E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\filters\GenerateCsrfTokenFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\daos\NoteDaoImpl.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\controllers\CreateNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagment\src\main\java\com\liceu\sromerom\model\Note.java

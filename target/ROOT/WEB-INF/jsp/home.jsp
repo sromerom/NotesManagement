@@ -104,6 +104,19 @@
                make sure you have an empty gif
             background-image: url('empty.gif');*/
         }
+
+        .link-button {
+            margin-top: 15px;
+            background: none;
+            border: none;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+
+        }
     </style>
 </head>
 <body>
@@ -124,22 +137,20 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/create">Create note</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/unlogin">Log out</a>
+                    <a class="nav-link" href="#">Edit your profile</a>
                 </li>
             </ul>
-            <span class="navbar-text">
-      Welcome sromerom
-    </span>
+            <form method="POST" action="${pageContext.request.contextPath}/unlogin" class="inline">
+                <input type="hidden" name="_csrftoken" value="${csrfToken}">
+                <button type="submit" class="link-button">
+                    Logout
+                </button>
+            </form>
+
+            <span class="navbar-text" style="padding-right: .5rem; padding-left: .5rem;">Welcome sromerom</span>
         </div>
     </nav>
 </header>
-<!--
-<h1>Gestio de notes</h1>
-<a href="/unlogin">Cerrar session</a>
-
-<a href="/create">Crea una nova nota</a>
--->
-
 <div class="container">
     <div class="justify-content-center">
         <div class="">
@@ -175,8 +186,6 @@
                         </c:choose>
                     </select>
                 </div>
-
-                <!-- <input type="text" name="titleFilter" placeholder="titol" value="${titleFilter}"> -->
                 <div class="form-group mb-3 mt-3 mr-1 w-20">
                     <input type="text" class="form-control" placeholder="title" aria-label="Username"
                            aria-describedby="basic-addon1" name="titleFilter">
@@ -193,8 +202,6 @@
                                value="${endDate}">
                     </div>
                 </div>
-                <!-- <input type="date" id="start" name="noteStart" value="${initDate}"> -->
-                <!-- <input type="date" id="end" name="noteEnd" value="${endDate}"> -->
                 <a class="btn btn-secondary" role="button" href="${pageContext.request.contextPath}/home">Restore</a>
                 <button class="btn principalButton text-white" type="submit">Search</button>
             </form>
@@ -299,7 +306,6 @@
                                                       d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                                             </svg>
                                         </a>
-
                                         <a data-toggle="modal" data-target="#modalDelete"
                                            onclick="passNoteId('/delete', ${note.noteid})">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16"
@@ -310,22 +316,6 @@
                                                       d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                             </svg>
                                         </a>
-                                        <!--
-                                        <form class="card-link" method="POST" action="/delete">
-                                            <label>
-                                                <input type="submit" name="image" value="one">
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16"
-                                                     class="bi bi-trash-fill"
-                                                     fill="currentColor"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                          d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
-                                                </svg>
-                                            </label>
-                                            <input type="hidden" name="noteid" value="${note.noteid}">
-                                        </form>
-                                        -->
-
                                         <a class="card-link" href="/share?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-share-fill"
                                                  fill="currentColor"
@@ -431,6 +421,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
                 <form id="formModal" class="card-link" method="POST" action="">
+                    <input type="hidden" name="_csrftoken" value="${csrfToken}">
                     <input id="deleteNoteHidden" type="hidden" name="noteid" value="">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>

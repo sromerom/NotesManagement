@@ -113,6 +113,7 @@
         <c:if test="${action == '/deleteShare'}">
             <form action="/deleteAllShare" method="POST">
                 <input type="hidden" name="noteid" value="${noteid}">
+                <input type="hidden" name="_csrftoken" value="${csrfToken}">
                 <button type="submit" class="btn btn-danger">Delete all shares</button>
             </form>
         </c:if>
@@ -136,7 +137,7 @@
             <small id="shareHelpBlock" class="form-text text-muted">
                 Remember that you cannot delete or create the share of a user that already exists.
             </small>
-
+            <input type="hidden" name="_csrftoken" value="${csrfToken}">
             <c:choose>
                 <c:when test="${action == '/deleteShare'}">
                     <button type="submit" class="btn btn-danger">Delete specific share</button>

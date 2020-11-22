@@ -51,7 +51,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 -------------------------------------------------POR HACER...-------------------------------------------------------
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
-//Contraseñas fuertes
 //Crear validaciones ###################################
 //Todo al mismo idioma
 //variable conn
@@ -65,9 +64,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //escape script markdown ?????
 //Utilizar dao user en dao note ##############################
 //hacer include de el header para no repetir codigo en los jsp
-//logout por post
-//implementar csrf #############################
-//Renderizar nota a texto home --> Hecho
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -88,3 +84,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //hacer filtro de las notas creadas que has compartido ################################### --> Hecho
 //Hacer diseño presentable ############################## --> Hecho
 //Acabar hacer filtros de busqueda ################################# --> Hecho
+//Contraseñas fuertes --> Hecho
+//implementar csrf ############################# --> Hecho
+//logout por post --> Hecho
+//Renderizar nota a texto home --> Hecho

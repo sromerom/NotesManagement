@@ -61,6 +61,7 @@
                     <input type="password" id="repeatPassword" class="form-control"
                            aria-describedby="passwordHelpBlock" name="repeatPassword" required>
                 </div>
+                <input type="hidden" name="_csrftoken" value="${csrfToken}">
                 <button id="registerButton" type="submit" class="btn btn-primary btn-customized">Register
                 </button>
                 <!-- End input fields -->
@@ -71,15 +72,6 @@
     </div>
 </div>
 
-
-<!--
-<form method="POST" action="/register">
-    Email <input type="text" name="newEmail"><br>
-    Nom usuari: <input type="text" name="newUser"><br>
-    Password: <input type="password" name="newPass"><br>
-    <button type="submit">Register</button>
-</form>
--->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
