@@ -1,6 +1,7 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:useBean id="util" class="com.liceu.sromerom.utils.MarkdownUtil"/>
 <html>
 <head>
     <title>Home</title>
@@ -138,7 +139,7 @@
                                         </c:forEach>
                                     </h6>
                                     <p class="card-text"
-                                       style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
+                                       style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${util.escapeText(note.body)}</p>
                                     <div class="optionsButtons">
                                         <a href="/edit?id=${note.noteid}">
                                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill"
@@ -191,8 +192,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">${note.title}</h5>
                                     <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
-                                    <p class="card-text"
-                                       style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
+                                    <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${util.escapeText(note.body)}</p>
 
                                     <div class="optionsButtons">
                                         <a href="/edit?id=${note.noteid}">
@@ -242,7 +242,7 @@
                             <h5 class="card-title">${note.title}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
                             <p class="card-text"
-                               style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${note.body}</p>
+                               style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${util.escapeText(note.body)}</p>
 
                             <div class="optionsButtons">
                                 <a data-toggle="modal" data-target="#modalDelete"

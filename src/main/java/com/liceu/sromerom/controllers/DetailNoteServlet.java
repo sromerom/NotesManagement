@@ -26,7 +26,8 @@ public class DetailNoteServlet extends HttpServlet {
             PrintWriter pw = resp.getWriter();
             if(ns.getNoteById(userid, noteid) != null) {
                 req.setAttribute("titleNote", ns.getNoteById(userid, noteid).getTitle());
-                req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
+                req.setAttribute("bodyNote", ns.getNoteById(userid, noteid).getBody());
+                //req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
             } else {
                 resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;

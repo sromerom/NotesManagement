@@ -18,20 +18,18 @@ public class GenerateCsrfTokenFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpSession session = req.getSession();
 
-        if (req.getMethod().equalsIgnoreCase("GET")) {
-            Cache<String, Boolean> tokenCache = (Cache<String, Boolean>) session.getAttribute("tokenCache");
-            if (tokenCache == null) {
-                tokenCache = CacheBuilder.newBuilder()
-                        .maximumSize(5000)
-                        .expireAfterWrite(1, TimeUnit.MINUTES)
-                        .build();
-                session.setAttribute("tokenCache", tokenCache);
-            }
-
-            String token = UUID.randomUUID().toString();
-            tokenCache.put(token, true);
-            req.setAttribute("csrfToken", token);
+        Cache<String, Boolean> tokenCache = (Cache<String, Boolean>) session.getAttribute("tokenCache");
+        if (tokenCache == null) {
+            tokenCache = CacheBuilder.newBuilder()
+                    .maximumSize(5000)
+                    .expireAfterWrite(60, TimeUnit.MINUTES)
+                    .build();
+            session.setAttribute("tokenCache", tokenCache);
         }
+
+        String token = UUID.randomUUID().toString();
+        tokenCache.put(token, true);
+        req.setAttribute("csrfToken", token);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

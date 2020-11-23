@@ -4,6 +4,7 @@ import com.liceu.sromerom.daos.*;
 import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Filter;
+import com.liceu.sromerom.utils.MarkdownUtil;
 import com.liceu.sromerom.utils.RenderableNote;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -42,11 +43,6 @@ public class NoteServiceImpl implements NoteService {
                 }
                 //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
                 renderableNotes.add(new RenderableNote(allNote.getNoteid(), allNote.getUser(), sharedUsersFromNote, allNote.getTitle(), allNote.getBody(), allNote.getCreationDate(), allNote.getLastModification()));
-            }
-
-            for (RenderableNote rn : renderableNotes) {
-                String bodyParsed = getParsedBodyEscapeText(rn.getBody());
-                rn.setBody(bodyParsed);
             }
             return renderableNotes;
         } catch (Exception e) {
@@ -185,10 +181,6 @@ public class NoteServiceImpl implements NoteService {
                 renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), sharedUsersFromNote, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
             }
 
-            for (RenderableNote rn : renderableNotes) {
-                String bodyParsed = getParsedBodyEscapeText(rn.getBody());
-                rn.setBody(bodyParsed);
-            }
             return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,24 +200,6 @@ public class NoteServiceImpl implements NoteService {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public String getParsedBodyToHTML(String body) {
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(body);
-
-
-        HtmlRenderer renderer = HtmlRenderer.builder().escapeHtml(true).sanitizeUrls(true).build();
-        return renderer.render(document);
-    }
-
-    @Override
-    public String getParsedBodyEscapeText(String body) {
-        Parser parser = Parser.builder().build();
-        Node document = parser.parse(body);
-        TextContentRenderer renderer2 = TextContentRenderer.builder().build();
-        return renderer2.render(document);
     }
 
     @Override
