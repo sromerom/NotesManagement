@@ -62,7 +62,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
 //escape script markdown ?????
-//Utilizar dao user en dao note ##############################
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -88,3 +87,4 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //logout por post --> Hecho
 //Renderizar nota a texto home --> Hecho
 //hacer include de el header para no repetir codigo en los jsp --> Hecho
+//Utilizar dao user en dao note ############################## --> Hecho de cierta forma. Extracion a un metodo de todas las partes repetidas

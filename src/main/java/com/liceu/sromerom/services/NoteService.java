@@ -15,9 +15,9 @@ public interface NoteService {
 
     public long getCreatedNotesLength(long id);
 
-    public boolean checkFilter(String title, String initDate, String endDate);
+    public boolean checkFilter(String search, String initDate, String endDate);
 
-    public List<RenderableNote> filter(long userid, String type, String title, String initDate, String endDate, int offset);
+    public List<RenderableNote> filter(long userid, String type, String search, String initDate, String endDate, int offset);
 
     public Note getNoteById(long userid, long noteid);
 

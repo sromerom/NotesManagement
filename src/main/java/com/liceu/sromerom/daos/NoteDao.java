@@ -13,17 +13,17 @@ public interface NoteDao {
 
     public long getNotesLengthFromUser(long userid) throws Exception;
 
-    public List<Note> filterCreatedNotesByTitle(long userid, String titol, int limit, int offset) throws Exception;
+    public List<Note> filterCreatedNotesBySearch(long userid, String search, int limit, int offset) throws Exception;
 
     public List<Note> filterCreatedNotesByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public List<Note> filterAllCreatedNotes(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception;
+    public List<Note> filterAllCreatedNotes(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public List<Note> filterTypeOfNoteByTitle(long userid, String titol, int limit, int offset) throws Exception;
+    public List<Note> filterTypeOfNoteBySearch(long userid, String search, int limit, int offset) throws Exception;
 
     public List<Note> filterTypeOfNoteByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public List<Note> filterAllTypeOfNote(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception;
+    public List<Note> filterAllTypeOfNote(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
     public Note getNoteById(long noteid) throws Exception;
 
@@ -50,17 +50,17 @@ public interface NoteDao {
     public long getSharedNotesLength(long userid) throws Exception;
 
 
-    public List<Note> filterSharedNotesWithMeByTitle(long userid, String titol, int limit, int offset) throws Exception;
+    public List<Note> filterSharedNotesWithMeBySearch(long userid, String search, int limit, int offset) throws Exception;
 
     public List<Note> filterSharedNotesWithMeByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    List<Note> filterAllSharedNotesWithMe(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception;
+    List<Note> filterAllSharedNotesWithMe(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public List<Note> filterSharedNotesByTitle(long userid, String title, int limit, int offset) throws Exception;
+    public List<Note> filterSharedNotesBySearch(long userid, String search, int limit, int offset) throws Exception;
 
     public List<Note> filterSharedNotesByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    public List<Note> filterAllSharedNotes(long userid, String title, String initDate, String endDate, int limit, int offset) throws Exception;
+    public List<Note> filterAllSharedNotes(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
     public void createShare(Note noteForShare, List<User> users) throws Exception;
 

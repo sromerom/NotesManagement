@@ -93,11 +93,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean checkFilter(String title, String initDate, String endDate) {
-        if (title != null && initDate != null && endDate != null) {
-            if (!title.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
-            if (!title.equals("") && initDate.equals("") && endDate.equals("")) return true;
-            return title.equals("") && !initDate.equals("") && !endDate.equals("");
+    public boolean checkFilter(String search, String initDate, String endDate) {
+        if (search != null && initDate != null && endDate != null) {
+            if (!search.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
+            if (!search.equals("") && initDate.equals("") && endDate.equals("")) return true;
+            return search.equals("") && !initDate.equals("") && !endDate.equals("");
 
         }
         return false;
@@ -105,7 +105,7 @@ public class NoteServiceImpl implements NoteService {
 
 
     @Override
-    public List<RenderableNote> filter(long userid, String type, String title, String initDate, String endDate, int offset) {
+    public List<RenderableNote> filter(long userid, String type, String search, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
         List<Note> notes = new ArrayList<>();
@@ -126,30 +126,30 @@ public class NoteServiceImpl implements NoteService {
         try {
             if (type == null || type.equals("")) {
                 System.out.println("filtramos todo...");
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
-                    notes = nd.filterTypeOfNoteByTitle(userid, title, LIMIT, offset);
+                if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByTitle")) {
+                    notes = nd.filterTypeOfNoteBySearch(userid, search, LIMIT, offset);
                     //return nd.filterByTitleAllTypeNotes(userid, title, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                } else if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByDate")) {
                     notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     //return nd.filterByDateAllTypeNotes(userid, initDate, endDate, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
-                    notes = nd.filterAllTypeOfNote(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                } else if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterAll")) {
+                    notes = nd.filterAllTypeOfNote(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                     //return nd.filterAllAllTypeNotes(userid, title, initDate, endDate, LIMIT, offset);
                 }
 
 
             } else {
                 System.out.println("filtramos solo lo seleccionado...");
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByTitle")) {
+                if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByTitle")) {
                     if (type.equals("compartides")) {
-                        notes = nd.filterSharedNotesWithMeByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterSharedNotesWithMeBySearch(userid, search, LIMIT, offset);
                     } else if (type.equals("compartit")) {
-                        notes = nd.filterSharedNotesByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterSharedNotesBySearch(userid, search, LIMIT, offset);
                     } else {
-                        notes = nd.filterCreatedNotesByTitle(userid, title, LIMIT, offset);
+                        notes = nd.filterCreatedNotesBySearch(userid, search, LIMIT, offset);
                     }
                 }
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterByDate")) {
+                if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByDate")) {
                     if (type.equals("compartides")) {
                         notes = nd.filterSharedNotesWithMeByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     } else if (type.equals("compartit")) {
@@ -158,13 +158,13 @@ public class NoteServiceImpl implements NoteService {
                         notes = nd.filterCreatedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     }
                 }
-                if (Filter.checkTypeFilter(title, initDate, endDate).equals("filterAll")) {
+                if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterAll")) {
                     if (type.equals("compartides")) {
-                        notes = nd.filterAllSharedNotesWithMe(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotesWithMe(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                     } else if (type.equals("compartit")) {
-                        notes = nd.filterAllSharedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                     } else {
-                        notes = nd.filterAllCreatedNotes(userid, title, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllCreatedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                     }
                 }
             }

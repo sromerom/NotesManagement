@@ -35,7 +35,8 @@
                 </button>
             </form>
 
-            <span class="navbar-text" style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession.username}!</span>
+            <span class="navbar-text"
+                  style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession.username}!</span>
         </div>
     </nav>
 </header>
@@ -99,17 +100,24 @@
 <section id="containerNotes">
     <div>
         <c:choose>
-            <c:when test="${typeNote == 'compartides'}">
-                <h2>Your notes that have been shared with you</h2>
-            </c:when>
-            <c:when test="${typeNote == 'compartit'}">
-                <h2>Your notes that you have shared</h2>
-            </c:when>
-            <c:when test="${typeNote == 'propies'}">
-                <h2>Your notes that you have created</h2>
+            <c:when test="${empty notes}">
+                <h2>Nothing to display</h2>
             </c:when>
             <c:otherwise>
-                <h2>All notes</h2>
+                <c:choose>
+                    <c:when test="${typeNote == 'compartides'}">
+                        <h2>Your notes that have been shared with you</h2>
+                    </c:when>
+                    <c:when test="${typeNote == 'compartit'}">
+                        <h2>Your notes that you have shared</h2>
+                    </c:when>
+                    <c:when test="${typeNote == 'propies'}">
+                        <h2>Your notes that you have created</h2>
+                    </c:when>
+                    <c:otherwise>
+                        <h2>All notes</h2>
+                    </c:otherwise>
+                </c:choose>
             </c:otherwise>
         </c:choose>
     </div>
