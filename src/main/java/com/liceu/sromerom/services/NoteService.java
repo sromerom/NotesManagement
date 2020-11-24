@@ -25,7 +25,7 @@ public interface NoteService {
 
     public boolean editNote(long userid, long idnote, String title, String body);
 
-    public boolean deleteNote(long userid, long idnote);
+    public boolean deleteNote(long userid, String [] noteids);
 
     //Shared Notes Services
 

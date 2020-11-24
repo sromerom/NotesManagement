@@ -12,18 +12,11 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script>
-    function passNoteId(action, noteid) {
-        let titleModal = document.querySelector("#titleDeleteModal");
-        let formModal = document.querySelector("#formModal");
 
-        if (action == "/delete") {
-            titleModal.innerText = "Are you sure to delete this note?"
-            formModal.action = "/delete"
-        } else {
-            titleModal.innerText = "Are you sure to delete this share note?"
-            formModal.action = "/deleteAllShare"
-        }
-        document.querySelector("#deleteNoteHidden").value = noteid;
+<!-- SCRIPTS HOME PAGE -->
+<script>
+
+    function passNoteId(noteid) {
+        document.querySelector("#deleteShareNoteHidden").value = noteid;
     }
 </script>

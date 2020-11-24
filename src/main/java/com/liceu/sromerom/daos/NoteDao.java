@@ -33,7 +33,7 @@ public interface NoteDao {
 
     public void update(Note note) throws Exception;
 
-    public void delete(long idnote) throws Exception;
+    public void delete(List<Note> notes) throws Exception;
 
     //Shared Notes
     public List<Note> getSharedNotesWithMe(long userid, int limit, int offset) throws Exception;

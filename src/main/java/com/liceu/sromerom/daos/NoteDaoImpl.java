@@ -4,6 +4,7 @@ import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -225,11 +226,13 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public void delete(long idnote) throws Exception {
+    public void delete(List<Note> notes) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("DELETE FROM note WHERE note_id = ?");
-        ps.setLong(1, idnote);
-        ps.execute();
+        for (Note n : notes) {
+            ps.setLong(1, n.getNoteid());
+            ps.execute();
+        }
         ps.close();
     }
 

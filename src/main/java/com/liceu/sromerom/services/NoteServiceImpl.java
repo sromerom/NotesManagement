@@ -242,9 +242,25 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean deleteNote(long userid, long noteid) {
+    public boolean deleteNote(long userid, String [] noteids) {
         NoteDao nd = new NoteDaoImpl();
+        List<Note> notesToDelete = new ArrayList<>();
 
+        try {
+            for (int i = 0; i < noteids.length; i++) {
+                if (!nd.isOwnerNote(userid, Long.parseLong(noteids[i]))) return false;
+                if (nd.isOwnerNote(userid, Long.parseLong(noteids[i]))) {
+                    notesToDelete.add(nd.getNoteById(Long.parseLong(noteids[i])));
+                }
+            }
+
+            nd.delete(notesToDelete);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        /*
         try {
             if (nd.isOwnerNote(userid, noteid)) {
                 nd.delete(noteid);
@@ -256,6 +272,8 @@ public class NoteServiceImpl implements NoteService {
             return false;
         }
         return false;
+
+         */
     }
 
     @Override

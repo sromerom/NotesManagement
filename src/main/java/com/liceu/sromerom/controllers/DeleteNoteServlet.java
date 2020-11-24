@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Arrays;
 
 @WebServlet(value = "/delete")
 public class DeleteNoteServlet extends HttpServlet {
@@ -23,6 +24,27 @@ public class DeleteNoteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if (req.getParameterValues("checkboxDelete") != null) {
+            HttpSession session = req.getSession();
+            NoteService ns = new NoteServiceImpl();
+            String[] idsToDelete = req.getParameterValues("checkboxDelete");
+            System.out.println(Arrays.toString(idsToDelete));
+            Long userid = (Long) session.getAttribute("userid");
+
+            if (userid != null && idsToDelete.length > 0) {
+                boolean noError = ns.deleteNote(userid, idsToDelete);
+                resp.sendRedirect(req.getContextPath() + "/home");
+                return;
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+                return;
+            }
+        }
+
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+        dispatcher.forward(req, resp);
+        /*
         if (req.getParameter("noteid") != null) {
             HttpSession session = req.getSession();
             NoteService ns = new NoteServiceImpl();
@@ -38,8 +60,6 @@ public class DeleteNoteServlet extends HttpServlet {
                 return;
             }
         }
-
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-        dispatcher.forward(req, resp);
+         */
     }
 }
