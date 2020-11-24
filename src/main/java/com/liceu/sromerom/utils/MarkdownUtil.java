@@ -4,9 +4,10 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.commonmark.renderer.text.TextContentRenderer;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 public class MarkdownUtil {
-
     public static String escapeText(String body) {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(body);
@@ -22,4 +23,9 @@ public class MarkdownUtil {
         return renderer.render(document);
     }
 
+    public static String cleanBody(String body) {
+        PolicyFactory policy = new HtmlPolicyBuilder().toFactory();
+        System.out.println("Saneao: " + policy.sanitize(body));
+        return policy.sanitize(body);
+    }
 }

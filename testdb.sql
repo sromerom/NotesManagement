@@ -51,7 +51,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 -------------------------------------------------POR HACER...-------------------------------------------------------
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
-//Crear validaciones ###################################
 //Todo al mismo idioma
 //variable conn
 //Acentos sqlite3
@@ -59,9 +58,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
 //Arreglar fallo de paginacion, te añade un boton extra ###################################
-//Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... #######################################
 //testear aplicacion ########################################
-//escape script markdown ?????
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -88,3 +85,7 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Renderizar nota a texto home --> Hecho
 //hacer include de el header para no repetir codigo en los jsp --> Hecho
 //Utilizar dao user en dao note ############################## --> Hecho de cierta forma. Extracion a un metodo de todas las partes repetidas
+//Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... ####################################### -->Hecho
+//Crear validaciones ################################### -->Hecho
+//Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... ####################################### -->Hecho
+//escape script markdown --> Hecho
