@@ -12,7 +12,13 @@ public interface UserService {
     //boolean existsUserLogin(String username, String password);
     boolean existsUserShare(long noteid, String[] sharedUsers);
 
+    boolean existsUserWithEmail(String email);
+    boolean existsUserWithUsername(String username);
     boolean validateUser(String username, String password);
     boolean checkRegister(String email, String username, String password, String password2);
+    boolean checkEditData(long userid, String email, String username);
+    boolean checkPasswordData(long userid, String currentPassword, String password, String password2);
+    boolean editPassword(long userid, String password);
+    boolean editDataInfo(long userid, String email, String username);
     long getUserId(String username);
 }

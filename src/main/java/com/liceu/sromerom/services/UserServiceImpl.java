@@ -97,6 +97,96 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean checkEditData(long userid, String email, String username) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            User user = ud.getUserById(userid);
+
+            if (email != null) {
+                if (!user.getEmail().equals(email)) {
+                    if (ud.existsUserWithEmail(email)) {
+                        return false;
+                    }
+
+                }
+                Pattern patternEmail = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+                Matcher matcherEmail = patternEmail.matcher(email);
+
+                if (!matcherEmail.find()) {
+                    return false;
+                }
+            }
+
+            if (username != null) {
+                if (!user.getUsername().equals(username)) {
+                    if (ud.existsUserWithUsername(username)) {
+                        return false;
+                    }
+                }
+                Pattern patternUsername = Pattern.compile("^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
+                Matcher matcherUsername = patternUsername.matcher(username);
+                if (!matcherUsername.find()) {
+                    return false;
+                }
+
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkPasswordData(long userid, String currentPassword, String password, String password2) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            User user = ud.getUserById(userid);
+            boolean validCurrentPassword = validateUser(user.getUsername(), currentPassword);
+            if (validCurrentPassword) {
+                Pattern patternPassword = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+                Matcher matcherPassword = patternPassword.matcher(password);
+                boolean passwordMatch = matcherPassword.find();
+                if (passwordMatch && password.equals(password2)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean editPassword(long userid, String password) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            String generatedSecuredPasswordHash = HashUtil.generatePasswordHash(password);
+            ud.updatePasswordById(userid, generatedSecuredPasswordHash);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean editDataInfo(long userid, String email, String username) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            ud.updateDataInfoById(userid, email, username);
+            //ud.updatePasswordById(userid, generatedSecuredPasswordHash);
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public long getUserId(String username) {
         UserDao ud = new UserDaoImpl();
         try {
@@ -106,6 +196,7 @@ public class UserServiceImpl implements UserService {
             return -1;
         }
     }
+
     @Override
     public boolean createUser(String email, String username, String password) {
         try {
@@ -144,5 +235,27 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean existsUserWithEmail(String email) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            return ud.existsUserWithEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+    @Override
+    public boolean existsUserWithUsername(String username) {
+        UserDao ud = new UserDaoImpl();
+        try {
+            return ud.existsUserWithUsername(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
     }
 }

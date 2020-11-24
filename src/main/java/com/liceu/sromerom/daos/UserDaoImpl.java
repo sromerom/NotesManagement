@@ -50,7 +50,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(long userid) throws Exception{
+    public User getUserById(long userid) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM user WHERE user_id = ?");
         ps.setLong(1, userid);
@@ -78,7 +78,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public long getUserIdByUsername(String username) throws Exception{
+    public long getUserIdByUsername(String username) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT user_id FROM user WHERE username = ?");
         ps.setString(1, username);
@@ -96,5 +96,26 @@ public class UserDaoImpl implements UserDao {
         ps.execute();
         ps.close();
 
+    }
+
+    @Override
+    public void updatePasswordById(long userid, String newPassword) throws Exception {
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE user SET password = ? WHERE user_id = ?");
+        ps.setString(1, newPassword);
+        ps.setLong(2, userid);
+        ps.execute();
+        ps.close();
+    }
+
+    @Override
+    public void updateDataInfoById(long userid, String email, String username) throws Exception{
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement("UPDATE user SET email = ?, username = ? WHERE user_id = ?");
+        ps.setString(1, email);
+        ps.setString(2, username);
+        ps.setLong(3, userid);
+        ps.execute();
+        ps.close();
     }
 }

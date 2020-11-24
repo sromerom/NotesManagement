@@ -40,6 +40,47 @@ public class EditUserProfileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+
+        long userid = (long) session.getAttribute("userid");
+        String newEmail = req.getParameter("newEmail");
+        String newUser = req.getParameter("newUser");
+        String currentPassword = req.getParameter("currentPassword");
+        String newPass = req.getParameter("newPass");
+        String newPassConfirm = req.getParameter("newPassConfirm");
+        UserService us = new UserServiceImpl();
+
+        System.out.println(newEmail);
+        System.out.println(newUser);
+        System.out.println(currentPassword);
+        System.out.println(newPass);
+        System.out.println(newPassConfirm);
+
+        boolean noError = false;
+        if (newEmail == null && newUser == null && currentPassword != null && newPass != null && newPassConfirm != null) {
+            boolean validInfo = us.checkPasswordData(userid, currentPassword, newPass, newPassConfirm);
+            if (validInfo) {
+                noError = us.editPassword(userid, newPass);
+            }
+        }
+
+        if (currentPassword == null && newPass == null && newPassConfirm == null && newEmail != null && newUser != null) {
+            boolean validInfo = us.checkEditData(userid, newEmail, newUser);
+            if (validInfo) {
+                noError = us.editDataInfo(userid, newEmail, newUser);
+            }
+        }
+
+        if (noError) {
+            System.out.println("S'ha actualitzat correctament...");
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
+
+
+        System.out.println("No s'ha actualitzat la contraseña correctament...");
+        req.setAttribute("noerror", false);
+        req.setAttribute("action", "/edit");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");
         dispatcher.forward(req, resp);
     }

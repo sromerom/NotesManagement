@@ -20,4 +20,8 @@ public interface UserDao {
 
     void create(User user) throws Exception;
 
+    void updatePasswordById(long userid, String newPassword) throws Exception;
+
+    void updateDataInfoById(long userid, String email, String username) throws Exception;
+
 }

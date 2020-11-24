@@ -1,3 +1,5 @@
+<%@ page isELIgnored="false" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -38,16 +40,16 @@
                                 </div>
                                 <div class="tab-content pt-3">
                                     <div class="tab-pane active">
-                                        <form class="form" novalidate="" method="POST"
-                                              action="${pageContext.request.contextPath}/editProfile">
-                                            <div class="row">
-                                                <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                <form class="form" novalidate="" method="POST"
+                                                      action="${pageContext.request.contextPath}/editProfile">
+                                                    <input type="hidden" name="_csrftoken" value="${csrfToken}">
                                                     <div class="row">
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Username</label>
-                                                                <input class="form-control" type="text" name="username"
-                                                                       placeholder="${username}" value="${username}">
+                                                                <input class="form-control" type="text" placeholder="${username}" name="newUser" value="${username}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -56,17 +58,28 @@
                                                             <div class="form-group">
                                                                 <label>Email</label>
                                                                 <input class="form-control" type="text"
-                                                                       placeholder="email" value="${email}">
+                                                                       placeholder="email" name="newEmail"
+                                                                       value="${email}">
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <div class="col d-flex justify-content-end">
+                                                            <button class="btn btn-primary" type="submit">Save Changes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <form class="form" novalidate="" method="POST"
+                                                      action="${pageContext.request.contextPath}/editProfile">
+                                                    <input type="hidden" name="_csrftoken" value="${csrfToken}">
                                                     <div class="mb-2"><b>Change Password</b></div>
                                                     <div class="row">
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Current Password</label>
                                                                 <input class="form-control" type="password"
-                                                                       placeholder="••••••">
+                                                                       name="currentPassword" placeholder="••••••">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -75,6 +88,7 @@
                                                             <div class="form-group">
                                                                 <label>New Password</label>
                                                                 <input class="form-control" type="password"
+                                                                       name="newPass"
                                                                        placeholder="••••••">
                                                             </div>
                                                         </div>
@@ -85,17 +99,18 @@
                                                                 <label>Confirm <span
                                                                         class="d-none d-xl-inline">Password</span></label>
                                                                 <input class="form-control" type="password"
-                                                                       placeholder="••••••"></div>
+                                                                       name="newPassConfirm" placeholder="••••••"></div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                    <div class="row">
+                                                        <div class="col d-flex justify-content-end">
+                                                            <button class="btn btn-primary" type="submit">Save Changes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
-                                            <div class="row">
-                                                <div class="col d-flex justify-content-end">
-                                                    <button class="btn btn-primary" type="submit">Save Changes</button>
-                                                </div>
-                                            </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
