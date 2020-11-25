@@ -77,17 +77,17 @@
                         </c:choose>
                     </select>
                 </div>
-                <div class="form-group mb-3 mt-3 mr-1 w-20">
+                <div class="form-group mb-3 mt-3 mr-1 w-10">
                     <input type="text" class="form-control" placeholder="title" aria-label="Username"
                            aria-describedby="basic-addon1" name="titleFilter">
                 </div>
-                <div class="form-group mb-3 mt-3 mr-1 w-20">
+                <div class="form-group mb-3 mt-3 mr-1 w-10">
                     <div class="">
                         <input class="form-control" type="datetime-local" id="startDate" name="noteStart"
                                value="${initDate}">
                     </div>
                 </div>
-                <div class="form-group mb-3 mt-3 mr-1 w-20">
+                <div class="form-group mb-3 mt-3 mr-1 w-10">
                     <div class="">
                         <input class="form-control" type="datetime-local" id="endDate" name="noteEnd"
                                value="${endDate}">
@@ -158,7 +158,7 @@
                         <c:choose>
                             <%-- #################### Notes compartides #################### --%>
                             <c:when test="${note.sharedUsers != null || typeNote == 'sharedNotesByYou'}">
-                                <div class="card" style="width: 18rem; background-color: #53b3cb; color: black">
+                                <div class="card sharedNotesByYou" style="width: 18rem; background-color: #53b3cb; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
                                     <div class="card-body">
@@ -213,7 +213,7 @@
                             </c:when>
                             <c:otherwise>
                                 <%-- #################### Notes creades #################### --%>
-                                <div class="card" style="width: 18rem; background-color: #f9c22e; color: black">
+                                <div class="card ownerNotes" style="width: 18rem; background-color: #f9c22e; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
                                     <div class="card-body">
@@ -256,7 +256,7 @@
                     </c:when>
                     <c:otherwise>
                         <%-- #################### Notes compartides amb tu #################### --%>
-                        <div class="card" style="width: 18rem; background-color: #f15946; color: white">
+                        <div class="card sharedNotesWithMe" style="width: 18rem; background-color: #f15946; color: white">
                             <div class="card-body">
                                 <h5 class="card-title">${note.title}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>

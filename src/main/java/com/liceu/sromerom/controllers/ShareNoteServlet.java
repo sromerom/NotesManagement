@@ -44,7 +44,7 @@ public class ShareNoteServlet extends HttpServlet {
         }
 
         req.setAttribute("action", "/share");
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/shares.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -65,7 +65,7 @@ public class ShareNoteServlet extends HttpServlet {
 
         req.setAttribute("noerror", false);
         req.setAttribute("action", "/share");
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/shares.jsp");
         dispatcher.forward(req, resp);
     }
 }

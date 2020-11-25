@@ -41,7 +41,7 @@ public class DeleteSpecificShareServlet extends HttpServlet {
         }
         req.setAttribute("noteid", noteid);
         req.setAttribute("action", "/deleteShare");
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/shares.jsp");
         dispatcher.forward(req, resp);
     }
 
@@ -69,7 +69,7 @@ public class DeleteSpecificShareServlet extends HttpServlet {
 
         req.setAttribute("noerror", false);
         req.setAttribute("action", "/deleteShare");
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/users.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/shares.jsp");
         dispatcher.forward(req, resp);
 
     }

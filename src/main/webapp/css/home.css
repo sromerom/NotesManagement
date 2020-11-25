@@ -95,3 +95,21 @@ svg {
     font-weight: 400;
     line-height: 1.5;
 }
+
+.sharedNotesByYou {
+    font-style: italic;
+}
+
+.sharedNotesWithMe {
+    font-style: italic;
+    color: white;
+}
+
+.sharedNotesWithMe div h6{
+    color: #505451 !important;
+}
+
+
+.ownerNotes {
+    font-style: italic;
+}

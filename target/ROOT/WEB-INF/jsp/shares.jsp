@@ -39,11 +39,9 @@
             </c:forEach>
         </ul>
         <c:if test="${action == '/deleteShare'}">
-            <form action="/deleteAllShare" method="POST">
-                <input type="hidden" name="noteid" value="${noteid}">
-                <input type="hidden" name="_csrftoken" value="${csrfToken}">
-                <button type="submit" class="btn btn-danger">Delete all shares</button>
-            </form>
+            <button id="buttonToDelete" type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDeleteAllShares">
+                Delete all shares
+            </button>
         </c:if>
     </div>
     <div>
@@ -79,6 +77,30 @@
 </section>
 <p><a href="${pageContext.request.contextPath}/home">Go to home</a></p>
 <%@ include file="parts/footer.jsp" %>
+
+
+<%-- ####################  Modal to Delete all shares #################### --%>
+<div class="modal fade" id="modalDeleteAllShares" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titleModalDeleteShares">Are you sure to delete all shares for this note?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
+                <form action="${pageContext.request.contextPath}/deleteAllShare" method="POST">
+                    <input type="hidden" name="noteid" value="${noteid}">
+                    <input type="hidden" name="_csrftoken" value="${csrfToken}">
+                    <button type="submit" class="btn btn-danger">Delete all shares</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('.js-example-basic-multiple').select2();
