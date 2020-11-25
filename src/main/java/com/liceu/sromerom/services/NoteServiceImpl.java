@@ -80,11 +80,15 @@ public class NoteServiceImpl implements NoteService {
 
         //Si no esta buit voldra dir que haurem d'utilizar el filtre per date, per tant les inicialitzam
         if (!initDate.equals("") && !endDate.equals("")) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime initDateTime = LocalDateTime.parse(initDate);
-            LocalDateTime endDataTime = LocalDateTime.parse(endDate);
-            initDateParsed = formatter.format(initDateTime);
-            endDateParsed = formatter.format(endDataTime);
+            System.out.println(initDate);
+            System.out.println(endDate);
+            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            //LocalDateTime initDateTime = LocalDateTime.parse(initDate);
+            //LocalDateTime endDataTime = LocalDateTime.parse(endDate);
+            //initDateParsed = formatter.format(initDateTime);
+            //endDateParsed = formatter.format(endDataTime);
+            initDateParsed = initDate;
+            endDateParsed = endDate;
 
         }
         try {

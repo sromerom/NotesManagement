@@ -96,11 +96,11 @@ svg {
     line-height: 1.5;
 }
 
-.sharedNotesByYou {
+.sharedNotesByYou  div h6{
     font-style: italic;
 }
 
-.sharedNotesWithMe {
+.sharedNotesWithMe  div h6{
     font-style: italic;
     color: white;
 }
@@ -110,6 +110,6 @@ svg {
 }
 
 
-.ownerNotes {
+.ownerNotes  div h6{
     font-style: italic;
 }

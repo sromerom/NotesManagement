@@ -83,6 +83,17 @@
                 </div>
                 <div class="form-group mb-3 mt-3 mr-1 w-10">
                     <div class="">
+                        <input id="startDate" class="form-control" type="text" name="noteStart" value="${initDate}"/>
+                    </div>
+                </div>
+                <div class="form-group mb-3 mt-3 mr-1 w-10">
+                    <div class="">
+                        <input id="endDate" class="form-control" type="text" name="noteEnd" value="${endDate}"/>
+                    </div>
+                </div>
+                <!--
+                <div class="form-group mb-3 mt-3 mr-1 w-10">
+                    <div class="">
                         <input class="form-control" type="datetime-local" id="startDate" name="noteStart"
                                value="${initDate}">
                     </div>
@@ -93,6 +104,7 @@
                                value="${endDate}">
                     </div>
                 </div>
+                -->
                 <a class="btn btn-secondary" role="button" href="${pageContext.request.contextPath}/home">Restore</a>
                 <button class="btn principalButton text-white" type="submit">Search</button>
             </form>
@@ -158,7 +170,8 @@
                         <c:choose>
                             <%-- #################### Notes compartides #################### --%>
                             <c:when test="${note.sharedUsers != null || typeNote == 'sharedNotesByYou'}">
-                                <div class="card sharedNotesByYou" style="width: 18rem; background-color: #53b3cb; color: black">
+                                <div class="card sharedNotesByYou"
+                                     style="width: 18rem; background-color: #53b3cb; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
                                     <div class="card-body">
@@ -213,7 +226,8 @@
                             </c:when>
                             <c:otherwise>
                                 <%-- #################### Notes creades #################### --%>
-                                <div class="card ownerNotes" style="width: 18rem; background-color: #f9c22e; color: black">
+                                <div class="card ownerNotes"
+                                     style="width: 18rem; background-color: #f9c22e; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
                                     <div class="card-body">
@@ -256,7 +270,8 @@
                     </c:when>
                     <c:otherwise>
                         <%-- #################### Notes compartides amb tu #################### --%>
-                        <div class="card sharedNotesWithMe" style="width: 18rem; background-color: #f15946; color: white">
+                        <div class="card sharedNotesWithMe"
+                             style="width: 18rem; background-color: #f15946; color: white">
                             <div class="card-body">
                                 <h5 class="card-title">${note.title}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Created By ${note.owner.username}</h6>
@@ -353,6 +368,44 @@
 <%@ include file="parts/footer.jsp" %>
 
 <script>
+    $(function() {
+        $('input[name="noteStart"]').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            autoUpdateInput: false,
+            minYear: 1901,
+            maxYear: parseInt(moment().format('YYYY'),10),
+            locale: {
+                format: 'YYYY-MM-DD hh:mm:ss'
+            }
+        });
+        $('input[name="noteEnd"]').daterangepicker({
+            singleDatePicker: true,
+            timePicker: true,
+            autoUpdateInput: false,
+            minYear: 1901,
+            maxYear: parseInt(moment().format('YYYY'),10),
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss'
+            }
+        });
+        $('input[name="noteStart"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        });
+
+        $('input[name="noteStart"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
+        $('input[name="noteEnd"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        });
+
+        $('input[name="noteEnd"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+
     let checkedStatus = 0;
     const allCheckbox = document.querySelectorAll("input[name = 'checkboxDelete']");
     document.querySelector("#buttonToDelete").style.display = "none";
