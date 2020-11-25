@@ -22,30 +22,22 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        UserService us = new UserServiceImpl();
         String user = req.getParameter("username");
         String pass = req.getParameter("password");
-        //En un cas normal, s'hauria de comprovar en la ddbb si esta el usuari en concret
 
-        UserService us = new UserServiceImpl();
-
-
+        //Iniciarem sessio sempre i quan els parametres no siguin null i la validacio d'usuari sigui true
         if (user != null && pass != null && us.validateUser(user, pass)) {
-            System.out.println("Estas dentro!!");
-
             req.setAttribute("username", user);
             HttpSession session = req.getSession();
-            //GUARDAR EN SESSIO L'OBJECTE USER COMPLET? ES CORRECTE?
             session.setAttribute("userid", us.getUserId(user));
             session.setAttribute("username", user);
 
-            //RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-            //dispatcher.forward(req, resp);
-            System.out.println("CONTEXT PATH...: " + req.getContextPath());
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
 
-        System.out.println("Error");
+
         req.setAttribute("noerror", false);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
         dispatcher.forward(req, resp);

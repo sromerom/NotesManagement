@@ -3,8 +3,6 @@ package com.liceu.sromerom.daos;
 import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Database;
-
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,8 +71,6 @@ public class NoteDaoImpl implements NoteDao {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE user_iduser = ? AND creationDate > ? AND lastModificationDate < ? ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
-        //2020-11-12 00:00:00
-        //2020-11-12 23:59:59
         ps.setString(2, initDate);
         ps.setString(3, endDate);
         ps.setInt(4, limit);
@@ -201,9 +197,6 @@ public class NoteDaoImpl implements NoteDao {
         ps.setLong(1, note.getUser().getUserid());
         ps.setString(2, note.getTitle());
         ps.setString(3, note.getBody());
-
-        //2020-11-10 12:46:03
-
         ps.setString(4, note.getCreationDate());
         ps.setString(5, note.getLastModification());
         ps.execute();
@@ -241,7 +234,6 @@ public class NoteDaoImpl implements NoteDao {
     public List<Note> getSharedNotesWithMe(long userid, int limit, int offset) throws SQLException {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
-        //note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password
         PreparedStatement ps = conn.prepareStatement("SELECT sharedNote.note_id, title, body, creationDate, lastModificationDate, user_iduser, email, username, password FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id INNER JOIN user ON note.user_iduser = user.user_id WHERE sharedNote.user_id = ? ORDER BY sharedNote.shared_note DESC LIMIT ? OFFSET ?");
         ps.setLong(1, userid);
         ps.setInt(2, limit);
@@ -270,7 +262,6 @@ public class NoteDaoImpl implements NoteDao {
     public boolean sharedNoteExists(long userid, long noteid) throws Exception {
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT * FROM sharedNote INNER JOIN user ON sharedNote.user_id = user.user_id WHERE user.user_id = ? AND note_id = ?");
-        System.out.println("userid: " + userid + " & " + "noteid: " + noteid);
         ps.setLong(1, userid);
         ps.setLong(2, noteid);
         ResultSet rs = ps.executeQuery();
@@ -417,7 +408,6 @@ public class NoteDaoImpl implements NoteDao {
         for (User user : users) {
             ps.setLong(1, noteForShare.getNoteid());
             ps.setLong(2, user.getUserid());
-            //ps.setLong(2, sn.getUser().getIduser());
             ps.execute();
         }
         ps.close();
@@ -430,7 +420,6 @@ public class NoteDaoImpl implements NoteDao {
         for (User user : users) {
             ps.setLong(1, noteForShare.getNoteid());
             ps.setLong(2, user.getUserid());
-            //ps.setLong(2, sn.getUser().getIduser());
             ps.execute();
         }
         ps.close();

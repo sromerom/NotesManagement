@@ -15,36 +15,39 @@ import java.io.IOException;
 @WebServlet(value = "/home")
 public class HomeServlet extends HttpServlet {
 
-    private final double PAGES_FOR_NOTE = 10.0;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NoteService ns = new NoteServiceImpl();
-        UserService us = new UserServiceImpl();
         HttpSession session = req.getSession();
 
+        //Parametres de l'usuari
         Long userid = (Long) session.getAttribute("userid");
-        req.setAttribute("usernameSession", us.getUserById(userid));
+        String username = (String) session.getAttribute("username");
+        req.setAttribute("usernameSession", username);
         req.setAttribute("useridSession", userid);
-        Integer offset = 0;
-        Integer currentPage = 1;
-        int totalPages;
 
-        //Params filtres
+        //Parametres del filtre de cerca
         String typeNoteDisplay = req.getParameter("typeNote");
         String titleFilter = req.getParameter("titleFilter");
-        req.setAttribute("titleFilter", titleFilter);
         String initDateFilter = req.getParameter("noteStart");
-        req.setAttribute("initDate", initDateFilter);
         String endDateFilter = req.getParameter("noteEnd");
+        req.setAttribute("titleFilter", titleFilter);
+        req.setAttribute("initDate", initDateFilter);
         req.setAttribute("endDate", endDateFilter);
 
-        System.out.println("type: " + typeNoteDisplay);
 
         //Pagination
+        final double PAGES_FOR_NOTE = 10.0; //Quantitat de notes que volem per pagina
+        int offset = 0; //Offset que l'hi pasarem al query
+        int currentPage = 1; //Pagina actual de la paginacio
+        int totalPages; //El numero total de pagines que tindra la paginacio, que variara segons el tipus de cerca que facem
+
+        //Url amb els parametres titleFilter, initDate i endDate + typeNote
         String filterURL = Filter.getURLFilter(typeNoteDisplay, titleFilter, initDateFilter, endDateFilter);
-        System.out.println("Filter URLLLLLLLLLLLLLLLLLLLLLLLL: " + filterURL);
+
         req.setAttribute("filterURL", filterURL);
+
+        //Per aconseguir el offset i la pagina actual
         if (req.getParameter("currentPage") != null) {
             int actualCurrentPage = Integer.parseInt(req.getParameter("currentPage"));
             if (actualCurrentPage > currentPage) {
@@ -55,15 +58,14 @@ public class HomeServlet extends HttpServlet {
                 currentPage = actualCurrentPage;
             }
         }
-        //Filter per mostrar nomes notes en especific
+
+        //Filter per mostrar els tipus de nota (totes les notes juntes, notes creades, notes que t'han compartit i notes que has compartit)
         if (typeNoteDisplay != null && !typeNoteDisplay.equals("")) {
-            if (typeNoteDisplay.equals("compartides")) {
+            if (typeNoteDisplay.equals("sharedNotesWithMe")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
                 req.setAttribute("notes", ns.getSharedNoteWithMe(userid, offset));
-                //Cambiar a metode
-                //totalPages = (int) Math.ceil(sns.getSharedNoteWithMe(userid, offset).size() / PAGES_FOR_NOTE);
                 totalPages = (int) Math.ceil(ns.getLengthSharedNoteWithMe(userid) / PAGES_FOR_NOTE);
-            } else if (typeNoteDisplay.equals("compartit")) {
+            } else if (typeNoteDisplay.equals("sharedNotesByYou")) {
                 req.setAttribute("typeNote", typeNoteDisplay);
                 req.setAttribute("notes", ns.getSharedNotes(userid, offset));
                 totalPages = (int) Math.ceil(ns.getLengthSharedNotes(userid) / PAGES_FOR_NOTE);
@@ -74,30 +76,21 @@ public class HomeServlet extends HttpServlet {
             }
         } else {
             req.setAttribute("typeNote", "allNotes");
-            System.out.println(ns.getNotesFromUser(userid, offset));
             req.setAttribute("notes", ns.getNotesFromUser(userid, offset));
             totalPages = (int) Math.ceil(ns.getAllNotesLength(userid) / (PAGES_FOR_NOTE));
         }
 
-        //Aplicam filtres
-        if (ns.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
-            System.out.println("Aplicamos filter");
+        //Aplicam els filtres de cerca ja sigui per date o per search de paraules clau
+        if (Filter.checkFilter(titleFilter, initDateFilter, endDateFilter)) {
             req.setAttribute("notes", ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset));
             totalPages = (int) Math.ceil(ns.filter(userid, typeNoteDisplay, titleFilter, initDateFilter, endDateFilter, offset).size() / (PAGES_FOR_NOTE));
         }
 
-        System.out.println("current page: " + currentPage);
-        System.out.println("totalPages " + totalPages);
+        //Pasam a la vista tots els parametres corresponents amb la paginacio
         req.setAttribute("totalPages", totalPages);
         req.setAttribute("currentPage", currentPage);
         req.setAttribute("totalPages", totalPages);
 
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
-        dispatcher.forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
         dispatcher.forward(req, resp);
     }

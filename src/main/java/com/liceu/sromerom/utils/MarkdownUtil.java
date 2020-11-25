@@ -25,7 +25,6 @@ public class MarkdownUtil {
 
     public static String cleanBody(String body) {
         PolicyFactory policy = new HtmlPolicyBuilder().toFactory();
-        System.out.println("Saneao: " + policy.sanitize(body));
         return policy.sanitize(body);
     }
 }

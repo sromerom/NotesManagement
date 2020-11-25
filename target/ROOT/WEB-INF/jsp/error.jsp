@@ -7,7 +7,7 @@
     <%@ include file="parts/header.jsp" %>
 </head>
 <body>
-<h1 style="text-align: center">OOOPS! You don't have access to this note!</h1>
+<h1 style="text-align: center">Sorry. You don't have access to this note!</h1>
 <%@ include file="parts/footer.jsp" %>
 </body>
 </html>

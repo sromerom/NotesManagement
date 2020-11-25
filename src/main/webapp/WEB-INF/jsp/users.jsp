@@ -57,7 +57,7 @@
         </c:choose>
         <form method="POST" action="${action}">
             <input type="hidden" id="noteid" name="noteid" value="${noteid}">
-            <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+            <select class="js-example-basic-multiple" name="users[]" multiple="multiple">
                 <c:forEach var="user" items="${users}">
                     <option value="${user.username}">${user.username}</option>
                 </c:forEach>

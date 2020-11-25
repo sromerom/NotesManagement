@@ -16,25 +16,27 @@ import java.io.IOException;
 
 @WebServlet(value = "/deleteShare")
 public class DeleteSpecificShareServlet extends HttpServlet {
-    private Long noteid = null;
     private Long userid = null;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserService us = new UserServiceImpl();
         NoteService ns = new NoteServiceImpl();
+        UserService us = new UserServiceImpl();
+        Long noteid = null;
         if (req.getParameter("id") != null) {
             noteid = Long.parseLong(req.getParameter("id"));
             HttpSession session = req.getSession();
             userid = (Long) session.getAttribute("userid");
             req.setAttribute("users", us.getAll(userid));
             req.setAttribute("usersShared", us.getSharedUsers(noteid));
-            if (ns.getNoteById(userid, noteid) == null) {
-                resp.sendRedirect(req.getContextPath() + "/home");
+
+
+            if (!ns.isNoteOwner(userid, noteid)) {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+            resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
         req.setAttribute("noteid", noteid);
@@ -45,17 +47,22 @@ public class DeleteSpecificShareServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] sharedUsers = req.getParameterValues("states[]");
+        String[] sharedUsers = req.getParameterValues("users[]");
+        long noteid = Long.parseLong(req.getParameter("noteid"));
         NoteService ns = new NoteServiceImpl();
         UserService us = new UserServiceImpl();
         boolean noError = false;
 
+        if (!ns.isNoteOwner(userid, noteid)) {
+            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+            return;
+        }
+        //Eliminarem sempre i quan existeixi usuaris a eliminar el share i que existeixi un share amb aquells usuaris
         if (sharedUsers != null && us.existsUserShare(noteid, sharedUsers)) {
             noError = ns.deleteShareNote(userid, noteid, sharedUsers);
         }
 
         if (noError) {
-            System.out.println("S'ha compartit la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }

@@ -11,7 +11,6 @@ public interface UserDao {
 
     User getUserById(long userid) throws Exception;
 
-
     boolean existsUserWithUsername(String username) throws Exception;
 
     boolean existsUserWithEmail(String email) throws Exception;

@@ -27,12 +27,18 @@ public class RegisterUserServlet extends HttpServlet {
         String newPassRepeat = req.getParameter("repeatPassword");
         UserService us = new UserServiceImpl();
 
-        boolean canRegister = us.checkRegister(newEmail, newUser, newPass, newPassRepeat);
-        boolean noError;
-        if (canRegister) {
-            noError = us.createUser(newEmail, newUser, newPass);
-        } else {
-            noError = false;
+        boolean noError = false;
+
+        //Revisam que els parametres que ens passen compleixen amb lo basic
+        if (newEmail != null && newUser != null && newPass != null && newPassRepeat != null) {
+            boolean canRegister = us.checkRegister(newEmail, newUser, newPass, newPassRepeat);
+
+            //Si les dades poden ser registrades, procedirem a crear un usuari
+            if (canRegister) {
+                noError = us.createUser(newEmail, newUser, newPass);
+            } else {
+                noError = false;
+            }
         }
 
         req.setAttribute("noerror", noError);

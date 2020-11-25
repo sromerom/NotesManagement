@@ -28,10 +28,10 @@ public class EditNoteServlet extends HttpServlet {
 
             req.setAttribute("action", "/edit");
 
-            if (noteid != null && ns.getNoteById(userid, noteid) != null) {
+            if (noteid != null && ns.isNoteOwner(userid, noteid)) {
                 req.setAttribute("noteid", noteid);
-                req.setAttribute("title", ns.getNoteById(userid, noteid).getTitle());
-                req.setAttribute("body", ns.getNoteById(userid, noteid).getBody());
+                req.setAttribute("title", ns.getNoteById(noteid).getTitle());
+                req.setAttribute("body", ns.getNoteById(noteid).getBody());
             } else {
                 resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
@@ -50,6 +50,8 @@ public class EditNoteServlet extends HttpServlet {
         NoteService ns = new NoteServiceImpl();
 
         boolean noError = false;
+
+        //Si estan tots els parametres necessaris, procedirem a actualitzar la nota
         if (req.getParameter("title") != null && req.getParameter("bodyContent") != null) {
             String title = req.getParameter("title");
             String body = req.getParameter("bodyContent");
@@ -59,7 +61,6 @@ public class EditNoteServlet extends HttpServlet {
         }
 
         if (noError) {
-            System.out.println("S'ha actualitzat la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }

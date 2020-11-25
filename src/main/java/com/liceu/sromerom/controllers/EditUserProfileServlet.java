@@ -1,10 +1,7 @@
 package com.liceu.sromerom.controllers;
 
-import com.liceu.sromerom.services.NoteService;
-import com.liceu.sromerom.services.NoteServiceImpl;
 import com.liceu.sromerom.services.UserService;
 import com.liceu.sromerom.services.UserServiceImpl;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,13 +13,12 @@ import java.io.IOException;
 
 @WebServlet(value = "/editProfile")
 public class EditUserProfileServlet extends HttpServlet {
-    private Long userid = null;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService us = new UserServiceImpl();
         HttpSession session = req.getSession();
-        userid = (Long) session.getAttribute("userid");
+        Long userid = (Long) session.getAttribute("userid");
 
         req.setAttribute("action", "/edit");
 
@@ -50,13 +46,10 @@ public class EditUserProfileServlet extends HttpServlet {
         String newPassConfirm = req.getParameter("newPassConfirm");
         UserService us = new UserServiceImpl();
 
-        System.out.println(newEmail);
-        System.out.println(newUser);
-        System.out.println(currentPassword);
-        System.out.println(newPass);
-        System.out.println(newPassConfirm);
 
         boolean noError = false;
+
+        //Si tenim null el email i username i la resta no, voldra dir que nomes esta modificant la contrasenya
         if (newEmail == null && newUser == null && currentPassword != null && newPass != null && newPassConfirm != null) {
             boolean validInfo = us.checkPasswordData(userid, currentPassword, newPass, newPassConfirm);
             if (validInfo) {
@@ -64,6 +57,7 @@ public class EditUserProfileServlet extends HttpServlet {
             }
         }
 
+        //Si tenim null el current password, newPass i newPassConfirm i la resta no, voldra dir que nomes esta modificant el usuari i el correu
         if (currentPassword == null && newPass == null && newPassConfirm == null && newEmail != null && newUser != null) {
             boolean validInfo = us.checkEditData(userid, newEmail, newUser);
             if (validInfo) {
@@ -72,13 +66,10 @@ public class EditUserProfileServlet extends HttpServlet {
         }
 
         if (noError) {
-            System.out.println("S'ha actualitzat correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
 
-
-        System.out.println("No s'ha actualitzat la contraseña correctament...");
         req.setAttribute("noerror", false);
         req.setAttribute("action", "/edit");
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");

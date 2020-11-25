@@ -25,20 +25,19 @@ public class CreateNoteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         NoteService ns = new NoteServiceImpl();
-        long iduser = (long) session.getAttribute("userid");
+        long userid = (long) session.getAttribute("userid");
         String title = req.getParameter("title");
         String body = req.getParameter("bodyContent");
-
 
         boolean noError = false;
         if (req.getParameter("title") != null && req.getParameter("bodyContent") != null) {
             //Cream la nota...
-            noError = ns.addNote(iduser, title, body);
+            noError = ns.addNote(userid, title, body);
         }
 
 
+        //Si no hi ha cap error, voldra dir que s'haura creat correctament la nota, i farem un redirect al home
         if (noError) {
-            System.out.println("S'ha creat la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }

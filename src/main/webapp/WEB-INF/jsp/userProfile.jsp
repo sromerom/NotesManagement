@@ -49,7 +49,9 @@
                                                         <div class="col">
                                                             <div class="form-group">
                                                                 <label>Username</label>
-                                                                <input class="form-control" type="text" placeholder="${username}" name="newUser" value="${username}">
+                                                                <input class="form-control" type="text"
+                                                                       placeholder="${username}" name="newUser"
+                                                                       value="${username}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -122,10 +124,13 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="px-xl-3">
-                                <button class="btn btn-block btn-secondary">
-                                    <i class="fa fa-sign-out"></i>
-                                    <span>Logout</span>
-                                </button>
+                                <form method="POST" action="${pageContext.request.contextPath}/unlogin" class="inline">
+                                    <input type="hidden" name="_csrftoken" value="${csrfToken}">
+                                    <button type="submit" class="btn btn-block btn-secondary">
+                                        <i class="fa fa-sign-out"></i>
+                                        <span>Logout</span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

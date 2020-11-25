@@ -3,14 +3,14 @@ DROP TABLE IF EXISTS note;
 
 CREATE TABLE IF NOT EXISTS user(
 user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-email VARCHAR(255) UNIQUE NOT NULL,
-username VARCHAR(30) UNIQUE NOT NULL,
-password VARCHAR(40) NOT NULL);
+email TEXT UNIQUE NOT NULL,
+username TEXT UNIQUE NOT NULL,
+password TEXT NOT NULL);
 
 CREATE TABLE IF NOT EXISTS note(
 note_id INTEGER PRIMARY KEY AUTOINCREMENT,
 user_iduser INTEGER NOT NULL,
-title VARCHAR(150),
+title TEXT ,
 body TEXT,
 creationDate DATETIME,
 lastModificationDate DATETIME,
@@ -51,8 +51,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 -------------------------------------------------POR HACER...-------------------------------------------------------
 //TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
-//Todo al mismo idioma
-//variable conn
 //Acentos sqlite3
 //Controller comprova si hi ha dades a enviar abans de fer operacions #######################
 //Cambiar el nombre del proyecto
@@ -89,3 +87,5 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Crear validaciones ################################### -->Hecho
 //Crear mensajes de error mostrando al usuari que algo mal ha ocurrido... ####################################### -->Hecho
 //escape script markdown --> Hecho
+//Todo al mismo idioma --> Hecho
+//variable conn --> Hecho

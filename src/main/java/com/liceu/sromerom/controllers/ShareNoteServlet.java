@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
 
 @WebServlet(value = "/share")
 public class ShareNoteServlet extends HttpServlet {
@@ -27,18 +26,20 @@ public class ShareNoteServlet extends HttpServlet {
 
         UserService us = new UserServiceImpl();
         NoteService ns = new NoteServiceImpl();
+        //Si hi ha parametre en la url, procedirem a enviar el usuaris que amb els que ha compartir i carregarem el select amb tots els usuaris
         if (req.getParameter("id") != null) {
             noteid = Long.parseLong(req.getParameter("id"));
             HttpSession session = req.getSession();
             userid = (Long) session.getAttribute("userid");
             req.setAttribute("users", us.getAll(userid));
             req.setAttribute("usersShared", us.getSharedUsers(noteid));
-            if (ns.getNoteById(userid, noteid) == null) {
-                resp.sendRedirect(req.getContextPath() + "/home");
+
+            if (!ns.isNoteOwner(userid, noteid)) {
+                resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
             }
         } else {
-            resp.sendRedirect(req.getContextPath() + "/restrictedArea");
+            resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }
 
@@ -49,9 +50,7 @@ public class ShareNoteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //Long userid = (Long) session.getAttribute("userid");
-        //String [] sharedUsers = req.getParameterValues("share");
-        String[] sharedUsers = req.getParameterValues("states[]");
+        String[] sharedUsers = req.getParameterValues("users[]");
         NoteService ns = new NoteServiceImpl();
         UserService us = new UserServiceImpl();
         boolean noError = false;
@@ -60,7 +59,6 @@ public class ShareNoteServlet extends HttpServlet {
         }
 
         if (noError) {
-            System.out.println("S'ha compartit la nota correctament...");
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }

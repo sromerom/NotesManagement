@@ -19,7 +19,7 @@
                 </div>
             </c:if>
             <!-- Form -->
-            <form method="POST" action="/login">
+            <form method="POST" action="${pageContext.request.contextPath}/login">
                 <h1>Management Notes Login</h1>
                 <!-- Input fields -->
                 <div class="form-group mt-2">
@@ -36,7 +36,7 @@
                 <!-- End input fields -->
             </form>
             <!-- Form end -->
-            <p><a href="/register">Create your account</a></p>
+            <p><a href="${pageContext.request.contextPath}/register">Create your account</a></p>
         </div>
     </div>
 </div>

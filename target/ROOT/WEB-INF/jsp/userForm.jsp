@@ -18,7 +18,6 @@
 
             <c:if test="${noerror == false && action == '/create'}">
                 <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
-
                     The note could not be created successfully
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

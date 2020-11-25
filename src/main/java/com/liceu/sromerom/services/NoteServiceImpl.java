@@ -4,46 +4,27 @@ import com.liceu.sromerom.daos.*;
 import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Filter;
-import com.liceu.sromerom.utils.MarkdownUtil;
 import com.liceu.sromerom.utils.RenderableNote;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
-import org.commonmark.renderer.text.TextContentRenderer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NoteServiceImpl implements NoteService {
     private final int LIMIT = 10;
 
     @Override
     public List<RenderableNote> getNotesFromUser(long userid, int offset) {
-        List<Note> allNotes;
+        List<Note> notes;
         List<RenderableNote> renderableNotes = new ArrayList<>();
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
         try {
             List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
-            allNotes = nd.getAllNotesFromUser(userid, LIMIT, offset);
-            for (Note allNote : allNotes) {
-                //User sharedUser = null;
-                List<User> sharedUsersFromNote = null;
-                for (int j = 0; j < sharedNotes.size(); j++) {
-                    if (sharedNotes.get(j).getNoteid() == allNote.getNoteid()) {
-                        //sharedUser = sharedNotes.get(j).getUser();
-                        sharedUsersFromNote = ud.getUsersFromSharedNote(sharedNotes.get(j).getNoteid());
-                        sharedNotes.remove(j);
-                        break;
-                    }
-                }
-                //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
-                renderableNotes.add(new RenderableNote(allNote.getNoteid(), allNote.getUser(), sharedUsersFromNote, allNote.getTitle(), allNote.getBody(), allNote.getCreationDate(), allNote.getLastModification()));
-            }
+            notes = nd.getAllNotesFromUser(userid, LIMIT, offset);
+            //Transformam les notes a RenderableNotes per poder saber si una nota ha estat compartida o no sense modificar el model "note"
+            parseNoteToRenderable(notes, renderableNotes, ud, sharedNotes);
             return renderableNotes;
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,18 +70,6 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean checkFilter(String search, String initDate, String endDate) {
-        if (search != null && initDate != null && endDate != null) {
-            if (!search.equals("") && !initDate.equals("") && !endDate.equals("")) return true;
-            if (!search.equals("") && initDate.equals("") && endDate.equals("")) return true;
-            return search.equals("") && !initDate.equals("") && !endDate.equals("");
-
-        }
-        return false;
-    }
-
-
-    @Override
     public List<RenderableNote> filter(long userid, String type, String search, String initDate, String endDate, int offset) {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
@@ -109,55 +78,55 @@ public class NoteServiceImpl implements NoteService {
         String initDateParsed = "";
         String endDateParsed = "";
 
-        if (!initDate.equals("") && !endDate.equals("") && initDate != null && endDate != null) {
+        //Si no esta buit voldra dir que haurem d'utilizar el filtre per date, per tant les inicialitzam
+        if (!initDate.equals("") && !endDate.equals("")) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime initDateTime = LocalDateTime.parse(initDate);
             LocalDateTime endDataTime = LocalDateTime.parse(endDate);
             initDateParsed = formatter.format(initDateTime);
             endDateParsed = formatter.format(endDataTime);
-            System.out.println(initDateParsed);
-            System.out.println(endDateParsed);
-            //System.out.println(endDataTime);
+
         }
         try {
+
+            //Si el type de note a filtrar es null, voldra dir que haurem de filtrar a totes les notes
             if (type == null || type.equals("")) {
-                System.out.println("filtramos todo...");
-                if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByTitle")) {
-                    notes = nd.filterTypeOfNoteBySearch(userid, search, LIMIT, offset);
-                    //return nd.filterByTitleAllTypeNotes(userid, title, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByDate")) {
-                    notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
-                    //return nd.filterByDateAllTypeNotes(userid, initDate, endDate, LIMIT, offset);
-                } else if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterAll")) {
-                    notes = nd.filterAllTypeOfNote(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
-                    //return nd.filterAllAllTypeNotes(userid, title, initDate, endDate, LIMIT, offset);
+                switch (Filter.checkTypeFilter(search, initDate, endDate)) {
+                    case "filterByTitle":
+                        notes = nd.filterTypeOfNoteBySearch(userid, search, LIMIT, offset);
+                        break;
+                    case "filterByDate":
+                        notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        break;
+                    case "filterAll":
+                        notes = nd.filterAllTypeOfNote(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        break;
                 }
 
 
-            } else {
-                System.out.println("filtramos solo lo seleccionado...");
+            } else { //Si no, haurem de filtrar per un tipus de nota en concret (notes creades, notes compartides amb mi o notes que he compartit)
                 if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByTitle")) {
-                    if (type.equals("compartides")) {
+                    if (type.equals("sharedNotesWithMe")) {
                         notes = nd.filterSharedNotesWithMeBySearch(userid, search, LIMIT, offset);
-                    } else if (type.equals("compartit")) {
+                    } else if (type.equals("sharedNotesByYou")) {
                         notes = nd.filterSharedNotesBySearch(userid, search, LIMIT, offset);
                     } else {
                         notes = nd.filterCreatedNotesBySearch(userid, search, LIMIT, offset);
                     }
                 }
                 if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByDate")) {
-                    if (type.equals("compartides")) {
+                    if (type.equals("sharedNotesWithMe")) {
                         notes = nd.filterSharedNotesWithMeByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
-                    } else if (type.equals("compartit")) {
+                    } else if (type.equals("sharedNotesByYou")) {
                         notes = nd.filterSharedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     } else {
                         notes = nd.filterCreatedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                     }
                 }
                 if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterAll")) {
-                    if (type.equals("compartides")) {
+                    if (type.equals("sharedNotesWithMe")) {
                         notes = nd.filterAllSharedNotesWithMe(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
-                    } else if (type.equals("compartit")) {
+                    } else if (type.equals("sharedNotesByYou")) {
                         notes = nd.filterAllSharedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                     } else {
                         notes = nd.filterAllCreatedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
@@ -166,20 +135,8 @@ public class NoteServiceImpl implements NoteService {
             }
 
             List<Note> sharedNotes = nd.getSharedNotes(userid, LIMIT, offset);
-            for (Note n : notes) {
-                //User sharedUser = null;
-                List<User> sharedUsersFromNote = null;
-                for (int j = 0; j < sharedNotes.size(); j++) {
-                    if (sharedNotes.get(j).getNoteid() == n.getNoteid()) {
-                        //sharedUser = sharedNotes.get(j).getUser();
-                        sharedUsersFromNote = ud.getUsersFromSharedNote(sharedNotes.get(j).getNoteid());
-                        sharedNotes.remove(j);
-                        break;
-                    }
-                }
-                //long noteid, User noteOwner, User sharedUser, String title, String body, String creationDate, String lastModification
-                renderableNotes.add(new RenderableNote(n.getNoteid(), n.getUser(), sharedUsersFromNote, n.getTitle(), n.getBody(), n.getCreationDate(), n.getLastModification()));
-            }
+            //Transformam les notes a RenderableNotes per poder saber si una nota ha estat compartida o no sense modificar el model "note"
+            parseNoteToRenderable(notes, renderableNotes, ud, sharedNotes);
 
             return renderableNotes;
         } catch (Exception e) {
@@ -189,16 +146,35 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note getNoteById(long userid, long noteid) {
+    public Note getNoteById(long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            if (nd.isOwnerNote(userid, noteid) || nd.sharedNoteExists(userid, noteid)) {
-                return nd.getNoteById(noteid);
-            }
-            return null;
+            return nd.getNoteById(noteid);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public boolean isNoteOwner(long userid, long noteid) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.isOwnerNote(userid, noteid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isSharedNote(long userid, long noteid) {
+        NoteDao nd = new NoteDaoImpl();
+        try {
+            return nd.sharedNoteExists(userid, noteid);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -242,15 +218,16 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean deleteNote(long userid, String [] noteids) {
+    public boolean deleteNote(long userid, String[] noteids) {
         NoteDao nd = new NoteDaoImpl();
         List<Note> notesToDelete = new ArrayList<>();
 
         try {
-            for (int i = 0; i < noteids.length; i++) {
-                if (!nd.isOwnerNote(userid, Long.parseLong(noteids[i]))) return false;
-                if (nd.isOwnerNote(userid, Long.parseLong(noteids[i]))) {
-                    notesToDelete.add(nd.getNoteById(Long.parseLong(noteids[i])));
+            for (String noteid : noteids) {
+                //Si hi ha qualsevol nota que no es seva, hauriem de retornar false ja que no podem eliminar-la
+                if (!nd.isOwnerNote(userid, Long.parseLong(noteid))) return false;
+                if (nd.isOwnerNote(userid, Long.parseLong(noteid))) {
+                    notesToDelete.add(nd.getNoteById(Long.parseLong(noteid)));
                 }
             }
 
@@ -260,20 +237,6 @@ public class NoteServiceImpl implements NoteService {
             e.printStackTrace();
             return false;
         }
-        /*
-        try {
-            if (nd.isOwnerNote(userid, noteid)) {
-                nd.delete(noteid);
-                return true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return false;
-
-         */
     }
 
     @Override
@@ -352,16 +315,19 @@ public class NoteServiceImpl implements NoteService {
             Note noteForShare = nd.getNoteById(noteid);
 
             List<User> users = new ArrayList<>();
+            //Si no existeix, ni entrarem al bucle
             if (noteForShare != null) {
                 for (String username : usernames) {
                     long userid = ud.getUserIdByUsername(username);
-                    System.out.println(nd.sharedNoteExists(userid, noteid));
+                    //Per guardar l'usuari al que compartirem, abans hem de comprovar si la nota que es vol compartir ja ho esta amb els usuaris introduits. Si no ho esta ho afegim
+                    //a la llista
                     if (!nd.sharedNoteExists(userid, noteid)) {
                         User user = ud.getUserById(userid);
                         users.add(user);
                     }
                 }
 
+                //Mentres hagui usuaris a la llista, crearem el share
                 if (users.size() != 0) {
                     nd.createShare(noteForShare, users);
                     return true;
@@ -384,14 +350,14 @@ public class NoteServiceImpl implements NoteService {
             if (noteForDeleteShare != null) {
                 for (String username : usernames) {
                     long userid = ud.getUserIdByUsername(username);
-                    System.out.println(nd.sharedNoteExists(userid, noteid));
+                    //Per guardar l'usuari al que descompartirem, abans hem de comprovar si la nota que es vol descompartir ja ho esta compartida previamente amb els usuaris introduits.
+                    //Si esta compartida, ho afegim a la llista
                     if (nd.sharedNoteExists(userid, noteid)) {
                         User user = ud.getUserById(userid);
                         users.add(user);
                     }
                 }
                 if (users.size() != 0) {
-                    //nd.createShare(noteForDeleteShare, users);
                     nd.deleteShare(noteForDeleteShare, users);
                     return true;
                 }
@@ -408,62 +374,56 @@ public class NoteServiceImpl implements NoteService {
     public boolean deleteAllShareNote(long userid, long noteid) {
         NoteDao nd = new NoteDaoImpl();
         try {
-            List<Note> sharedNotes = nd.getSharedNotes(userid, 50, 0);
-            List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, 50, 0);
+            List<Note> sharedNotes = nd.getSharedNotes(userid, (int) nd.getSharedNotesLength(userid), 0);
+            List<Note> sharedWithMe = nd.getSharedNotesWithMe(userid, (int) nd.getSharedNotesWithMeLength(userid), 0);
             boolean canDelete = false;
 
+            //Primer comprovam que la nota que esta compartida es troba a les notes compartides "With Me"
             for (Note n : sharedWithMe) {
-                System.out.println(n.getNoteid() + " =? " + noteid);
                 if (n.getNoteid() == noteid) {
-                    System.out.println("Eliminamos nota que nos han compartido");
                     canDelete = true;
                 }
             }
 
-            System.out.println("can delete? " + canDelete);
+            //Si la nota esta compartida amb tu i nomes amb tu, si podem pasar a borrar la nota
             if (canDelete) {
                 nd.deleteAllSharesByNoteId(noteid);
                 return true;
             }
 
+            //Si la nota no ha estat compartida amb mi, farem una segona comprovacio amb les notes que jo he compartides
             for (Note n : sharedNotes) {
                 if (n.getUser().getUserid() == userid && n.getNoteid() == noteid) {
-                    System.out.println("Eliminamos nota que hemos compartido");
                     canDelete = true;
                 }
             }
 
+            //Si la nota la he compartit jo i nomes jo, podem posar a borrar la nota
             if (canDelete) {
                 nd.deleteAllSharesByNoteId(noteid);
                 return true;
             }
+
+            //Si arriba fins aqui, voldra dir que intenta esborrar el share d'una nota que ni l'han compartit no ha compartit, per tant no te permis per esborrar-la
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return false;
 
-
-        /*
-        NoteDao nd = new NoteDaoImpl();
-        try {
-            nd.deleteAllSharesByNoteId(noteid);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-         */
     }
 
-    private boolean checkHTMLTags(String body) {
-        Pattern pattern = Pattern.compile("<.+?>");
-        Matcher matcher = pattern.matcher(body);
-        boolean matchFound = matcher.find();
-        if (matchFound) {
-            return true;
-        } else {
-            return false;
+    private void parseNoteToRenderable(List<Note> notes, List<RenderableNote> renderableNotes, UserDao ud, List<Note> sharedNotes) throws Exception {
+        for (Note allNote : notes) {
+            List<User> sharedUsersFromNote = null;
+            for (int j = 0; j < sharedNotes.size(); j++) {
+                if (sharedNotes.get(j).getNoteid() == allNote.getNoteid()) {
+                    sharedUsersFromNote = ud.getUsersFromSharedNote(sharedNotes.get(j).getNoteid());
+                    sharedNotes.remove(j);
+                    break;
+                }
+            }
+            renderableNotes.add(new RenderableNote(allNote.getNoteid(), allNote.getUser(), sharedUsersFromNote, allNote.getTitle(), allNote.getBody(), allNote.getCreationDate(), allNote.getLastModification()));
         }
     }
 }

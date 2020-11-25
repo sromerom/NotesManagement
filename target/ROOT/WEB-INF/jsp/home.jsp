@@ -4,11 +4,12 @@
 <jsp:useBean id="util" class="com.liceu.sromerom.utils.MarkdownUtil"/>
 <html>
 <head>
-    <title>Home</title>
+    <title>Your Home</title>
     <link href="css/home.css" rel="stylesheet">
     <%@ include file="parts/header.jsp" %>
 </head>
 <body>
+<%-- ####################  Header menu #################### --%>
 <header>
     <nav id="header" class="p5 navbar navbar-expand-lg">
         <a class="navbar-brand" href="#">Notes Management</a>
@@ -37,41 +38,41 @@
             </form>
 
             <span class="navbar-text"
-                  style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession.username}!</span>
+                  style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession}!</span>
         </div>
     </nav>
 </header>
+<%-- ####################  Search Filter #################### --%>
 <div class="container">
     <div class="justify-content-center">
         <div class="">
-            <form class="form-inline" action="/home" method="GET">
-                <!-- <select name="typeNote" id="note"> -->
+            <form class="form-inline" action="${pageContext.request.contextPath}/home" method="GET">
                 <div class="form-group mb-3 mt-3 mr-1">
                     <select class="form-control" name="typeNote" id="selectTypeNote">
                         <c:choose>
-                            <c:when test="${typeNote == 'compartides'}">
+                            <c:when test="${typeNote == 'sharedNotesWithMe'}">
                                 <option disabled="disabled">Select a type of note to filter</option>
-                                <option value="propies">Created Notes</option>
-                                <option selected="true" value="compartides">Shared Notes With You</option>
-                                <option value="compartit">Shared Notes by you</option>
+                                <option value="ownerNotes">Created Notes</option>
+                                <option selected="true" value="sharedNotesWithMe">Shared Notes With You</option>
+                                <option value="sharedNotesByYou">Shared Notes by you</option>
                             </c:when>
-                            <c:when test="${typeNote == 'compartit'}">
+                            <c:when test="${typeNote == 'sharedNotesByYou'}">
                                 <option disabled="disabled">Select a type of note to filter</option>
-                                <option value="propies">Created Notes</option>
-                                <option value="compartides">Shared Notes With You</option>
-                                <option selected="true" value="compartit">Shared Notes by you</option>
+                                <option value="ownerNotes">Created Notes</option>
+                                <option value="sharedNotesWithMe">Shared Notes With You</option>
+                                <option selected="true" value="sharedNotesByYou">Shared Notes by you</option>
                             </c:when>
-                            <c:when test="${typeNote == 'propies'}">
+                            <c:when test="${typeNote == 'ownerNotes'}">
                                 <option disabled="disabled">Select a type of note to filter</option>
-                                <option selected="true" value="propies">Created Notes</option>
-                                <option value="compartides">Shared Notes With You</option>
-                                <option value="compartit">Shared Notes by you</option>
+                                <option selected="true" value="ownerNotes">Created Notes</option>
+                                <option value="sharedNotesWithMe">Shared Notes With You</option>
+                                <option value="sharedNotesByYou">Shared Notes by you</option>
                             </c:when>
                             <c:otherwise>
                                 <option selected="true" disabled="disabled">Select a type of note to filter</option>
-                                <option value="propies">Created Notes</option>
-                                <option value="compartides">Shared Notes With You</option>
-                                <option value="compartit">Shared Notes by you</option>
+                                <option value="ownerNotes">Created Notes</option>
+                                <option value="sharedNotesWithMe">Shared Notes With You</option>
+                                <option value="sharedNotesByYou">Shared Notes by you</option>
                             </c:otherwise>
                         </c:choose>
                     </select>
@@ -98,6 +99,7 @@
         </div>
     </div>
 </div>
+<%-- ####################  Container of notes #################### --%>
 <section id="containerNotes">
     <div>
         <c:choose>
@@ -106,13 +108,13 @@
             </c:when>
             <c:otherwise>
                 <c:choose>
-                    <c:when test="${typeNote == 'compartides'}">
+                    <c:when test="${typeNote == 'sharedNotesWithMe'}">
                         <h2>Your notes that have been shared with you</h2>
                     </c:when>
-                    <c:when test="${typeNote == 'compartit'}">
+                    <c:when test="${typeNote == 'sharedNotesByYou'}">
                         <h2>Your notes that you have shared</h2>
                     </c:when>
-                    <c:when test="${typeNote == 'propies'}">
+                    <c:when test="${typeNote == 'ownerNotes'}">
                         <h2>Your notes that you have created</h2>
                     </c:when>
                     <c:otherwise>
@@ -124,13 +126,13 @@
 
 
     </div>
-    <form action="/delete" method="POST">
+    <form action="${pageContext.request.contextPath}/delete" method="POST">
         <input type="hidden" name="_csrftoken" value="${csrfToken}">
         <button id="buttonToDelete" type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete">
             Delete Selected Notes
         </button>
         <div id="siteNotes">
-            <!-- Modal to Delete note -->
+            <%-- ####################  Modal to Delete note #################### --%>
             <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog"
                  aria-labelledby="exampleModalCenterTitle"
                  aria-hidden="true">
@@ -151,9 +153,11 @@
             </div>
             <c:forEach var="note" items="${notes}">
                 <c:choose>
+                    <%-- ####################  Notes propies #################### --%>
                     <c:when test="${note.owner.userid == useridSession}">
                         <c:choose>
-                            <c:when test="${note.sharedUsers != null || typeNote == 'compartit'}">
+                            <%-- #################### Notes compartides #################### --%>
+                            <c:when test="${note.sharedUsers != null || typeNote == 'sharedNotesByYou'}">
                                 <div class="card" style="width: 18rem; background-color: #53b3cb; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
@@ -169,35 +173,36 @@
                                         <p class="card-text"
                                            style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${util.cleanBody(note.body)}</p>
                                         <div class="optionsButtons">
-                                            <a href="/edit?id=${note.noteid}">
+                                            <a href="${pageContext.request.contextPath}/edit?id=${note.noteid}">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                      class="bi bi-pencil-fill"
                                                      fill="currentColor"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
-                                                          d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                          d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"></path>
                                                 </svg>
                                             </a>
-                                            <a class="card-link" href="/share?id=${note.noteid}">
+                                            <a class="card-link"
+                                               href="${pageContext.request.contextPath}/share?id=${note.noteid}">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                      class="bi bi-share-fill"
                                                      fill="currentColor"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
-                                                          d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+                                                          d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"></path>
                                                 </svg>
                                             </a>
-                                            <a href="/deleteShare?id=${note.noteid}">
+                                            <a href="${pageContext.request.contextPath}/deleteShare?id=${note.noteid}">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                      class="bi bi-person-x-fill"
                                                      fill="currentColor"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
-                                                          d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                                          d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"></path>
                                                 </svg>
                                             </a>
                                         </div>
-                                        <a href="/detail?id=${note.noteid}">
+                                        <a href="${pageContext.request.contextPath}/detail?id=${note.noteid}">
                                             <span class="link-spanner"></span>
                                         </a>
                                         <h6 class="card-subtitle mb-2 text-muted dateInfo"
@@ -207,6 +212,7 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
+                                <%-- #################### Notes creades #################### --%>
                                 <div class="card" style="width: 18rem; background-color: #f9c22e; color: black">
                                     <input class="checkboxDelete" type="checkbox" name="checkboxDelete"
                                            value="${note.noteid}">
@@ -217,26 +223,27 @@
                                            style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;overflow: hidden;">${util.cleanBody(note.body)}</p>
 
                                         <div class="optionsButtons">
-                                            <a href="/edit?id=${note.noteid}">
+                                            <a href="${pageContext.request.contextPath}/edit?id=${note.noteid}">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                      class="bi bi-pencil-fill"
                                                      fill="currentColor"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
-                                                          d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                                                          d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"></path>
                                                 </svg>
                                             </a>
-                                            <a class="card-link" href="/share?id=${note.noteid}">
+                                            <a class="card-link"
+                                               href="${pageContext.request.contextPath}/share?id=${note.noteid}">
                                                 <svg width="1em" height="1em" viewBox="0 0 16 16"
                                                      class="bi bi-share-fill"
                                                      fill="currentColor"
                                                      xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd"
-                                                          d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+                                                          d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"></path>
                                                 </svg>
                                             </a>
                                         </div>
-                                        <a href="/detail?id=${note.noteid}">
+                                        <a href="${pageContext.request.contextPath}/detail?id=${note.noteid}">
                                             <span class="link-spanner"></span>
                                         </a>
                                         <h6 class="card-subtitle mb-2 text-muted dateInfo"
@@ -248,8 +255,7 @@
                         </c:choose>
                     </c:when>
                     <c:otherwise>
-
-
+                        <%-- #################### Notes compartides amb tu #################### --%>
                         <div class="card" style="width: 18rem; background-color: #f15946; color: white">
                             <div class="card-body">
                                 <h5 class="card-title">${note.title}</h5>
@@ -265,12 +271,12 @@
                                              fill="currentColor"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd"
-                                                  d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+                                                  d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"></path>
                                         </svg>
                                     </a>
 
                                 </div>
-                                <a href="/detail?id=${note.noteid}">
+                                <a href="${pageContext.request.contextPath}/detail?id=${note.noteid}">
                                     <span class="link-spanner"></span>
                                 </a>
                                 <h6 class="card-subtitle mb-2 text-muted dateInfo"
@@ -283,12 +289,14 @@
             </c:forEach>
         </div>
     </form>
+
+    <%-- #################### Pagination section #################### --%>
     <nav id="pagination" aria-label="Page navigation example">
         <ul class="pagination">
             <c:if test="${currentPage != 1}">
                 <li class="page-item">
                     <a class="page-link principalButton"
-                       href="/home?currentPage=${currentPage-1}&${filterURL}">Previous</a>
+                       href="${pageContext.request.contextPath}/home?currentPage=${currentPage-1}&${filterURL}">Previous</a>
                 </li>
             </c:if>
 
@@ -304,7 +312,8 @@
                     </c:when>
                     <c:otherwise>
                         <li class="page-item">
-                            <a class="page-link principalButton" href="/home?currentPage=${i}&${filterURL}">${i}</a>
+                            <a class="page-link principalButton"
+                               href="${pageContext.request.contextPath}/home?currentPage=${i}&${filterURL}">${i}</a>
                         </li>
                     </c:otherwise>
                 </c:choose>
@@ -312,13 +321,13 @@
 
             <c:if test="${currentPage lt totalPages}">
                 <li class="page-item">
-                    <a class="page-link principalButton" href="/home?currentPage=${currentPage+1}&${filterURL}">Next</a>
+                    <a class="page-link principalButton"
+                       href="${pageContext.request.contextPath}/home?currentPage=${currentPage+1}&${filterURL}">Next</a>
                 </li>
             </c:if>
         </ul>
     </nav>
-
-    <!-- Modal to Delete note -->
+    <%-- ####################  Modal to Delete share Note #################### --%>
     <div class="modal fade" id="modalDeleteShares" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -363,34 +372,5 @@
     }
 
 </script>
-
-<!--
-<script>
-    let allCheckbox = document.querySelectorAll("input[name = 'checkboxDelete']");
-    for (let i = 0; i < allCheckbox.length; i++) {
-        allCheckbox[i].addEventListener("change", function () {
-            if (this.checked) {
-                console.log("Checked");
-                console.log(this.id)
-                addCheckbox(this.id)
-            } else {
-                console.log("No checked");
-                console.log(this)
-            }
-        });
-    }
-
-    function addCheckbox(noteid) {
-        const inputHidden = document.querySelector("#hiddenDelete");
-        const beforeActual = inputHidden.value;
-        console.log(beforeActual)
-    }
-
-    function deleteCheckbox(noteid) {
-
-    }
-
-</script>
--->
 </body>
 </html>

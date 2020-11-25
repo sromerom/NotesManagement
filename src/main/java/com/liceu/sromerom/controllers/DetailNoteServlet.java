@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(value = "/detail")
 public class DetailNoteServlet extends HttpServlet {
@@ -23,15 +22,18 @@ public class DetailNoteServlet extends HttpServlet {
             NoteService ns = new NoteServiceImpl();
             HttpSession session = req.getSession();
             Long userid = (Long) session.getAttribute("userid");
-            PrintWriter pw = resp.getWriter();
-            if(ns.getNoteById(userid, noteid) != null) {
-                req.setAttribute("titleNote", ns.getNoteById(userid, noteid).getTitle());
-                req.setAttribute("bodyNote", ns.getNoteById(userid, noteid).getBody());
-                //req.setAttribute("bodyNote", ns.getParsedBodyToHTML(ns.getNoteById(userid, noteid).getBody()));
+
+            //Pasarem els atributs a la vista sempre i quan la nota sigui compartida amb tu
+            if (ns.isSharedNote(userid, noteid) || ns.isNoteOwner(userid, noteid)) {
+                req.setAttribute("titleNote", ns.getNoteById(noteid).getTitle());
+                req.setAttribute("bodyNote", ns.getNoteById(noteid).getBody());
             } else {
                 resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
             }
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
         }
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/detail.jsp");

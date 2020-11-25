@@ -14,33 +14,31 @@ import java.io.IOException;
 @WebServlet(value = "/deleteAllShare")
 public class DeleteShareServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect(req.getContextPath() + "/home");
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        //Si tenim la nota que vol compartir i el id d'usuari, procedirem a compartir la nota
         if (req.getParameter("noteid") != null && session.getAttribute("userid") != null) {
             NoteService ns = new NoteServiceImpl();
             long userid = (long) session.getAttribute("userid");
             long noteid = Long.parseLong(req.getParameter("noteid"));
-            //long sharedNoteId = sns.getSharedNoteId(Long.parseLong(req.getParameter("noteid")), Long.parseLong(req.getParameter("userid")));
-            long sharedNoteId = ns.getSharedNoteId(noteid);
-            boolean noError = false;
-            System.out.println("shareNoteId: " + sharedNoteId);
-            if (sharedNoteId != -1) {
-                noError = ns.deleteAllShareNote(userid, noteid);
-            } else {
+
+            System.out.println(ns.isNoteOwner(userid, noteid));
+            System.out.println(ns.isSharedNote(userid, noteid));
+            if (!ns.isSharedNote(userid, noteid) && !ns.isNoteOwner(userid, noteid)) {
                 resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
             }
 
-            if (noError) {
-                resp.sendRedirect(req.getContextPath() + "/home");
-                return;
+
+            //Aconseguim el id de share que es,per poder eliminar aquest
+            long sharedNoteId = ns.getSharedNoteId(noteid);
+
+
+            //Nomes eliminarem, sempre i quan tinguem el shareNoteId
+            if (sharedNoteId != -1) {
+                ns.deleteAllShareNote(userid, noteid);
             }
-            System.out.println("Error eliminant el share");
+            resp.sendRedirect(req.getContextPath() + "/home");
         }
     }
 }
