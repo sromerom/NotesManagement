@@ -30,6 +30,8 @@ FOREIGN KEY(user_id) REFERENCES user(user_id) ON DELETE CASCADE ON UPDATE CASCAD
 //Notas del usuario sromerom
 //INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Nota4", "Esto es una nota4...", datetime('now','localtime'), datetime('now','localtime'));
 
+
+
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 1", "Body note 1 example", '2020-11-10 12:00:00', '2020-11-10 12:00:00');
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 2", "Body note 2 example", '2020-11-10 12:00:00', '2020-11-10 12:00:00');
 
@@ -49,14 +51,10 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) values (1, "Note example 12", "Body note 12 example", '2020-11-15 12:00:00', '2020-11-15 12:00:00');
 
 -------------------------------------------------POR HACER...-------------------------------------------------------
-//TABLA RELACIONAL ENTRE NOTAS
 //Limitacion de intentos de login
 //Acentos sqlite3
-//Controller comprova si hi ha dades a enviar abans de fer operacions #######################
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
-//Arreglar fallo de paginacion, te añade un boton extra ###################################
-//testear aplicacion ########################################
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -89,3 +87,6 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //escape script markdown --> Hecho
 //Todo al mismo idioma --> Hecho
 //variable conn --> Hecho
+//testear aplicacion ######################################## --> Hecho
+//Arreglar fallo de paginacion, te añade un boton extra ################################### --> Hecho
+//Controller comprova si hi ha dades a enviar abans de fer operacions ####################### --> Hecho
