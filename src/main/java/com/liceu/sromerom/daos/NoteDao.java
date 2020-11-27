@@ -19,11 +19,11 @@ public interface NoteDao {
 
     List<Note> filterAllCreatedNotes(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    List<Note> filterTypeOfNoteBySearch(long userid, String search, int limit, int offset) throws Exception;
+    List<Note> filterAllTypesOfNoteBySearch(long userid, String search, int limit, int offset) throws Exception;
 
-    List<Note> filterTypeOfNoteByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
+    List<Note> filterAllTypesOfNoteByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception;
 
-    List<Note> filterAllTypeOfNote(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
+    List<Note> filterAllTypesOfNoteByAll(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception;
 
     Note getNoteById(long noteid) throws Exception;
 

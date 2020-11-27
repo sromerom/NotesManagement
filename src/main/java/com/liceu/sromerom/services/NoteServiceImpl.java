@@ -97,13 +97,13 @@ public class NoteServiceImpl implements NoteService {
             if (type == null || type.equals("")) {
                 switch (Filter.checkTypeFilter(search, initDate, endDate)) {
                     case "filterByTitle":
-                        notes = nd.filterTypeOfNoteBySearch(userid, search, LIMIT, offset);
+                        notes = nd.filterAllTypesOfNoteBySearch(userid, search, LIMIT, offset);
                         break;
                     case "filterByDate":
-                        notes = nd.filterTypeOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllTypesOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
                         break;
                     case "filterAll":
-                        notes = nd.filterAllTypeOfNote(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllTypesOfNoteByAll(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
                         break;
                 }
 

@@ -55,6 +55,9 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Acentos sqlite3
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
+//Arreglar welcome de home
+//Comprobar eliminacion de share de notas que te comparten
+//Cambiar string a date del modelo note
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho

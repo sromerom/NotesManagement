@@ -100,7 +100,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterTypeOfNoteBySearch(long userid, String search, int limit, int offset) throws Exception {
+    public List<Note> filterAllTypesOfNoteBySearch(long userid, String search, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note.user_iduser = ? AND (note.title LIKE ? OR note.body LIKE ?) OR note.note_id IN (SELECT sharedNote.note_id FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id WHERE sharedNote.user_id = ? AND (note.title LIKE ? OR note.body LIKE ?)) ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
@@ -119,7 +119,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterTypeOfNoteByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
+    public List<Note> filterAllTypesOfNoteByDate(long userid, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
         //PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note.user_iduser = ? AND creationDate > ? AND lastModificationDate < ? OR note.note_id IN (SELECT sharedNote.note_id FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id WHERE sharedNote.user_id = ?) ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
@@ -139,7 +139,7 @@ public class NoteDaoImpl implements NoteDao {
     }
 
     @Override
-    public List<Note> filterAllTypeOfNote(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception {
+    public List<Note> filterAllTypesOfNoteByAll(long userid, String search, String initDate, String endDate, int limit, int offset) throws Exception {
         List<Note> result = new ArrayList<>();
         Connection conn = Database.getConnection();
         PreparedStatement ps = conn.prepareStatement("SELECT note_id, title, body, creationDate, lastModificationDate, user_id, email, username, password FROM note INNER JOIN user ON user.user_id = note.user_iduser WHERE note.user_iduser = ? AND (note.title LIKE ? OR note.body LIKE ?) AND creationDate > ? AND lastModificationDate < ? OR note.note_id IN (SELECT sharedNote.note_id FROM sharedNote INNER JOIN note ON sharedNote.note_id = note.note_id WHERE sharedNote.user_id = ? AND (note.title LIKE ? OR note.body LIKE ?) AND creationDate > ? AND lastModificationDate < ?) ORDER BY note.note_id DESC LIMIT ? OFFSET ?");
@@ -210,8 +210,6 @@ public class NoteDaoImpl implements NoteDao {
         PreparedStatement ps = conn.prepareStatement("UPDATE note SET title = ?, body = ?, lastModificationDate = ? WHERE note_id = ?");
         ps.setString(1, note.getTitle());
         ps.setString(2, note.getBody());
-
-
         ps.setString(3, note.getLastModification());
         ps.setLong(4, note.getNoteid());
         ps.execute();

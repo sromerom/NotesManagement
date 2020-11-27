@@ -22,8 +22,6 @@ public class DeleteShareServlet extends HttpServlet {
             long userid = (long) session.getAttribute("userid");
             long noteid = Long.parseLong(req.getParameter("noteid"));
 
-            System.out.println(ns.isNoteOwner(userid, noteid));
-            System.out.println(ns.isSharedNote(userid, noteid));
             if (!ns.isSharedNote(userid, noteid) && !ns.isNoteOwner(userid, noteid)) {
                 resp.sendRedirect(req.getContextPath() + "/restrictedArea");
                 return;
