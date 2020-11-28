@@ -38,7 +38,7 @@
             </form>
 
             <span class="navbar-text"
-                  style="padding-right: .5rem; padding-left: .5rem;">Welcome ${usernameSession}!</span>
+                  style="padding-right: .5rem; padding-left: .5rem;">Welcome ${username}!</span>
         </div>
     </nav>
 </header>
@@ -355,9 +355,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
-                    <form id="formModal" class="card-link" method="POST" action="/deleteAllShare">
+                    <form id="formModal" class="card-link" method="POST" action="/deleteShare">
                         <input type="hidden" name="_csrftoken" value="${csrfToken}">
-                        <input id="deleteShareNoteHidden" type="hidden" name="noteid" value="">
+                        <input id="noteIdHidden" type="hidden" name="noteid" value="">
+                        <input id="userHidden" type="hidden" name="users[]" value="sromerom">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </div>

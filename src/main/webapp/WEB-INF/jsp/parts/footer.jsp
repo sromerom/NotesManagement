@@ -18,6 +18,6 @@
 <script>
 
     function passNoteId(noteid) {
-        document.querySelector("#deleteShareNoteHidden").value = noteid;
+        document.querySelector("#noteIdHidden").value = noteid;
     }
 </script>

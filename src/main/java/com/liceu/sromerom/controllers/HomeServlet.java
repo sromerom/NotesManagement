@@ -18,13 +18,14 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         NoteService ns = new NoteServiceImpl();
+        UserService us = new UserServiceImpl();
         HttpSession session = req.getSession();
 
         //Parametres de l'usuari
         Long userid = (Long) session.getAttribute("userid");
-        String username = (String) session.getAttribute("username");
-        req.setAttribute("usernameSession", username);
+        String username = us.getUserById(userid).getUsername();
         req.setAttribute("useridSession", userid);
+        req.setAttribute("username", username);
 
         //Parametres del filtre de cerca
         String typeNoteDisplay = req.getParameter("typeNote");

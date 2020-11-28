@@ -55,9 +55,9 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //Acentos sqlite3
 //Cambiar el nombre del proyecto
 //e.printStackTrace();
-//Arreglar welcome de home
-//Comprobar eliminacion de share de notas que te comparten
 //Cambiar string a date del modelo note
+//poner tamaño maximo a un nombre de usuario
+//poner tamaño maximo a una contraseña de usuario
 -------------------------------------------------HECHAS-------------------------------------------------------
 //TABLA N-M -->Hecho
 //Implementar paginacion para las sharedNote -->Hecho
@@ -93,3 +93,5 @@ INSERT INTO note (user_iduser, title, body, creationDate, lastModificationDate) 
 //testear aplicacion ######################################## --> Hecho
 //Arreglar fallo de paginacion, te añade un boton extra ################################### --> Hecho
 //Controller comprova si hi ha dades a enviar abans de fer operacions ####################### --> Hecho
+//Arreglar welcome de home --> Hecho
+//Comprobar eliminacion de share de notas que te comparten --> Hecho
