@@ -3,11 +3,17 @@ package com.liceu.sromerom.daos;
 import com.liceu.sromerom.model.Note;
 import com.liceu.sromerom.model.User;
 import com.liceu.sromerom.utils.Database;
+import jdk.vm.ci.meta.Local;
+
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteDaoImpl implements NoteDao {
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public List<Note> getAllNotesFromUser(long userid, int limit, int offset) throws Exception {
@@ -170,8 +176,8 @@ public class NoteDaoImpl implements NoteDao {
         long userid = rs.getLong(1);
         String actualTitle = rs.getString(2);
         String body = rs.getString(3);
-        String creationDate = rs.getString(4);
-        String lastModificationDate = rs.getString(5);
+        LocalDateTime creationDate = LocalDateTime.parse(rs.getString(4),formatter);
+        LocalDateTime lastModificationDate = LocalDateTime.parse(rs.getString(5), formatter);
         String email = rs.getString(6);
         String username = rs.getString(7);
         String password = rs.getString(8);
@@ -197,8 +203,8 @@ public class NoteDaoImpl implements NoteDao {
         ps.setLong(1, note.getUser().getUserid());
         ps.setString(2, note.getTitle());
         ps.setString(3, note.getBody());
-        ps.setString(4, note.getCreationDate());
-        ps.setString(5, note.getLastModification());
+        ps.setString(4, formatter.format(note.getCreationDate()));
+        ps.setString(5, formatter.format(note.getLastModification()));
         ps.execute();
         ps.close();
 
@@ -210,7 +216,7 @@ public class NoteDaoImpl implements NoteDao {
         PreparedStatement ps = conn.prepareStatement("UPDATE note SET title = ?, body = ?, lastModificationDate = ? WHERE note_id = ?");
         ps.setString(1, note.getTitle());
         ps.setString(2, note.getBody());
-        ps.setString(3, note.getLastModification());
+        ps.setString(3, formatter.format(note.getLastModification()));
         ps.setLong(4, note.getNoteid());
         ps.execute();
         ps.close();
@@ -437,8 +443,8 @@ public class NoteDaoImpl implements NoteDao {
             long noteid = rs.getLong(1);
             String actualTitle = rs.getString(2);
             String body = rs.getString(3);
-            String creationDate = rs.getString(4);
-            String lastModificationDate = rs.getString(5);
+            LocalDateTime creationDate = LocalDateTime.parse(rs.getString(4),formatter);
+            LocalDateTime lastModificationDate = LocalDateTime.parse(rs.getString(5), formatter);
             long useridNote = rs.getLong(6);
             String email = rs.getString(7);
             String username = rs.getString(8);

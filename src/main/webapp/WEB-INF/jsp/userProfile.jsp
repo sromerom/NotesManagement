@@ -8,6 +8,14 @@
 </head>
 <body>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<c:if test="${noerror == false}">
+    <div class="alert alert alert-danger alert-dismissible fade show" role="alert">
+        The profile could not be edited successfully
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</c:if>
 <div class="container">
     <div class="row flex-lg-nowrap">
         <div class="col">

@@ -75,22 +75,7 @@ public class NoteServiceImpl implements NoteService {
         UserDao ud = new UserDaoImpl();
         List<Note> notes = new ArrayList<>();
         List<RenderableNote> renderableNotes = new ArrayList<>();
-        String initDateParsed = "";
-        String endDateParsed = "";
 
-        //Si no esta buit voldra dir que haurem d'utilizar el filtre per date, per tant les inicialitzam
-        if (!initDate.equals("") && !endDate.equals("")) {
-            System.out.println(initDate);
-            System.out.println(endDate);
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            //LocalDateTime initDateTime = LocalDateTime.parse(initDate);
-            //LocalDateTime endDataTime = LocalDateTime.parse(endDate);
-            //initDateParsed = formatter.format(initDateTime);
-            //endDateParsed = formatter.format(endDataTime);
-            initDateParsed = initDate;
-            endDateParsed = endDate;
-
-        }
         try {
 
             //Si el type de note a filtrar es null, voldra dir que haurem de filtrar a totes les notes
@@ -100,10 +85,10 @@ public class NoteServiceImpl implements NoteService {
                         notes = nd.filterAllTypesOfNoteBySearch(userid, search, LIMIT, offset);
                         break;
                     case "filterByDate":
-                        notes = nd.filterAllTypesOfNoteByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllTypesOfNoteByDate(userid, initDate, endDate, LIMIT, offset);
                         break;
                     case "filterAll":
-                        notes = nd.filterAllTypesOfNoteByAll(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllTypesOfNoteByAll(userid, search, initDate, endDate, LIMIT, offset);
                         break;
                 }
 
@@ -120,20 +105,20 @@ public class NoteServiceImpl implements NoteService {
                 }
                 if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterByDate")) {
                     if (type.equals("sharedNotesWithMe")) {
-                        notes = nd.filterSharedNotesWithMeByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterSharedNotesWithMeByDate(userid, initDate, endDate, LIMIT, offset);
                     } else if (type.equals("sharedNotesByYou")) {
-                        notes = nd.filterSharedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterSharedNotesByDate(userid, initDate, endDate, LIMIT, offset);
                     } else {
-                        notes = nd.filterCreatedNotesByDate(userid, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterCreatedNotesByDate(userid, initDate, endDate, LIMIT, offset);
                     }
                 }
                 if (Filter.checkTypeFilter(search, initDate, endDate).equals("filterAll")) {
                     if (type.equals("sharedNotesWithMe")) {
-                        notes = nd.filterAllSharedNotesWithMe(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotesWithMe(userid, search, initDate, endDate, LIMIT, offset);
                     } else if (type.equals("sharedNotesByYou")) {
-                        notes = nd.filterAllSharedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllSharedNotes(userid, search, initDate, endDate, LIMIT, offset);
                     } else {
-                        notes = nd.filterAllCreatedNotes(userid, search, initDateParsed, endDateParsed, LIMIT, offset);
+                        notes = nd.filterAllCreatedNotes(userid, search, initDate, endDate, LIMIT, offset);
                     }
                 }
             }
@@ -187,12 +172,13 @@ public class NoteServiceImpl implements NoteService {
         NoteDao nd = new NoteDaoImpl();
         UserDao ud = new UserDaoImpl();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String date = myDateObj.format(myFormatObj);
+        String dateString = myDateObj.format(formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
 
         try {
-            nd.create(new Note(0, ud.getUserById(userid), title, body, date, date));
+            nd.create(new Note(0, ud.getUserById(userid), title, body, dateTime, dateTime));
             return true;
 
         } catch (Exception e) {
@@ -205,14 +191,20 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public boolean editNote(long userid, long noteid, String title, String body) {
         NoteDao nd = new NoteDaoImpl();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String lastModificationDate = myDateObj.format(myFormatObj);
+        String dateString = myDateObj.format(formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+
+
+
 
         try {
             Note noteToUpdate = nd.getNoteById(noteid);
             if (nd.isOwnerNote(userid, noteid)) {
-                nd.update(new Note(noteid, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), lastModificationDate));
+
+
+                nd.update(new Note(noteid, noteToUpdate.getUser(), title, body, noteToUpdate.getCreationDate(), dateTime));
                 return true;
             }
         } catch (Exception e) {

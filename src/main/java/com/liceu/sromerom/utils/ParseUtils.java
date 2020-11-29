@@ -7,7 +7,10 @@ import org.commonmark.renderer.text.TextContentRenderer;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
-public class MarkdownUtil {
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class ParseUtils {
     public static String escapeText(String body) {
         Parser parser = Parser.builder().build();
         Node document = parser.parse(body);
@@ -26,5 +29,10 @@ public class MarkdownUtil {
     public static String cleanBody(String body) {
         PolicyFactory policy = new HtmlPolicyBuilder().toFactory();
         return policy.sanitize(body);
+    }
+
+    public static String parseDefaultDateTime(LocalDateTime ldt) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return ldt.format(formatter);
     }
 }

@@ -1,7 +1,7 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="util" class="com.liceu.sromerom.utils.MarkdownUtil"/>
+<jsp:useBean id="util" class="com.liceu.sromerom.utils.ParseUtils"/>
 <html>
 <head>
     <title>Detail Note</title>

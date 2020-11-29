@@ -1,7 +1,7 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:useBean id="util" class="com.liceu.sromerom.utils.MarkdownUtil"/>
+<jsp:useBean id="util" class="com.liceu.sromerom.utils.ParseUtils"/>
 <html>
 <head>
     <title>Your Home</title>
@@ -220,7 +220,7 @@
                                         </a>
                                         <h6 class="card-subtitle mb-2 text-muted dateInfo"
                                             style="font-size: 10px; margin-top: 10px;">Last
-                                            Modification ${note.lastModification}</h6>
+                                            Modification ${util.parseDefaultDateTime(note.lastModification)}</h6>
                                     </div>
                                 </div>
                             </c:when>
@@ -260,9 +260,11 @@
                                         <a href="${pageContext.request.contextPath}/detail?id=${note.noteid}">
                                             <span class="link-spanner"></span>
                                         </a>
+
                                         <h6 class="card-subtitle mb-2 text-muted dateInfo"
                                             style="font-size: 10px; margin-top: 10px;">Last
-                                            Modification ${note.lastModification}</h6>
+                                            Modification ${util.parseDefaultDateTime(note.lastModification)}</h6>
+
                                     </div>
                                 </div>
                             </c:otherwise>
@@ -296,7 +298,7 @@
                                 </a>
                                 <h6 class="card-subtitle mb-2 text-muted dateInfo"
                                     style="font-size: 10px; margin-top: 10px;">Last
-                                    Modification ${note.lastModification}</h6>
+                                    Modification ${util.parseDefaultDateTime(note.lastModification)}</h6>
                             </div>
                         </div>
                     </c:otherwise>

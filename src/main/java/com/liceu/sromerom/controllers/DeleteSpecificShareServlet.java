@@ -54,9 +54,6 @@ public class DeleteSpecificShareServlet extends HttpServlet {
         HttpSession session = req.getSession();
         Long userid = (Long) session.getAttribute("userid");
         boolean noError = false;
-
-        System.out.println(noteid);
-        System.out.println(Arrays.toString(sharedUsers));
         if (noteid != null && sharedUsers.length > 0 && ns.isNoteOwner(userid, noteid) || ns.isSharedNote(userid, noteid)) {
             //Eliminarem sempre i quan existeixi usuaris a eliminar el share i que existeixi un share amb aquells usuaris
             if (sharedUsers != null && us.existsUserShare(noteid, sharedUsers)) {

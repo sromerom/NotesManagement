@@ -17,11 +17,11 @@ com\liceu\sromerom\daos\UserDaoImpl.class
 com\liceu\sromerom\utils\Filter.class
 com\liceu\sromerom\daos\NoteDao.class
 com\liceu\sromerom\model\Note.class
-com\liceu\sromerom\utils\MarkdownUtil.class
 com\liceu\sromerom\controllers\DeleteSpecificShareServlet.class
 com\liceu\sromerom\services\NoteServiceImpl.class
 com\liceu\sromerom\controllers\ShareNoteServlet.class
 com\liceu\sromerom\utils\HashUtil.class
+com\liceu\sromerom\utils\ParseUtils.class
 com\liceu\sromerom\model\User.class
 com\liceu\sromerom\controllers\EditNoteServlet.class
 com\liceu\sromerom\controllers\LoginServlet.class

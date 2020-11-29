@@ -2,6 +2,8 @@ package com.liceu.sromerom.utils;
 
 import com.liceu.sromerom.model.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class RenderableNote {
@@ -10,18 +12,20 @@ public class RenderableNote {
     private List<User> sharedUsers;
     private String title;
     private String body;
-    private String creationDate;
-    private String lastModification;
+    private LocalDateTime creationDate;
+    private LocalDateTime lastModification;
 
-    public RenderableNote(long noteid, User noteOwner, List<User> sharedUsers, String title, String body, String creationDate, String lastModification) {
+
+    public RenderableNote(long noteid, User owner, List<User> sharedUsers, String title, String body, LocalDateTime creationDate, LocalDateTime lastModification) {
         this.noteid = noteid;
-        this.owner = noteOwner;
+        this.owner = owner;
         this.sharedUsers = sharedUsers;
         this.title = title;
         this.body = body;
         this.creationDate = creationDate;
         this.lastModification = lastModification;
     }
+
 
     @Override
     public String toString() {
@@ -31,8 +35,8 @@ public class RenderableNote {
                 ", sharedUsers=" + sharedUsers +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
-                ", creationDate='" + creationDate + '\'' +
-                ", lastModification='" + lastModification + '\'' +
+                ", creationDate=" + creationDate +
+                ", lastModification=" + lastModification +
                 '}';
     }
 
@@ -76,19 +80,19 @@ public class RenderableNote {
         this.body = body;
     }
 
-    public String getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public String getLastModification() {
+    public LocalDateTime getLastModification() {
         return lastModification;
     }
 
-    public void setLastModification(String lastModification) {
+    public void setLastModification(LocalDateTime lastModification) {
         this.lastModification = lastModification;
     }
 }

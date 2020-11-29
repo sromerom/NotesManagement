@@ -21,9 +21,8 @@ public class Database {
             }
             return connection;
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }
 
