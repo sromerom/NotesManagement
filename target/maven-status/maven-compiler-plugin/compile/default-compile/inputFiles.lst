@@ -10,7 +10,6 @@ E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\ma
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\controllers\ShareNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\controllers\EditNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\utils\RenderableNote.java
-E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\filters\CorsFilter.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\services\NoteService.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\controllers\DetailNoteServlet.java
 E:\Fp informatica\CFGS 2n any REP\PracticasEntornServidor\NotesManagement\src\main\java\com\liceu\sromerom\controllers\DisplayAccessErrorServlet.java

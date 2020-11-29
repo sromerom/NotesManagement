@@ -3,7 +3,6 @@ com\liceu\sromerom\controllers\EditUserProfileServlet.class
 com\liceu\sromerom\daos\UserDao.class
 com\liceu\sromerom\controllers\DeleteShareServlet.class
 com\liceu\sromerom\controllers\DeleteNoteServlet.class
-com\liceu\sromerom\filters\CorsFilter.class
 com\liceu\sromerom\controllers\RegisterUserServlet.class
 com\liceu\sromerom\controllers\DisplayAccessErrorServlet.class
 com\liceu\sromerom\controllers\CreateNoteServlet.class
